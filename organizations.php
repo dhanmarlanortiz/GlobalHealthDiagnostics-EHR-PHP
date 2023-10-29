@@ -1,4 +1,15 @@
 <?php 
+/* AUTHENTICATION - START */
+ob_start();
+session_start();
+
+if(!isset($_SESSION["valid"])){
+	$url = ($_SERVER['HTTP_HOST'] == 'app.globalhealth-diagnostics.com') ? "https://app.globalhealth-diagnostics.com" : "http://localhost/globalhealth-php";
+    header("location:" . $url . "/login.php");
+    exit();
+}
+/* AUTHENTICATION - END */
+
 require_once('connection.php');
 include('header.php');
 include('navbar.php');
@@ -29,36 +40,38 @@ $result = $conn->query($sql);
 <main class='mx-auto max-w-7xl mt-4 px-4 pt-6 pb-20 sm:px-6 lg:px-8'>
     <div class="bg-white p-6 rounded shadow-sm">
 
-<?php
-if ($result->num_rows > 0) {
-    echo    
-    "<table class='display'>
-        <thead>
-            <tr>
-                <th>Organizations Name</th>
-                <th>Email Address</th>
-                <th>Telephone Number</th>
-                <th>Office Address</th>
-            </tr>
-        </thead>
-        <tbody>";
-        while($org = $result->fetch_assoc()) {
-        echo 
-            "<tr>" .
-                "<td>" . $org["name"] . "</td>" .
-                "<td>" . $org["email"] . "</td>" .
-                "<td>" . $org["phone"] . "</td>".
-                "<td>" . $org["address"] . "</td>".
-            "</tr>";
+        <?php
+        if ($result->num_rows > 0) {
+            echo    
+            "<div class='overflow-auto p-1'>
+                <table class='display'>
+                    <thead>
+                        <tr>
+                            <th>Organizations Name</th>
+                            <th>Office Address</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>";
+                    while($org = $result->fetch_assoc()) {
+                    echo 
+                        "<tr>" .
+                            "<td>" . $org["name"] . "</td>" .
+                            "<td>" . $org["address"] . "</td>".
+                            "<td class='text-right'><a class='btn btn-info btn-sm text-white text-xs rounded normal-case' href='" . base_url(false) . "/organization.php?id=" . $org['id'] . "'>View</a></td>".
+                        "</tr>";
+                    }
+                    echo
+                    "</body>" .
+                "</table>
+            </div>";
+        } else {
+            echo "Results not found.";
         }
-        echo
-        "</body>" .
-    "</table>";
-} else {
-    echo "Results not found.";
-}
-$conn->close();
-?>
+        $conn->close();
+        ?>
+
+
 
 
   </div>

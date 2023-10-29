@@ -1,0 +1,95 @@
+header h1 {
+  color: #15803d !important;
+}
+
+.btn {
+  border-radius: 0.25rem;
+  text-transform: none;
+}
+.btn.btn-default {
+  background: #a8a29e;
+  border-color: #a8a29e;
+  color: #fff;
+}
+.btn.btn-default:hover, .btn.btn-default:focus {
+  background: #78716c;
+  outline-color: #78716c;
+}
+.btn.btn-primary {
+  background: #15803d;
+  border-color: #15803d;
+  color: #fff;
+}
+.btn.btn-primary:hover, .btn.btn-primary:focus {
+  background: #166534;
+  outline-color: #166534;
+}
+.btn.btn-secondary {
+  background: #fbbf24;
+  border-color: #fbbf24;
+  color: #fff;
+}
+.btn.btn-secondary:hover, .btn.btn-secondary:focus {
+  background: #eab308;
+  outline-color: #eab308;
+}
+
+table {
+  visibility: hidden;
+}
+table.dataTable {
+  visibility: visible;
+  margin: 15px 0;
+}
+table.dataTable:before {
+  content: none;
+}
+table.dataTable thead > tr > th.sorting:before, table.dataTable thead > tr > th.sorting:after {
+  right: 5px;
+  line-height: 7px;
+  font-size: 0.6em;
+}
+table.dataTable th, table.dataTable td {
+  font-size: 12px;
+  line-height: 1.3em;
+}
+table.dataTable th {
+  font-weight: 500 !important;
+}
+table:before {
+  content: "Generating result ...";
+  visibility: visible;
+  font-size: 14px;
+}
+
+.dataTables_length label {
+  font-size: 12px;
+  font-weight: 500;
+}
+.dataTables_length select {
+  padding-right: 20px;
+  margin: 0 5px;
+}
+
+.dataTables_filter label {
+  font-size: 12px;
+  font-weight: 500;
+}
+.dataTables_filter input {
+  font-size: 12px;
+  margin-left: 10px;
+  line-height: 1.5em;
+}
+
+.dataTables_info,
+.dataTables_paginate a {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5em;
+}
+
+.my-2.col-span-2.border.border-gray-200.rounded.min-w-full.bg-white.dark\:bg-gray-800.dark\:border-gray-700 {
+  border: none;
+}
+
+/*# sourceMappingURL=main.css.map */

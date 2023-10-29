@@ -1,4 +1,15 @@
 <?php 
+/* AUTHENTICATION - START */
+ob_start();
+session_start();
+
+if(!isset($_SESSION["valid"])){
+	$url = ($_SERVER['HTTP_HOST'] == 'app.globalhealth-diagnostics.com') ? "https://app.globalhealth-diagnostics.com" : "http://localhost/globalhealth-php";
+    header("location:" . $url . "/login.php");
+    exit();
+}
+/* AUTHENTICATION - END */
+
 include('header.php');
 include('navbar.php'); 
 ?>
