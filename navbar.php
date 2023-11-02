@@ -1,6 +1,14 @@
 <?php 
+
 function setActiveNav($pageNames, $screen) {
-    if(in_array(explode('.', trim( explode('/', trim( parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) , '/'))[1] , '/'))[0], $pageNames)) {
+    $requestUri = $_SERVER['REQUEST_URI'];
+    $parsedUri = parse_url($requestUri, PHP_URL_PATH);
+    $path = $parsedUri;
+    $pathArray = explode('/', $path);
+    $fileName = $pathArray[count($pathArray) - 1];
+    $fileName = rtrim($fileName, '.php');
+    
+    if(in_array($fileName, $pageNames)) {
         if( $screen == 'desktop' ) {
             echo "bg-green-900 text-white rounded px-3 py-2 text-sm font-medium";
         } else if( $screen == 'mobile' ) {
@@ -38,7 +46,7 @@ function setActiveNav($pageNames, $screen) {
                 </div>
                 <div class="hidden sm:ml-6 sm:block">
                     <div class="flex space-x-4">
-                        <a href="<?php base_url(); ?>" class="<?php setActiveNav(array(''), 'desktop') ?>">Home</a>
+                        <a href="<?php base_url(); ?>/home.php" class="<?php setActiveNav(array('home'), 'desktop') ?>">Home</a>
                         <a href="<?php base_url(); ?>/users.php" class="<?php setActiveNav(array('user', 'users', 'createUser'), 'desktop') ?>">Users</a>
                         <a href="<?php base_url(); ?>/organizations.php" class="<?php setActiveNav(array('organization', 'organizations', 'createOrganization', 'employees-APE', 'employeeCreate-APE', 'employee-APE'), 'desktop') ?>">Organizations</a>
                     </div>
@@ -52,7 +60,7 @@ function setActiveNav($pageNames, $screen) {
     
     <div class="hidden sm:hidden" id="mobile-menu">
         <div class="space-y-1 px-2 pb-3 pt-2">
-            <a href="<?php base_url(); ?>" class="<?php setActiveNav(array(''), 'mobile') ?>">Home</a>
+            <a href="<?php base_url(); ?>/home.php" class="<?php setActiveNav(array('home'), 'mobile') ?>">Home</a>
             <a href="<?php base_url(); ?>/users.php" class="<?php setActiveNav(array('user', 'users', 'createUser'), 'mobile') ?>">Users</a>
             <a href="<?php base_url(); ?>/organizations.php" class="<?php setActiveNav(array('organization', 'organizations', 'createOrganization', 'employees-APE', 'employeeCreate-APE', 'employee-APE'), 'mobile') ?>">Organizations</a>
         </div>
