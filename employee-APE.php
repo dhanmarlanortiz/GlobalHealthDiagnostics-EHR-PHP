@@ -58,6 +58,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $examination = test_input( $_POST['examination'] );
     $remarks = test_input( $_POST['remarks'] );
 
+    
+
     $apeUpdateQuery =  "UPDATE APE SET 
                         headCount = $headCount,
                         " . (($_POST['controlNumber'] > 0) ? "controlNumber = '$_POST[controlNumber]'," : '') . "
@@ -76,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         examination = '$examination',
                         remarks = '$remarks'
                         WHERE id = $id";
-    echo $apeUpdateQuery;
+    
     if ($conn->query($apeUpdateQuery) === TRUE) {
         $url = base_url(false) . "/employee-APE.php?id=" . $id;
         
@@ -88,6 +90,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
+$organizationDetail = getOrganization($_POST['organizationId']);
+$o = $_POST['organizationId'];
+$y = date('Y', strtotime($_POST['dateRegistered']));
+
 $conn->close();
 
 $styleButtonPrimary = "btn rounded normal-case bg-blue-600 hover:bg-blue-800";
@@ -97,31 +103,42 @@ $styleTextError = "mt-2 text-red-400 text-xs";
 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id=" . $_GET['id'] ) ;?>">
     <header class="bg-white shadow-sm">
         <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center">
+        <div class="flex justify-between items-center overflow-hidden"> 
                 <div>
-                    <h1 class="text-3xl font-bold tracking-tight text-gray-900 mb-2">Employee Information</h1>
+                    <h1 class="text-3xl font-bold tracking-tight text-gray-900 mb-2">
+                        <span class="pr-3"><?php echo $organizationDetail['name']; ?></span>
+                        <span class="font-normal text-xl border-l-2 border-green-700 pl-3">APE Information</span>
+                    </h1>
                     <div class="text-xs breadcrumbs p-0 text-gray-800">
                         <ul>
                             <li>Home</li> 
-                            <li>Services</li> 
-                            <li>Annual Physical Examination</li> 
-                            <li>Employee Information</li> 
+                            <li>Organizations</li> 
+                            <li><?php echo $organizationDetail['name']; ?></li> 
+                            <li>Annual Physical Examination</li>
+                            <li>Information</li> 
                         </ul>
                     </div>
                 </div>
-                <div class="hidden lg:block">
+                <!-- <div class="hidden lg:block">
                     <a class="btn btn-default" href="<?php echo base_url() . '/employees-APE.php?o=' . $_POST['organizationId'] . '&y=' . date('Y', strtotime($_POST['dateRegistered'])); ?>">Back</a>
                     <a class="btn btn-secondary" href="<?php echo base_url() . '/components/controlNumberCreate-APE.php?id=' . $_POST['id'] ; ?>" >Get Control Number</a>
                     <button class="btn btn-primary" type="submit" >Save Changes</button>
-                </div>
+                </div> -->
             </div>
         </div>
     </header>
-    <main class='mx-auto max-w-7xl px-4 pt-6 pb-20 sm:px-6 lg:px-8'>
-        <div class="mx-auto rounded-b-box rounded-b-box max-w-3xl mb-10">
+    <main class='mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8'>
+        <div class="mx-auto rounded-b-box rounded-b-box max-w-3xl">
             <!-- <h2 class="px-6 py-4 bg-gray-200 font-semibold rounded-t-box shadow-sm">Registration Form</h2> -->
-            
-            <div class="flex items-center justify-end gap-x-6 bg-white p-6 mb-3">
+            <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
+                <ul class="flex -mb-px">
+                    <li class="w-full bg-white inline-block p-6 text-green-700 border-b-2 border-green-700 active text-left text-sm">
+                        Information Sheet
+                    </li>
+                </ul>
+            </div>
+
+            <div class="flex items-center justify-end gap-x-6 bg-white px-6 py-10 border-b">
                 <div class="space-y-12 w-full">
                     <div class="">
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-8">
@@ -130,13 +147,14 @@ $styleTextError = "mt-2 text-red-400 text-xs";
                             </div>
                             <div class="sm:col-span-1">
                                 <input type="number" name="controlNumber" id="controlNumber" data-label="Control Number" readonly min="1" step="1" placeholder="Not Available" />
+                                <a class="text-xs text-sky-400" href="<?php echo base_url() . '/components/controlNumberCreate-APE.php?id=' . $_POST['id'] ; ?>" >Generate Control Number</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="flex items-center justify-end gap-x-6 bg-white p-6 mb-3">
+            <div class="flex items-center justify-end gap-x-6 bg-white px-6 py-10 border-b">
                 <div class="space-y-12 w-full">
                     <div class="">
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-8">
@@ -179,11 +197,12 @@ $styleTextError = "mt-2 text-red-400 text-xs";
                 </div>
             </div>
             
-            <div class="flex items-center justify-end gap-x-6 bg-white p-6 mb-3">
+            <div class="flex items-center justify-end gap-x-6 bg-white px-6 py-10 border-b">
                 <div class="space-y-12 w-full">
                     <div class="">
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-8">
-                            <div class="sm:col-span-2">
+                            <input type="hidden" id="organizationId">
+                            <!-- <div class="sm:col-span-2">
                                 <select id="organizationId" data-label="Organization" required>
                                     <?php 
                                         if ($orgResult !== false && $orgResult->num_rows > 0) {
@@ -203,17 +222,17 @@ $styleTextError = "mt-2 text-red-400 text-xs";
                                         }
                                     ?>
                                 </select>
-                            </div>
+                            </div> -->
                             <div class="sm:col-span-1">
                                 <input type="text" id="employeeNumber" data-label="Employee Number" />
+                            </div>
+                            <div class="sm:col-span-2">
+                                <input type="text" id="department" data-label="Department" />
                             </div>
                             <div class="sm:col-span-1">
                                 <input type="text" id="membership" data-label="Membership" />
                             </div>
-                            <div class="sm:col-span-1">
-                                <input type="text" id="department" data-label="Department" />
-                            </div>
-                            <div class="sm:col-span-1">
+                            <div class="sm:col-span-2">
                                 <input type="text" id="level" data-label="Level" />
                             </div>
                         </div>
@@ -221,7 +240,7 @@ $styleTextError = "mt-2 text-red-400 text-xs";
                 </div>
             </div>
             
-            <div class="flex items-center justify-end gap-x-6 bg-white p-6 mb-4">
+            <div class="flex items-center justify-end gap-x-6 bg-white px-6 py-10 border-b">
                 <div class="space-y-12 w-full">
                     <div class="">
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-8">
@@ -244,25 +263,22 @@ $styleTextError = "mt-2 text-red-400 text-xs";
                     </div>
                 </div>
             </div>
-            
+            <div class="flex items-center justify-end flex-col sm:flex-row gap-x-1 bg-white mt-0 px-6 py-4 border-t-2 border-green-700">
+                <a href="<?php echo base_url(false) . '/employees-APE.php?o=' . $o . '&y=' . $y; ?>" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Cancel</a>
+                <button type="submit" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">Save Changes</button>
+            </div>
             <div class="flex justify-end gap-x-1 lg:hidden">
                 <a href="<?php base_url(); ?>/employees-APE.php" class="btn btn-default">Back</a>
                 <a href="<?php base_url(); ?>/employees-APE.php" class="btn btn-secondary">Get Control Number</a>
                 <button type="submit" class="btn btn-primary">Save Changes</button>
             </div>
-
-            <!-- <div class="flex items-center justify-end gap-x-6 bg-white mt-0 px-6 py-4 rounded-b-box shadow-sm">
-                <a href="<?php base_url(); ?>/registeredEmployees.php" class="<?php echo $styleButtonLink; ?>">Cancel</a>
-                <button type="submit" class="<?php echo $styleButtonPrimary; ?>">Save Changes</button>
-            </div> -->
-        </div>
-        
+        </div>        
     </main>
 </form>
 <script>
     $(document).ready( function() {
         var post = <?php echo json_encode($_POST) ?>;
-        let styleInput = "block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6";
+        let styleInput = "block w-full rounded py-1.5 px-2 text-gray-900 border-gray-300 placeholder:text-gray-400 focus:border-green-700 focus:ring-0 focus:bg-green-50 sm:text-sm sm:leading-6";
         let styleLabel = "block text-sm font-medium leading-6 text-gray-900";
 
         $('input[type=text], input[type=number], input[type=date], select').each( function() {
@@ -270,7 +286,7 @@ $styleTextError = "mt-2 text-red-400 text-xs";
             
             $(`<label for='${$(this).attr("id")}' class='${styleLabel}'>${ $(this).attr('data-label') }</label>`).insertBefore($(this));
             $(this).wrap(`<div class='mt-2'></div>`);
-            $(this).attr('class', styleInput)
+            $(this).attr('class', styleInput);  
             $(this).attr('name', id);
         });
 
@@ -279,6 +295,7 @@ $styleTextError = "mt-2 text-red-400 text-xs";
                 let id = $(this).attr('id');
                 // $(this).attr('value', (Object.keys(post[id]).length === 0) ? '' : post[id]);
                 $(this).attr('value', post[id]);
+                $(this).attr('name', id);
             });
         }
 

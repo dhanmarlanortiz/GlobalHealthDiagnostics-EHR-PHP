@@ -46,12 +46,14 @@ $conn->close();
     <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center">
             <div>
-                <h1 class="text-3xl font-bold tracking-tight text-gray-900 mb-2">Organization Details</h1>
+                <h1 class="text-3xl font-bold tracking-tight text-gray-900 mb-2">
+                    <?php echo $name; ?>
+                </h1>
                 <div class="text-xs breadcrumbs p-0 text-gray-800">
                     <ul>
                         <li>Home</li> 
                         <li>Organizations</li> 
-                        <li>Organization Details</li> 
+                        <li><?php echo $name; ?></li> 
                     </ul>
                 </div>
             </div>
@@ -62,46 +64,7 @@ $conn->close();
     </div>
 </header>
 <main class='mx-auto max-w-7xl mt-4 px-4 pt-6 pb-20 sm:px-6 lg:px-8'>
-    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" class="max-w-md mx-auto">
-        <h2 class="px-6 py-4 bg-gray-200 font-semibold rounded-t-box shadow-sm">Information</h2>
-        <div class="flex items-center justify-end gap-x-6 bg-white p-6 shadow-sm">
-            <div class="space-y-12 w-full">
-                <div class="border-b border-gray-900/10 pb-12">
-                    <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                        <div class="sm:col-span-6">
-                            <label htmlFor="name" class="<?php echo $styleLabel; ?>">Organization Name</label>
-                            <div class="mt-2">
-                                <input name="name" id="name" value="<?php echo $name; ?>" type="text" class="<?php echo $styleInput; ?>" required readonly />
-                            </div>
-                        </div>
-                        <div class="sm:col-span-6">
-                            <label htmlFor="email" class="<?php echo $styleLabel; ?>">Email Address</label>
-                            <div class="mt-2">
-                                <input name="email" id="email" value="<?php echo $email; ?>" type="email" class="<?php echo $styleInput; ?>" required readonly />
-                            </div>
-                        </div>
-                        <div class="sm:col-span-6">
-                            <label htmlFor="phone" class="<?php echo $styleLabel; ?>">Telephone Number</label>
-                            <div class="mt-2">
-                                <input name="phone" id="phone" value="<?php echo $phone; ?>" type="number" class="<?php echo $styleInput; ?>" required readonly />
-                            </div>
-                        </div>
-                        <div class="sm:col-span-6">
-                            <label htmlFor="address" class="<?php echo $styleLabel; ?>">Office Address</label>
-                            <div class="mt-2">
-                                <input name="address" id="address" value="<?php echo $address; ?>" type="address" class="<?php echo $styleInput; ?>" required readonly />
-                            </div>
-                        </div>                
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="flex items-center justify-end gap-x-2 bg-white mt-0 pb-6 px-6 rounded-b-box shadow-sm">
-            <!-- <a href="<?php base_url(); ?>/Organizations.php" class="<?php echo $styleButtonLink; ?>">Cancel</a> -->
-            <button type="button" class="<?php echo $styleButtonInfo; ?>">Edit</button>
-            <button type="button" class="<?php echo $styleButtonDanger; ?>">Delete</button>
-        </div>
-    </form>
+   
 </main>
 
 

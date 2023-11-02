@@ -32,31 +32,45 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 
 $orgQuery = "SELECT * FROM Organization";
 $orgResult = $conn->query($orgQuery);
+
+$organizationName = "";
+$orgDetailsQuery = "SELECT * FROM Organization WHERE id = '$o'";
+$orgDetailsResult = $conn->query($orgDetailsQuery);;
+if ($orgDetailsResult !== false && $orgDetailsResult->num_rows > 0) {
+    while($orgDetails = $orgDetailsResult->fetch_assoc()) {
+        $organizationName = $orgDetails['name'];
+    }
+}
+
 ?>
 
 <header class="bg-white shadow-sm">
     <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center">
+        <div class="flex justify-between items-center overflow-hidden">
             <div>
-                <h1 class="text-3xl font-bold tracking-tight text-gray-900 mb-2">APE Employees</h1>
+                <h1 class="text-3xl font-bold tracking-tight text-gray-900 mb-2">
+                    <span class="pr-3"><?php echo $organizationName; ?></span>
+                    <span class="font-normal text-xl border-l-2 border-green-700 pl-3">APE</span>
+                </h1>
                 <div class="text-xs breadcrumbs p-0 text-gray-800">
                     <ul>
                         <li>Home</li> 
-                        <li>Services</li> 
-                        <li>Annual Physical Examination</li> 
-                        <li>APE Employees</li> 
+                        <li>Organizations</li> 
+                        <li><?php echo $organizationName;?></li>
+                        <li>Annual Physical Examination</li>
                     </ul>
                 </div>
             </div>
-            <div>
+            <!-- <div>
                 <a href="<?php base_url(); ?>/employeeCreate-APE.php" class="btn btn-primary">Register</a>
-            </div>
+            </div> -->
         </div>
     </div>
 </header>
-<main class='mx-auto max-w-7xl mt-4 px-4 pt-6 pb-20 sm:px-6 lg:px-8'>
-    <div class="bg-white p-6 rounded shadow-sm">
-        <form method="GET" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" class="flex flex-col sm:flex-row sm:items-center max-w-2xl">
+<main class='mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8'>
+    
+    <!-- <div class="bg-white p-6 rounded shadow-sm">
+        <form id="searchYear-APE" method="GET" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" class="flex flex-col sm:flex-row sm:items-center max-w-2xl">
             <label for="o" class="block text-sm font-medium leading-6 text-gray-900 mb-2 sm:mr-4 sm:mb-0">Organization</label>
             <select name="o" id="o" class="mb-5 sm:mb-0 sm:w-30 block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" required>
                 <?php 
@@ -76,15 +90,28 @@ $orgResult = $conn->query($orgQuery);
                 }
                 ?>
             </select>
+            <input type="hidden" name="o" value="<?php echo $o; ?>">
             <label for="d" class="block text-sm font-medium leading-6 text-gray-900 mb-2 sm:mb-0 sm:mr-4 sm:ml-6 sm:text-right">Year</label>
             <input type="number" id="y" name="y" min="1900" max="2099" step="1" value="<?php echo $y; ?>" class="mb-5 sm:mb-0 sm:w-30 block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-400 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6" required />
-            <button type="submit" class="sm:ml-4 rounded-md bg-gray-300 px-3 py-2 text-sm font-semibold shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-400">Search</button>
-
         </form>
-    </div>
-    <br>
+        
+    </div> -->
 
-    <div class="bg-white p-6 rounded shadow-sm">
+    <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
+        <ul class="flex -mb-px">
+            <li class="mr-2">
+                <a href="" class="inline-block p-2 md:p-4 text-green-700 border-b-2 border-green-700 rounded-t-lg active text-left text-xs md:text-sm dark:text-green-800 dark:border-green-800" aria-current="page">
+                    Annual Physical Examination
+                </a>
+            </li>
+            <li class="mr-2">
+                <a href="#" class="inline-block p-2 md:p-4 border-b-2 border-transparent rounded-t-lg text-left text-xs md:text-sm hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">
+                    Pre-employment Medical Assessment
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="bg-white p-2 md:p-4">
         <?php
         if ($empResult !== false && $empResult->num_rows > 0) {
             echo    
@@ -115,7 +142,11 @@ $orgResult = $conn->query($orgQuery);
                         echo 
                             "<tr>" .
                                 "<td class='text-center'>" . $emp["headCount"] . "</td>" .
-                                "<td>" . $emp["lastName"] . ", " . $emp["firstName"] . ", " . $emp["middleName"] .  "</td>" .
+                                "<td>
+                                    <a href='" . base_url(false) . "/employee-APE.php?id=" . $emp['id'] . "' class='text-green-700'>" . 
+                                        $emp["lastName"] . ", " . $emp["firstName"] . ", " . $emp["middleName"] .  
+                                    "</a>
+                                </td>" .
                                 "<td class='text-center'>" . $emp["controlNumber"] . "</td>" .
                                 "<td class='text-center'>" . $emp["age"] . "</td>" .
                                 "<td>" . $emp["sex"] . "</td>" .
@@ -127,8 +158,8 @@ $orgResult = $conn->query($orgQuery);
                                 "<td>" . $dateCompleted . "</td>" .
                                 "<td>" . $emp["remarks"] . "</td>" .
                                 "<td class='text-center'>
-                                    <a class='text-blue-600' href='" . base_url(false) . "/employee-APE.php?id=" . $emp['id'] . "'>
-                                        Edit
+                                    <a class='btn btn-primary btn-sm text-xs rounded normal-case font-normal' href='" . base_url(false) . "/employee-APE.php?id=" . $emp['id'] . "'>
+                                        View
                                     </a>
                                 </td>".
                             "</tr>";
@@ -142,11 +173,28 @@ $orgResult = $conn->query($orgQuery);
         }
         $conn->close();
         ?>
-
-
-
-
-  </div>
+    </div>
+    <div class="bg-white p-2 md:px-4 md:pb-4">
+        <div class="flex sm:justify-between flex-col sm:flex-row">
+            <div class="dataTables_year p-1">
+                <form id="searchYear-APE" method="GET" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" class="flex flex-col sm:flex-row sm:items-center max-w-2xl">
+                    <label>
+                        Year: <input id="y" value="<?php echo $y; ?>" type="number" id="y" name="y" min="1900" max="2099" step="1"  class="border placeholder-gray-500 ml-2 px-3 py-2 rounded-lg border-gray-200 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 dark:bg-gray-800 dark:border-gray-600 dark:focus:border-blue-500 dark:placeholder-gray-400" required />
+                    </label>
+                    <input type="hidden" name="o" value="<?php echo $o; ?>">
+                </form>
+                <script>
+                    document.getElementById("y").onchange = function () {
+                        document.getElementById("searchYear-APE").submit();
+                    };
+                </script>
+            </div>
+            <div class="p-1">
+                <a href="<?php base_url()?>/organizations.php" class="btn btn-default btn-sm text-xs rounded normal-case h-9 w-full sm:w-auto mb-2 sm:mb-0">Back</a>
+                <a href="<?php echo base_url(false) . "/employeeCreate-APE.php?o=" . $o . "&y=" . $y; ?>" class="btn btn-primary btn-sm text-xs rounded normal-case h-9 w-full sm:w-auto">APE Registration</a>
+            </div>
+        </div>
+    </div>
 </main>
 
 

@@ -23,8 +23,9 @@ function test_input($data) {
     $data = htmlspecialchars($data);
     return $data;
 }
-
+$o = $y = 0;
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+ 
     // $headCount = test_input( $_POST['headCount'] );
     // $controlNumber = test_input( $_POST['controlNumber'] );
     $firstName = test_input( $_POST['firstName'] );
@@ -33,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // $birthDate = test_input( $_POST['birthDate'] );
     $age = test_input( $_POST['age'] );
     $sex = test_input( $_POST['sex'] );
-    $organizationId = test_input( $_POST['organizationId'] );
+    $organizationId = test_input( intval($_POST['organizationId']) );
     $employeeNumber = test_input( $_POST['employeeNumber'] );
     $membership = test_input( $_POST['membership'] );
     $department = test_input( $_POST['department'] );
@@ -56,6 +57,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     /* GET HEAD COUNT - END */
 
+    $o = $organizationId;
+    $y = date('Y', strtotime($dateRegistered));
+
     $regQuery = "INSERT INTO APE(headCount, firstName, middleName, lastName, age, sex, organizationId, employeeNumber, membership, department, level, dateRegistered, examination, userId) VALUES('$headCount', '$firstName', '$middleName', '$lastName', '$age', '$sex', '$organizationId', '$employeeNumber', '$membership', '$department', '$level', '$dateRegistered', '$examination', '$userId')";
     
     if ($conn->query($regQuery) === TRUE) {
@@ -63,10 +67,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // $url = base_url(false) . "/registeredEmployees.php?o=" . $organizationId . "&y=" . date('Y', strtotime($dateRegistered));
         $url = base_url(false) . "/employee-APE.php?id=" . $id;
         header("Location: " . $url ."");
+        die;
     } else {
         echo $conn->error;
     }
+} else {
+    $o = test_input( $_GET['o']);
 }
+
+$organizationDetail = getOrganization($o);
 
 $conn->close();
 
@@ -77,29 +86,40 @@ $styleTextError = "mt-2 text-red-400 text-xs";
 
 <header class="bg-white shadow-sm">
     <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center">
+        <div class="flex justify-between items-center overflow-hidden">
             <div>
-                <h1 class="text-3xl font-bold tracking-tight text-gray-900 mb-2">APE Employee Registration</h1>
+                <h1 class="text-3xl font-bold tracking-tight text-gray-900 mb-2">
+                    <span class="pr-3"><?php echo $organizationDetail['name']; ?></span>
+                    <span class="font-normal text-xl border-l-2 border-green-700 pl-3">APE Registration</span>
+                </h1>
                 <div class="text-xs breadcrumbs p-0 text-gray-800">
                     <ul>
                         <li>Home</li> 
-                        <li>Services</li> 
-                        <li>Annual Physical Examination</li> 
-                        <li>APE Employee Registration</li> 
+                        <li>Organizations</li> 
+                        <li><?php echo $organizationDetail['name']; ?></li> 
+                        <li>Annual Physical Examination</li>
+                        <li>Registration</li> 
                     </ul>
                 </div>
             </div>
-            <div>
+            <!-- <div>
                 <a href="<?php base_url(); ?>/employees-APE.php" class="btn btn-default rounded normal-case">Back</a>
-            </div>
+            </div> -->
         </div>
     </div>
 </header>
-<main class='mx-auto max-w-7xl mt-4 px-4 pt-6 pb-20 sm:px-6 lg:px-8'>
-    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" class="mx-auto rounded-b-box rounded-b-box max-w-3xl mb-10">
-
-        <h2 class="px-6 py-4 bg-gray-200 font-semibold rounded-t-box shadow-sm">Registration Form</h2>
+<main class='mx-auto max-w-7xl mt-4 px-4 py-6 sm:px-6 lg:px-8'>
+    
+    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" class="mx-auto max-w-3xl">
+        <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
+            <ul class="flex -mb-px">
+                <li class="w-full bg-white inline-block p-6 text-green-700 border-b-2 border-green-700 active text-left text-sm">
+                    Registration Form
+                </li>
+            </ul>
+        </div>
         <!-- 
+        <h2 class="px-6 py-4 bg-gray-200 font-semibold rounded-t-box shadow-sm">Registration Form</h2>
         <div class="flex items-center justify-end gap-x-6 bg-white p-6 border-b">
             <div class="space-y-12 w-full">
                 <div class="">
@@ -116,7 +136,7 @@ $styleTextError = "mt-2 text-red-400 text-xs";
         </div>
         -->
 
-        <div class="flex items-center justify-end gap-x-6 bg-white p-6 border-b">
+        <div class="flex items-center justify-end gap-x-6 bg-white px-6 py-10 border-b">
             <div class="space-y-12 w-full">
                 <div class="">
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-8">
@@ -159,11 +179,12 @@ $styleTextError = "mt-2 text-red-400 text-xs";
             </div>
         </div>
         
-        <div class="flex items-center justify-end gap-x-6 bg-white p-6 border-b">
+        <div class="flex items-center justify-end gap-x-6 bg-white px-6 py-10 border-b">
             <div class="space-y-12 w-full">
                 <div class="">
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-8">
-                        <div class="sm:col-span-2">
+                        <input type="hidden" id="organizationId" name="organizationId"  value="<?php echo $organizationDetail['id']; ?>"/>
+                        <!-- <div class="sm:col-span-2">
                             <select id="organizationId" data-label="Organization" required>
                                 <?php 
                                     if ($orgResult !== false && $orgResult->num_rows > 0) {
@@ -183,17 +204,17 @@ $styleTextError = "mt-2 text-red-400 text-xs";
                                     }
                                 ?>
                             </select>
-                        </div>
+                        </div> -->
                         <div class="sm:col-span-1">
                             <input type="text" id="employeeNumber" data-label="Employee Number" />
                         </div>
-                        <div class="sm:col-span-1">
-                            <input type="text" id="membership" data-label="Membership" />
-                        </div>
-                        <div class="sm:col-span-1">
+                        <div class="sm:col-span-2">
                             <input type="text" id="department" data-label="Department" />
                         </div>
-                        <div class="sm:col-span-1">
+                        <div class="sm:col-span">
+                            <input type="text" id="membership" data-label="Membership" />
+                        </div>
+                        <div class="sm:col-span-2">
                             <input type="text" id="level" data-label="Level" />
                         </div>
                     </div>
@@ -201,7 +222,7 @@ $styleTextError = "mt-2 text-red-400 text-xs";
             </div>
         </div>
         
-        <div class="flex items-center justify-end gap-x-6 bg-white p-6 border-b">
+        <div class="flex items-center justify-end gap-x-6 bg-white px-6 py-10">
             <div class="space-y-12 w-full">
                 <div class="">
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-8">
@@ -226,9 +247,9 @@ $styleTextError = "mt-2 text-red-400 text-xs";
             </div>
         </div>
 
-        <div class="flex items-center justify-end gap-x-6 bg-white mt-0 px-6 py-4 rounded-b-box shadow-sm">
-            <a href="<?php base_url(); ?>/registeredEmployees.php" class="<?php echo $styleButtonLink; ?>">Cancel</a>
-            <button type="submit" class="<?php echo $styleButtonPrimary; ?>">Submit</button>
+        <div class="flex items-center justify-end flex-col sm:flex-row gap-x-1 bg-white mt-0 px-6 py-4 border-t-2 border-green-700">
+            <a href="<?php echo base_url(false) . '/employees-APE.php?o=' . $o . '&y=' . $y; ?>" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Cancel</a>
+            <button type="submit" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">Submit</button>
         </div>
     </form>
 </main>

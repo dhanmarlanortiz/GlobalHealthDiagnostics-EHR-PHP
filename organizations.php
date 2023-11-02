@@ -58,7 +58,7 @@ $result = $conn->query($sql);
                         "<tr>" .
                             "<td>" . $org["name"] . "</td>" .
                             "<td>" . $org["address"] . "</td>".
-                            "<td class='text-right'><a class='btn btn-info btn-sm text-white text-xs rounded normal-case' href='" . base_url(false) . "/organization.php?id=" . $org['id'] . "'>View</a></td>".
+                            "<td class='text-right'><a class='btn btn-info btn-sm text-white text-xs rounded normal-case' href='" . base_url(false) . "/employees-APE.php?o=" . $org['id'] . "&y=" . date('Y') . "'>View</a></td>".
                         "</tr>";
                     }
                     echo
