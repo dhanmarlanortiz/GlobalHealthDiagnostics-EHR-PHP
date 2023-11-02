@@ -31,15 +31,21 @@ $result = $conn->query($sql);
                     </ul>
                 </div>
             </div>
-            <div>
-                <a href="<?php base_url(); ?>/createOrganization.php" class="btn btn-success hover:bg-green-600 rounded text-white normal-case">Create</a>
-            </div>
         </div>
     </div>
 </header>
-<main class='mx-auto max-w-7xl mt-4 px-4 pt-6 pb-20 sm:px-6 lg:px-8'>
-    <div class="bg-white p-6 rounded shadow-sm">
+<main class='<?php echo $classMainContainer; ?>'>
+    <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
+        <ul class="flex -mb-px">
+            <li class="mr-2">
+                <a href="" class="inline-block p-2 md:p-4 text-green-700 border-b-2 border-green-700 rounded-t-lg active text-left text-xs md:text-sm dark:text-green-800 dark:border-green-800" aria-current="page">
+                    Client Companies
+                </a>
+            </li>
+        </ul>
+    </div>
 
+    <div class="bg-white p-2 md:p-4">
         <?php
         if ($result->num_rows > 0) {
             echo    
@@ -58,7 +64,14 @@ $result = $conn->query($sql);
                         "<tr>" .
                             "<td>" . $org["name"] . "</td>" .
                             "<td>" . $org["address"] . "</td>".
-                            "<td class='text-right'><a class='btn btn-info btn-sm text-white text-xs rounded normal-case' href='" . base_url(false) . "/employees-APE.php?o=" . $org['id'] . "&y=" . date('Y') . "'>View</a></td>".
+                            "<td class='text-right'>
+                                <a class='" . $classTblBtnSecondary . "  mr-1' href='" . base_url(false) . "/employees-APE.php?o=" . $org['id'] . "&y=" . date('Y') . "' title='View Medical Service Record'>
+                                    View Records
+                                </a>
+                                <a class='" . $classTblBtnPrimary . " ' href='" . base_url(false) . "/organizationDetails.php?id=" . $org['id'] . "' title='View or edit organization details'>
+                                    Edit Details
+                                </a>
+                            </td>".                         
                         "</tr>";
                     }
                     echo
@@ -68,13 +81,18 @@ $result = $conn->query($sql);
         } else {
             echo "Results not found.";
         }
+        
         $conn->close();
         ?>
-
-
-
-
-  </div>
+    </div>
+    <div class="bg-white p-2 md:px-4 md:pb-4 border-t-2 border-green-700">
+        <div class="flex sm:justify-between flex-col sm:flex-row">
+            <div></div>
+            <div class="p-1">
+                <a href="<?php base_url(); ?>/createOrganization.php" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">Create Organization</a>
+            </div>
+        </div>
+    </div>
 </main>
 
 

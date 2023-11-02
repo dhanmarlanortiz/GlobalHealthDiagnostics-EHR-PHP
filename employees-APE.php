@@ -67,7 +67,7 @@ if ($orgDetailsResult !== false && $orgDetailsResult->num_rows > 0) {
         </div>
     </div>
 </header>
-<main class='mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8'>
+<main class='<?php echo $classMainContainer; ?>'>
     
     <!-- <div class="bg-white p-6 rounded shadow-sm">
         <form id="searchYear-APE" method="GET" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" class="flex flex-col sm:flex-row sm:items-center max-w-2xl">
@@ -131,7 +131,7 @@ if ($orgDetailsResult !== false && $orgDetailsResult->num_rows > 0) {
                             <th>Date Registered</th>
                             <th>Date Completed</th>
                             <th>Remarks</th>
-                            <th>Action</th>
+                            <th>Information</th>
                         </tr>
                     </thead>
                     <tbody>";
@@ -158,7 +158,7 @@ if ($orgDetailsResult !== false && $orgDetailsResult->num_rows > 0) {
                                 "<td>" . $dateCompleted . "</td>" .
                                 "<td>" . $emp["remarks"] . "</td>" .
                                 "<td class='text-center'>
-                                    <a class='btn btn-primary btn-sm text-xs rounded normal-case font-normal' href='" . base_url(false) . "/employee-APE.php?id=" . $emp['id'] . "'>
+                                    <a class='" . $classTblBtnPrimary . "' href='" . base_url(false) . "/employee-APE.php?id=" . $emp['id'] . "'>
                                         View
                                     </a>
                                 </td>".
@@ -174,7 +174,7 @@ if ($orgDetailsResult !== false && $orgDetailsResult->num_rows > 0) {
         $conn->close();
         ?>
     </div>
-    <div class="bg-white p-2 md:px-4 md:pb-4">
+    <div class="bg-white p-2 md:px-4 md:pb-4 border-t-2 border-green-700">
         <div class="flex sm:justify-between flex-col sm:flex-row">
             <div class="dataTables_year p-1">
                 <form id="searchYear-APE" method="GET" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" class="flex flex-col sm:flex-row sm:items-center max-w-2xl">
@@ -191,7 +191,7 @@ if ($orgDetailsResult !== false && $orgDetailsResult->num_rows > 0) {
             </div>
             <div class="p-1">
                 <a href="<?php base_url()?>/organizations.php" class="btn btn-default btn-sm text-xs rounded normal-case h-9 w-full sm:w-auto mb-2 sm:mb-0">Back</a>
-                <a href="<?php echo base_url(false) . "/employeeCreate-APE.php?o=" . $o . "&y=" . $y; ?>" class="btn btn-primary btn-sm text-xs rounded normal-case h-9 w-full sm:w-auto">APE Registration</a>
+                <a href="<?php echo base_url(false) . "/employeeCreate-APE.php?o=" . $o . "&y=" . $y; ?>" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">APE Registration</a>
             </div>
         </div>
     </div>
