@@ -19,7 +19,6 @@ if(isset($_SESSION["valid"])){
 require_once('connection.php');
 include('header.php');
 
-$styleSubmit = "flex w-full justify-center rounded-md bg-blue-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600";
 $styleInput = "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6";
 $styleLabel = "block text-sm font-medium leading-6 text-gray-900";
 
@@ -65,20 +64,52 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $conn->close();
 
 ?>
-	
-			
 
-			<div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8" style="min-height: calc(100vh - 52px);">
-				<div class="sm:mx-auto sm:w-full sm:max-w-sm bg-white px-6 pt-6 rounded-t-box shadow-sm">
-					<img class="mx-auto w-auto" src="images/ghd-logo-text-bottom.png" alt="Global health diagnostics" />
+	<style>
+		.login-page {
+			background-image: 
+				/* linear-gradient(91deg, rgba(21, 128, 60, .8), rgba(21, 128, 60, .2)),  */
+				url(images/medical-banner-with-doctor-wearing-coat-min.jpg);
+			background-size: cover;
+    		background-position: center;
+		}
+
+		.login-page--inner::before {
+			content: "";
+			position: absolute;
+			width: 100vw;
+			height: 100vh;
+			background-color: #fff;
+			right: 100%;
+			top: 0;
+		}
+		
+		@media screen and (max-width: 641px) {
+			.login-page--container {
+				background-color: rgba(255,255,255,0.9);
+			}
+		}
+
+		footer {
+			display: none !important;
+		}		
+	</style>
+
+	<div class="login-page">
+		<div class="login-page--inner m-auto max-w-7xl relative">
+			<div class="login-page--container flex min-h-full flex-col justify-center px-6 py-12 lg:px-8 max-w-xl bg-white shadow-lg" style="min-height: 100vh;">
+				<div class="sm:mx-auto sm:w-full sm:max-w-sm">
+					<img class="mx-auto w-auto" src="images/ghd-logo.png" alt="Global health diagnostics logo" draggable="false" />
+					<h1 class="font-medium mb-10 mt-5 text-3xl text-4xl text-center text-slate-600">
+						Global Health <span class="block font-thin text-slate-400 text-xl tracking-wider">DIAGNOSTICS</span>
+					</h1>
 				</div>
-				
-				<div class="sm:mx-auto sm:w-full sm:max-w-sm bg-white p-6 rounded-b-box shadow-sm">
+				<div class="sm:mx-auto sm:w-full sm:max-w-sm">
 					<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" class="space-y-6">
 						<div>
 							<label for="username" class="<?php echo $styleLabel; ?>">Username</label>
 							<div class="mt-2">
-								<input id="username" name="username" type="text" placeholder="Username" autocomplete="username" class="<?php echo $styleInput; ?>" required />
+								<input id="username" name="username" type="text" placeholder="Username" autocomplete="username" class="<?php echo $classInputPrimary; ?>" required />
 							</div>
 						</div>
 						
@@ -90,17 +121,18 @@ $conn->close();
 								</div> -->
 							</div>
 							<div class="mt-2">
-								<input id="password" name="password" type="password" placeholder="Password" autocomplete="current-password" class="<?php echo $styleInput; ?>" required />
+								<input id="password" name="password" type="password" placeholder="Password" autocomplete="current-password" class="<?php echo $classInputPrimary; ?>" required />
 							</div>
 						</div>
 						
 						<div>
-							<button type="submit" class="<?php echo $styleSubmit; ?>">Sign in</button>
+							<button type="submit" class="<?php echo $classBtnPrimary; ?> w-full">Sign in</button>
 						</div>
 					</form>
 				</div>
 			</div>
-
+		</div>
+	</div>
 <?php 
 include('footer.php');
 ?>
