@@ -31,49 +31,55 @@ $result = $conn->query($sql);
                 </div>
             </div>
             <div>
-                <a href="<?php base_url(); ?>/createUser.php" class="btn btn-success hover:bg-green-600 rounded text-white normal-case">Create</a>
+                <a href="<?php base_url(); ?>/createUser.php" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">Create User</a>
             </div>
         </div>
     </div>
 </header>
-<main class='mx-auto max-w-7xl mt-4 px-4 pt-6 pb-20 sm:px-6 lg:px-8'>
-    <div class="bg-white p-6 rounded shadow-sm overflow-hidden">
-
-<?php
-if ($result->num_rows > 0) {
-    echo    
-    "<div class='overflow-auto p-1'>
-        <table class='display'>
-            <thead>
-                <tr>
-                    <th>Username</th>
-                    <th>Organization</th>
-                    <th>Role</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>";
-            while($user = $result->fetch_assoc()) {
-                $userRole = ($user["role"] == "1") ? "Admin" : "Client";
-                $userStatus= ($user["isActive"] == "1") ? "Active" : "Inactive";
-            echo 
-                "<tr>" .
-                    "<td>" . $user["username"] . "</td>" .
-                    "<td>" . $user["organization"] . "</td>".
-                    "<td>" . $userRole . "</td>".
-                    "<td class='text-right'><a class='btn btn-info btn-sm text-white text-xs rounded normal-case' href='" . base_url(false) . "/user.php?id=" . $user['id'] . "'>View</a></td>".
-                "</tr>";
-            }
-            echo
-            "</body>" .
-        "</table>
-    </div>";
-} else {
-    echo "Results not found.";;
-}
-$conn->close();
-?>
-    
+<main class='<?php echo $classMainContainer; ?>'>
+    <div class="bg-white p-2 md:p-4">
+        <?php
+        if ($result->num_rows > 0) {
+            echo    
+            "<div class='overflow-auto p-1'>
+                <table class='display'>
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Organization</th>
+                            <th>Role</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>";
+                    while($user = $result->fetch_assoc()) {
+                        $userRole = ($user["role"] == "1") ? "Admin" : "Client";
+                        $userStatus= ($user["isActive"] == "1") ? "Active" : "Inactive";
+                    echo 
+                        "<tr>" .
+                            "<td>" . $user["username"] . "</td>" .
+                            "<td>" . $user["organization"] . "</td>".
+                            "<td>" . $userRole . "</td>".
+                            "<td class='text-right'><a class='" . $classTblBtnPrimary . "' href='" . base_url(false) . "/user.php?id=" . $user['id'] . "'>View</a></td>".
+                        "</tr>";
+                    }
+                    echo
+                    "</body>" .
+                "</table>
+            </div>";
+        } else {
+            echo "Results not found.";;
+        }
+        $conn->close();
+        ?>
+    </div>
+    <div class="bg-white p-2 md:px-4 md:pb-4 border-t-2 border-green-700">
+        <div class="flex sm:justify-between flex-col sm:flex-row">
+            <div></div>
+            <div class="p-1">
+                <a href="<?php base_url(); ?>/createUser.php" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">Create User</a>
+            </div>
+        </div>
     </div>
 </main>
 

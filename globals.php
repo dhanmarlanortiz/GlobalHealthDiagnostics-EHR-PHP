@@ -20,14 +20,6 @@ global $classMainContainer;
 $classInputPrimary = "block w-full rounded py-1.5 px-2 text-gray-900 border-gray-300 placeholder:text-gray-400 focus:border-green-700 focus:ring-0 focus:bg-green-50 sm:text-sm sm:leading-6";
 global $classInputPrimary;
 
-function main_open() {
-
-}
-
-function main_close() {
-    
-}
-
 function getOrganization($id = null) {
     require("connection.php");
     
@@ -42,6 +34,17 @@ function getOrganization($id = null) {
             return $orgResult->fetch_assoc();
         }
     }
+}
+
+function createFormHeader($header = 'Form') {
+    echo 
+        '<div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200">
+            <ul class="flex -mb-px">
+                <li class="w-full bg-white inline-block p-6 text-green-700 border-b-2 border-green-700 active text-left text-sm">
+                    ' . $header . '
+                </li>
+            </ul>
+        </div>';
 }
 
 function print_pre($data = null) {

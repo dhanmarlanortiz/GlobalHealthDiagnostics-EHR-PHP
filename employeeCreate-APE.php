@@ -108,16 +108,11 @@ $styleTextError = "mt-2 text-red-400 text-xs";
         </div>
     </div>
 </header>
-<main class='mx-auto max-w-7xl mt-4 px-4 py-6 sm:px-6 lg:px-8'>
+<main class='mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8'>
     
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" class="mx-auto max-w-3xl">
-        <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
-            <ul class="flex -mb-px">
-                <li class="w-full bg-white inline-block p-6 text-green-700 border-b-2 border-green-700 active text-left text-sm">
-                    Registration Form
-                </li>
-            </ul>
-        </div>
+        
+        <?php createFormHeader('Registration Form'); ?>
         <!-- 
         <h2 class="px-6 py-4 bg-gray-200 font-semibold rounded-t-box shadow-sm">Registration Form</h2>
         <div class="flex items-center justify-end gap-x-6 bg-white p-6 border-b">

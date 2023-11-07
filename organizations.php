@@ -68,7 +68,7 @@ $result = $conn->query($sql);
                                 <a class='" . $classTblBtnSecondary . "  mr-1' href='" . base_url(false) . "/employees-APE.php?o=" . $org['id'] . "&y=" . date('Y') . "' title='View Medical Service Record'>
                                     View Records
                                 </a>
-                                <a class='" . $classTblBtnPrimary . " ' href='" . base_url(false) . "/organizationDetails.php?id=" . $org['id'] . "' title='View or edit organization details'>
+                                <a class='" . $classTblBtnPrimary . " ' href='" . base_url(false) . "/organization.php?id=" . $org['id'] . "' title='View or edit organization details'>
                                     Edit Details
                                 </a>
                             </td>".                         

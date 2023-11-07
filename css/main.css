@@ -157,4 +157,39 @@ table:before {
   border: none;
 }
 
+.flash {
+  padding: 0;
+  font-size: 14px;
+  margin: 0 !important;
+}
+.flash.flash-error-inline {
+  color: #f87171;
+}
+
+.input-error input,
+.input-error input:hover,
+.input-error input:focus {
+  border-color: #f87171;
+  background-color: rgba(248, 113, 113, 0.1);
+}
+.input-error .input-error--message p {
+  color: #f87171;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.flash.flash-success {
+  margin: 1.5rem 0 !important;
+  background: #fff;
+  padding: 1.5rem;
+  color: #15803c;
+}
+
+.flash.flash-error {
+  margin: 1.5rem 0 !important;
+  background: #fff;
+  padding: 1.5rem;
+  color: #f87171;
+}
+
 /*# sourceMappingURL=main.css.map */

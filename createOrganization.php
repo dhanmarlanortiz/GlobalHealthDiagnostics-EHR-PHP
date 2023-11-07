@@ -30,6 +30,21 @@ function test_input($data) {
     return $data;
 }
 
+// $id = 0;
+// if ($_SERVER["REQUEST_METHOD"] == "GET") {
+//     $id = $_GET['id'];
+//     $getQuery = "SELECT * FROM APE WHERE id = $id";
+//     $apeDetailsResult = $conn->query($apeDetailsQuery);
+
+//     if ($apeDetailsResult !== false && $apeDetailsResult->num_rows > 0) {
+//         while($apeDetails = $apeDetailsResult->fetch_assoc()) {
+//             $_POST = $apeDetails;
+//         }
+//     }
+// }
+
+
+$errVal = $errKey = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $name = test_input($_POST["name"]);
   $email = test_input($_POST["email"]);
@@ -39,15 +54,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $sql = "INSERT INTO Organization (name, email, phone, address)
   VALUES ('$name', '$email', '$phone', '$address')";
   
-  if ($conn->query($sql) === TRUE) {
-      $id = $conn->insert_id;
-      $url = base_url(false) . "/organization.php?id=" . $id;
-      header("Location: " . $url ."");
-  }
+    if ($conn->query($sql) === TRUE) {
+        $id = $conn->insert_id;
+        $url = base_url(false) . "/organization.php?id=" . $id;
+        header("Location: " . $url ."");
+
+    } else {
+
+        // duplicate entry error
+        if($conn->errno == 1062) {
+            $errMsg = explode("'", $conn->error);
+            $errVal = $errMsg[1];
+            $errKey = $errMsg[3];
+        }
+    }
 }
 
 $conn->close();
-
 ?>
 
 <header class="bg-white shadow-sm">
@@ -64,52 +87,70 @@ $conn->close();
                 </div>
             </div>
             <div>
-                <a href="<?php base_url(); ?>/organizations.php" class="btn btn-default rounded normal-case">Back</a>
             </div>
         </div>
     </div>
 </header>
-<main class='mx-auto max-w-7xl mt-4 px-4 pt-6 pb-20 sm:px-6 lg:px-8'>
+<main class='mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8'>
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" class="max-w-md mx-auto">
-        <h2 class="px-6 py-4 bg-gray-200 font-semibold rounded-t-box shadow-sm">Form</h2>
-        <div class="flex items-center justify-end gap-x-6 bg-white p-6 shadow-sm">
+        <?php createFormHeader(); ?>
+        <div class="flex items-center justify-end gap-x-6 bg-white px-6 py-10 border-b">
             <div class="space-y-12 w-full">
-                <div class="border-b border-gray-900/10 pb-12">
+                <div class="">
                     <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                        <div class="sm:col-span-6">
-                            <label htmlFor="name" class="<?php echo $styleLabel; ?>">Organization Name</label>
-                            <div class="mt-2">
-                                <input name="name" id="name" value="<?php echo $name; ?>" type="text" class="<?php echo $styleInput; ?>" required />
-                            </div>
+                        <div class="sm:col-span-6 <?php echo ($errKey == 'name') ? 'input-error' : ''; ?>">
+                            <input id="name" type="text" data-label="Organization Name" required />
+                            <?php echo ($errKey == 'name') ? '<div class="input-error--message"><p>' . $errVal . ' already exists.</p></div>' : ''; ?>
                         </div>
                         <div class="sm:col-span-6">
-                            <label htmlFor="email" class="<?php echo $styleLabel; ?>">Email Address</label>
-                            <div class="mt-2">
-                                <input name="email" id="email" value="<?php echo $email; ?>" type="email" class="<?php echo $styleInput; ?>" required />
-                            </div>
+                            <input id="email" type="email" data-label="Email Address" required />
                         </div>
                         <div class="sm:col-span-6">
-                            <label htmlFor="phone" class="<?php echo $styleLabel; ?>">Telephone Number</label>
-                            <div class="mt-2">
-                                <input name="phone" id="phone" value="<?php echo $phone; ?>" type="number" class="<?php echo $styleInput; ?>" required />
-                            </div>
+                            <input id="phone" type="number" data-label="Telephone Number" required />
                         </div>
                         <div class="sm:col-span-6">
-                            <label htmlFor="address" class="<?php echo $styleLabel; ?>">Office Address</label>
-                            <div class="mt-2">
-                                <input name="address" id="address" value="<?php echo $address; ?>" type="address" class="<?php echo $styleInput; ?>" required />
-                            </div>
+                            <input id="address" type="text" data-label="Office Address" required />
                         </div>                
                     </div>
                 </div>
             </div>
         </div>
-        <div class="flex items-center justify-end gap-x-6 bg-white mt-0 pb-6 px-6 rounded-b-box shadow-sm">
-            <a href="<?php base_url(); ?>/Organizations.php" class="<?php echo $styleButtonLink; ?>">Cancel</a>
-            <button type="submit" class="<?php echo $styleButtonPrimary; ?>">Save</button>
+        <div class="flex items-center justify-end flex-col sm:flex-row gap-x-1 bg-white mt-0 px-6 py-4 border-t-2 border-green-700">
+            <a href="<?php base_url(); ?>/Organizations.php" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Cancel</a>
+            <button type="submit" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">Save</button>
         </div>
     </form>
 </main>
+
+<script>
+    $(document).ready( function() {
+        var post = <?php echo json_encode($_POST) ?>;
+        let styleInput = "block w-full rounded py-1.5 px-2 text-gray-900 border-gray-300 placeholder:text-gray-400 focus:border-green-700 focus:ring-0 focus:bg-green-50 sm:text-sm sm:leading-6";
+        let styleLabel = "block text-sm font-medium leading-6 text-gray-900";
+
+        $('input[type=text], input[type=number], input[type=email], input[type=date], select').each( function() {
+            let id = $(this).attr('id');
+            let placeholder = $(this).attr('data-label');
+
+            $(`<label for='${$(this).attr("id")}' class='${styleLabel}'>${ $(this).attr('data-label') }</label>`).insertBefore($(this));
+            $(this).wrap(`<div class='mt-2'></div>`);
+            $(this).attr('class', styleInput);  
+            $(this).attr('name', id);
+            // $(this).attr('placeholder', placeholder);
+        });
+
+        if(Object.keys(post).length !== 0) {
+            $('input').each( function(key) {
+                let id = $(this).attr('id');
+                
+                // $(this).attr('value', (Object.keys(post[id]).length === 0) ? '' : post[id]);
+                $(this).attr('value', post[id]);
+                $(this).attr('name', id);
+            });
+        }
+
+    });
+</script>
 
 <?php
   include('footer.php');

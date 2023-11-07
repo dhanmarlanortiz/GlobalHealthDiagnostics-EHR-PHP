@@ -119,11 +119,6 @@ $styleTextError = "mt-2 text-red-400 text-xs";
                         </ul>
                     </div>
                 </div>
-                <!-- <div class="hidden lg:block">
-                    <a class="btn btn-default" href="<?php echo base_url() . '/employees-APE.php?o=' . $_POST['organizationId'] . '&y=' . date('Y', strtotime($_POST['dateRegistered'])); ?>">Back</a>
-                    <a class="btn btn-secondary" href="<?php echo base_url() . '/components/controlNumberCreate-APE.php?id=' . $_POST['id'] ; ?>" >Get Control Number</a>
-                    <button class="btn btn-primary" type="submit" >Save Changes</button>
-                </div> -->
             </div>
         </div>
     </header>
@@ -266,11 +261,6 @@ $styleTextError = "mt-2 text-red-400 text-xs";
             <div class="flex items-center justify-end flex-col sm:flex-row gap-x-1 bg-white mt-0 px-6 py-4 border-t-2 border-green-700">
                 <a href="<?php echo base_url(false) . '/employees-APE.php?o=' . $o . '&y=' . $y; ?>" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Cancel</a>
                 <button type="submit" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">Save Changes</button>
-            </div>
-            <div class="flex justify-end gap-x-1 lg:hidden">
-                <a href="<?php base_url(); ?>/employees-APE.php" class="btn btn-default">Back</a>
-                <a href="<?php base_url(); ?>/employees-APE.php" class="btn btn-secondary">Get Control Number</a>
-                <button type="submit" class="btn btn-primary">Save Changes</button>
             </div>
         </div>        
     </main>

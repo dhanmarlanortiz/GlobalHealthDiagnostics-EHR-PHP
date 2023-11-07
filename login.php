@@ -58,6 +58,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 				exit();				
 			}
 		}
+	} else {
+		flash('login-error', 'Invalid username or password', FLASH_ERROR_INLINE);
 	}
 }
 
@@ -95,13 +97,13 @@ $conn->close();
 		}		
 	</style>
 
+
 	<div class="login-page">
 		<div class="login-page--inner m-auto max-w-7xl relative">
 			<div class="login-page--container flex min-h-full flex-col justify-center px-6 py-12 lg:px-8 max-w-xl bg-white shadow-lg" style="min-height: 100vh;">
 				<div class="sm:mx-auto sm:w-full sm:max-w-sm">
 					<img class="mx-auto w-auto" src="images/ghd-logo.png" alt="Global health diagnostics logo" draggable="false" />
-					<h1 class="font-medium mb-10 mt-5 text-3xl text-4xl text-center text-slate-600">
-						Global Health <span class="block font-thin text-slate-400 text-xl tracking-wider">DIAGNOSTICS</span>
+					<h1 class="font-medium mb-10 mt-5 text-3xl text-3xl text-center text-slate-600">Global Health Diagnostics<span class="block font-thin mt-1 text-lg text-slate-400 tracking-wider">Electronic Health Record Systems</span>
 					</h1>
 				</div>
 				<div class="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -126,8 +128,9 @@ $conn->close();
 						</div>
 						
 						<div>
-							<button type="submit" class="<?php echo $classBtnPrimary; ?> w-full">Sign in</button>
+							<button type="submit" class="<?php echo $classBtnPrimary; ?> w-full mb-2">Sign in</button>
 						</div>
+						<?php flash('login-error'); ?>
 					</form>
 				</div>
 			</div>
