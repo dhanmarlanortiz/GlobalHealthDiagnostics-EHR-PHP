@@ -22,7 +22,7 @@ include('navbar.php');
 				</div>
 				<div class="text-center">
 					<h1 class="text-4xl font-bold tracking-tight text-green-700 sm:text-6xl">Global Health Diagnostics</h1>
-					<p class="mt-6 text-lg leading-8 text-gray-600">Electronic Health Record System</p>
+					<p class="mt-6 text-lg leading-8 text-gray-600">Electronic Health Record</p>
 				</div>
 			</div>
 

@@ -8,6 +8,9 @@ global $classBtnPrimary;
 $classTblBtnPrimary = "btn btn-primary btn-sm text-xs rounded normal-case font-normal";
 global $classTblBtnPrimary;
 
+$classBtnSecondary = "btn btn-secondary btn-sm text-xs rounded normal-case h-9";
+global $classBtnSecondary;
+
 $classTblBtnSecondary = "btn btn-secondary btn-sm text-xs rounded normal-case font-normal";
 global $classTblBtnSecondary;
 
@@ -22,9 +25,6 @@ global $classInputPrimary;
 
 function getOrganization($id = null) {
     require("connection.php");
-    
-    $orgQuery = "SELECT * FROM Organization";
-    $orgArray = array();
 
     if(null !== $id) {
         $orgQuery = "SELECT * FROM Organization WHERE id = $id";
@@ -32,6 +32,44 @@ function getOrganization($id = null) {
         
         if ($orgResult !== false && $orgResult->num_rows > 0) {
             return $orgResult->fetch_assoc();
+        }
+    } else {
+        $orgsQuery = "SELECT * FROM Organization";
+        $orgsResult = $conn->query($orgsQuery);
+        
+        if ($orgsResult !== false && $orgsResult->num_rows > 0) {
+            $orgsArray = array();
+            while($orgs = $orgsResult->fetch_assoc()) {
+                $orgArr = array(
+                    'id' => $orgs['id'],
+                    'name' => $orgs['name'],
+                    'email' => $orgs['email'],
+                    'phone' => $orgs['phone'],
+                    'address' => $orgs['address']
+                );
+
+                array_push($orgsArray, $orgArr);
+            }
+            
+            return $orgsArray;
+            // return $orgsResult->fetch_assoc();
+        }
+    }
+}
+
+function getUser($id = null) {
+    require("connection.php");
+    
+    $userQuery = "SELECT * FROM User";
+    $userArray = array();
+
+    if(null !== $id) {
+
+        $userQuery = "SELECT U.*, O.name as organization FROM User U LEFT JOIN Organization O ON U.organizationId = O.id WHERE U.id = $id";
+        $userResult = $conn->query($userQuery);
+        
+        if ($userResult !== false && $userResult->num_rows > 0) {
+            return $userResult->fetch_assoc();
         }
     }
 }
@@ -45,6 +83,37 @@ function createFormHeader($header = 'Form') {
                 </li>
             </ul>
         </div>';
+}
+
+function createMainHeader($headerText = "", $pagination = array()) {
+    echo '
+        <header class="bg-white shadow-sm">
+            <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h1 class="text-3xl font-bold tracking-tight text-gray-900 mb-2">' . $headerText . '</h1>
+                        <div class="text-xs breadcrumbs p-0 text-gray-800">
+                            <ul>';
+                                
+                            foreach ($pagination as $key => $value) {
+                                echo "<li>" . $value . "</li>";
+                            }
+                            
+    echo                    '</ul>
+                        </div>
+                    </div>
+                    <div>
+                    </div>
+                </div>
+            </div>
+        </header>';
+}
+
+function clean($data) {
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
 }
 
 function print_pre($data = null) {

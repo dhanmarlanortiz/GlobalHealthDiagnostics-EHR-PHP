@@ -31,6 +31,7 @@ function test_input($data) {
 	return $data;
 }
 
+$username = $password = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $username = test_input($_POST["username"]);
   $password = test_input($_POST["password"]);
@@ -59,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			}
 		}
 	} else {
-		flash('login-error', 'Invalid username or password', FLASH_ERROR_INLINE);
+		flash('login-error', '<strong>Authentication failed!</strong> Invalid username or password', FLASH_ERROR_INLINE);
 	}
 }
 
@@ -111,7 +112,7 @@ $conn->close();
 						<div>
 							<label for="username" class="<?php echo $styleLabel; ?>">Username</label>
 							<div class="mt-2">
-								<input id="username" name="username" type="text" placeholder="Username" autocomplete="username" class="<?php echo $classInputPrimary; ?>" required />
+								<input id="username" name="username" type="text" placeholder="Username" autocomplete="username" value="<?php echo $username; ?>" class="<?php echo $classInputPrimary; ?>" required />
 							</div>
 						</div>
 						
@@ -123,7 +124,7 @@ $conn->close();
 								</div> -->
 							</div>
 							<div class="mt-2">
-								<input id="password" name="password" type="password" placeholder="Password" autocomplete="current-password" class="<?php echo $classInputPrimary; ?>" required />
+								<input id="password" name="password" type="password" placeholder="Password" autocomplete="current-password" value="<?php echo $password; ?>" class="<?php echo $classInputPrimary; ?>" required />
 							</div>
 						</div>
 						

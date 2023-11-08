@@ -33,6 +33,7 @@ function test_input($data) {
     return $data;
 }
 
+$errVal = $errKey = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = test_input($_POST["username"]);
     $email = test_input($_POST["email"]);
@@ -44,97 +45,108 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     VALUES ('$username', '$email', $role, $organizationId, '$password')";
 
     if ($conn->query($userQuery) === TRUE) {
-        // $id = $conn->insert_id;
-        // $url = base_url(false) . "/user.php?id=" . $id;
-        // header("Location: " . $url ."");
+        create_flash_message('create-success', '<strong>Success!</strong> New user has been successfully created.', FLASH_SUCCESS);
+
+        $id = $conn->insert_id;
+        $url = base_url(false) . "/user.php?id=" . $id;
+        header("Location: " . $url ."");
+
+        exit();
     } else {
-        
+        create_flash_message('create-failed', '<strong>Failed!</strong> Please review and try again.', FLASH_ERROR);
+
+        // duplicate entry error
+        if($conn->errno == 1062) {
+            $errMsg = explode("'", $conn->error);
+            $errVal = $errMsg[1];
+            $errKey = $errMsg[3];
+        }
     }
 }
 
 $conn->close();
 
+createMainHeader("Create User", array("Home", "Users", "Create User"));
 ?>
 
-<header class="bg-white shadow-sm">
-    <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center">
-            <div>
-                <h1 class="text-3xl font-bold tracking-tight text-gray-900 mb-2">Create User</h1>
-                <div class="text-xs breadcrumbs p-0 text-gray-800">
-                    <ul>
-                        <li>Home</li> 
-                        <li>Users</li> 
-                        <li>Create User</li> 
-                    </ul>
-                </div>
-            </div>
-            <div>
-                <a href="<?php base_url(); ?>/users.php" class="btn btn-default rounded normal-case">Back</a>
-            </div>
-        </div>
-    </div>
-</header>
-<main class='mx-auto max-w-7xl mt-4 px-4 pt-6 pb-20 sm:px-6 lg:px-8'>
+
+<main class='<?php echo $classMainContainer; ?>'>
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" class="max-w-3xl mx-auto">
-        <h2 class="px-6 py-4 bg-gray-200 font-semibold rounded-t-box shadow-sm">Form</h2>
-        <div class="flex items-center justify-end gap-x-6 bg-white p-6 shadow-sm">
+        <?php createFormHeader(); ?>
+        <div class="flex items-center justify-end gap-x-6 bg-white px-6 py-10 border-b">
             <div class="space-y-12 w-full">
-                <div class="border-b border-gray-900/10 pb-12">
-                    <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                        <div class="sm:col-span-3">
-                            <label htmlFor="username" class="<?php echo $styleLabel; ?>">Username</label>
-                            <div class="mt-2">
-                                <input name="username" id="username" value="<?php echo $username; ?>" type="text" class="<?php echo $styleInput; ?>" required />
-                            </div>
-                        </div>
-                        <div class="sm:col-span-3">
-                            <label htmlFor="email" class="<?php echo $styleLabel; ?>">Email</label>
-                            <div class="mt-2">
-                                <input name="email" id="email" value="<?php echo $email; ?>" type="email" class="<?php echo $styleInput; ?>" required />
-                            </div>
-                        </div>
-                        <div class="sm:col-span-3">
-                            <label htmlFor="role" class="<?php echo $styleLabel; ?>">Role</label>
-                            <div class="mt-2">
-                                <select name="role" id="role" class="<?php echo $styleInput; ?>" required>
-                                    <option <?php echo ($role == "1") ? "selected" : "" ?> value="1">Admin</option>
-                                    <option <?php echo ($role == "2") ? "selected" : "" ?> value="2">Client</option>
-                                </select>
-                                <p class="mt-3 text-gray-600 text-xs"><span class="font-semibold">Admin:</span> Global Health Diagnostics employees</p>
-                                <p class="mt-1 text-gray-600 text-xs"><span class="font-semibold">Client:</span> Company HR & Admin Officer</p>
-                            </div>
-                        </div>
-                        <div class="sm:col-span-3">
-                            <label htmlFor="organizationId" class="<?php echo $styleLabel; ?>">Organization</label>
-                            <div class="mt-2">
-                                <select name="organizationId" id="organizationId" class="<?php echo $styleInput; ?>" required>   
-                                <?php
-                                    if ($OrgResult->num_rows > 0) {
-                                        while($org = $OrgResult->fetch_assoc()) {
-                                            echo "<option value='" . $org['id'] . "'  " . (($organizationId == $org['id']) ? 'selected' : '') . ">" . $org['name'] . "</option>";
-                                        }
-                                    }
-                                ?>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="sm:col-span-3">
-                            <label htmlFor="password" class="<?php echo $styleLabel; ?>">Password</label>
-                            <div class="mt-2">
-                                <input name="password" id="password" value="<?php echo $password; ?>" type="text" class="<?php echo $styleInput; ?>" required />
-                            </div>
-                        </div>
+                <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                    <div class="sm:col-span-3 <?php echo ($errKey == 'username') ? 'input-error' : ''; ?>">
+                        <input id="username" type="text" data-label="Username" required />
+                        <p class="mt-3 text-gray-600 text-xs">Username can only contain alphabets and numbers</p>
+                        <?php echo ($errKey == 'username') ? '<div class="input-error--message"><p>' . $errVal . ' already exists.</p></div>' : ''; ?>
+                    </div>
+                    <div class="sm:col-span-3">
+                        <input id="email" type="email" data-label="Email" required />
+                    </div>
+                    <div class="sm:col-span-3">
+                        <select id="role" data-label="Role" required>
+                            <option <?php echo ($role == "1") ? "selected" : "" ?> value="1">Admin</option>
+                            <option <?php echo ($role == "2") ? "selected" : "" ?> value="2">Client</option>
+                        </select>
+                        <p class="mt-3 text-gray-600 text-xs"><span class="font-semibold">Admin:</span> Global Health Diagnostics employees</p>
+                        <p class="mt-1 text-gray-600 text-xs"><span class="font-semibold">Client:</span> Company HR & Admin Officer</p>
+                    </div>
+                    <div class="sm:col-span-3">
+                        <select id="organizationId" data-label="Organization" required>   
+                        <?php
+                            if ($OrgResult->num_rows > 0) {
+                                while($org = $OrgResult->fetch_assoc()) {
+                                    echo "<option value='" . $org['id'] . "'  " . (($organizationId == $org['id']) ? 'selected' : '') . ">" . $org['name'] . "</option>";
+                                }
+                            }
+                        ?>
+                        </select>
+                    </div>
+                    <div class="sm:col-span-3">
+                        <input id="password" type="text" data-label="Password" required />
                     </div>
                 </div>
             </div>
         </div>
-        <div class="flex items-center justify-end gap-x-6 bg-white mt-0 pb-6 px-6 rounded-b-box shadow-sm">
-            <a href="<?php base_url(); ?>/users.php" class="<?php echo $styleButtonLink; ?>">Cancel</a>
-            <button type="submit" class="<?php echo $styleButtonPrimary; ?>">Save</button>
+        <div class="flex items-center justify-end flex-col sm:flex-row gap-x-1 bg-white mt-0 px-6 py-4 border-t-2 border-green-700">
+            <a href="<?php base_url(); ?>/users.php" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Cancel</a>
+            <button type="submit" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">Save</button>
         </div>
+
+        <?php flash('create-success'); ?>
+        <?php flash('create-failed'); ?>
     </form>
 </main>
+
+
+<script>
+    $(document).ready( function() {
+        var post = <?php echo json_encode($_POST) ?>;
+        let styleInput = "block w-full rounded py-1.5 px-2 text-gray-900 border-gray-300 placeholder:text-gray-400 focus:border-green-700 focus:ring-0 focus:bg-green-50 sm:text-sm sm:leading-6";
+        let styleLabel = "block text-sm font-medium leading-6 text-gray-900";
+
+        $('input[type=text], input[type=number], input[type=date], input[type=email], select').each( function() {
+            let id = $(this).attr('id');
+            
+            $(`<label for='${$(this).attr("id")}' class='${styleLabel}'>${ $(this).attr('data-label') }</label>`).insertBefore($(this));
+            $(this).wrap(`<div class='mt-2'></div>`);
+            $(this).attr('class', styleInput);  
+            $(this).attr('name', id);
+        });
+
+        if(Object.keys(post).length !== 0) {
+            $('input').each( function(key) {
+                let id = $(this).attr('id');
+                $(this).attr('value', post[id]);
+                $(this).attr('name', id);
+            });
+        }
+
+    });
+
+</script>
+
 
 <?php
 include('footer.php');

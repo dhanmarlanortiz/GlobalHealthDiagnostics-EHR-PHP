@@ -125,8 +125,6 @@ $conn->close();
 
             <?php flash('update-success'); ?>
             <?php flash('update-failed'); ?>
-
-
         </div>
     </main>
 
