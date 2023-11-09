@@ -81,17 +81,23 @@ createMainHeader("User Details", array("Home", "Users", "User Details"));
 ?>
 
 <main class='<?php echo $classMainContainer; ?>'>
-    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" class="max-w-3xl mx-auto">
+    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" id="userForm" class="max-w-3xl mx-auto">
         <input type="hidden" id="id" name="id" value="<?php echo $id; ?>">
         <?php createFormHeader("Information"); ?>
         <div class="flex items-center justify-end gap-x-6 bg-white px-6 py-10 border-b">
             <div class="space-y-12 w-full">
                 <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                     <div class="sm:col-span-3 <?php echo ($errKey == 'username') ? 'input-error' : ''; ?>">
-                        <input id="username" data-label="Username" type="text" pattern="[a-zA-Z0-9]+" required />
-                        <p class="mt-3 text-gray-600 text-xs">Username can only contain alphabets and numbers</p>
-                        <?php echo ($errKey == 'username') ? '<div class="input-error--message"><p>' . $errVal . ' already exists.</p></div>' : ''; ?>
+                        <input type="text" id="username" data-label="Username" 
+                        title="Username must be 3-20 characters and can only contain letters, numbers, underscores, and hyphens" required />
+
+                        <p class="mt-3 text-gray-600 text-xs">Username must be 3-20 characters and can only contain letters, numbers, underscores, and hyphens</p>
                         
+                        <?php 
+                        echo ($errKey == 'username') 
+                            ? '<div class="input-error--message"><p>' . $errVal . ' already exists.</p></div>' 
+                            : ''; 
+                        ?>
                     </div>
                     <div class="sm:col-span-3">
                         <input id="email" data-label="Email Address" type="text" required />
@@ -160,6 +166,36 @@ createMainHeader("User Details", array("Home", "Users", "User Details"));
         }
     });
 
+    class FormValidation {
+        constructor() {
+            this.form = document.getElementById("userForm");
+            this.usernameInput = document.getElementById("username");
+            this.pattern = /^[a-zA-Z0-9_\-]{3,20}$/;
+
+            this.usernameInput.addEventListener("input", this.validateUsername.bind(this));
+            this.form.addEventListener("submit", this.checkForm.bind(this));
+        }
+
+        validateUsername() {
+            const username = this.usernameInput.value;
+
+            if (this.pattern.test(username)) {
+                this.form.classList.remove("form-error");
+                this.form.classList.remove("input-error--username");
+            } else {
+                this.form.classList.add("form-error");
+                this.form.classList.add("input-error--username");
+            }
+        }
+
+        checkForm(event) {
+            if (this.form.classList.contains("form-error")) {
+                event.preventDefault();
+            }
+        }
+    }
+
+    const formValidation = new FormValidation();
 </script>
 
 <?php

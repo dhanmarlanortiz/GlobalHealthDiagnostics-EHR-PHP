@@ -178,6 +178,13 @@ table:before {
   margin-top: 5px;
 }
 
+form.input-error--username #username,
+form.input-error--username #username:hover,
+form.input-error--username #username:focus {
+  border-color: #f87171;
+  background-color: rgba(248, 113, 113, 0.1);
+}
+
 .flash.flash-success {
   margin: 1.5rem 0 !important;
   background: #fff;

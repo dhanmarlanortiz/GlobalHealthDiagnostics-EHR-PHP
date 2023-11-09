@@ -216,6 +216,17 @@ table {
     }
 }
 
+form {
+    &.input-error--username {
+        #username,
+        #username:hover,
+        #username:focus {
+            border-color: #f87171;
+            background-color: rgba(248, 113, 113, 0.1)
+        }
+    }
+}
+
 .flash.flash-success {
     margin: 1.5rem 0 !important;
     background: #fff;
