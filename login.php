@@ -60,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			}
 		}
 	} else {
-		flash('login-error', '<strong>Authentication failed!</strong> Invalid username or password', FLASH_ERROR_INLINE);
+		flash('login-error', '<strong>Error!</strong> Invalid username or password', FLASH_ERROR_INLINE);
 	}
 }
 

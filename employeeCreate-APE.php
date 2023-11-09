@@ -23,7 +23,8 @@ function test_input($data) {
     $data = htmlspecialchars($data);
     return $data;
 }
-$o = $y = 0;
+$o = 0;
+$y = date('Y');
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
  
     // $headCount = test_input( $_POST['headCount'] );
@@ -252,7 +253,7 @@ $styleTextError = "mt-2 text-red-400 text-xs";
 <script>
     $(document).ready( function() {
         var post = <?php echo json_encode($_POST) ?>;
-        let styleInput = "block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6";
+        let styleInput = "block w-full rounded py-1.5 px-2 text-gray-900 border-gray-300 placeholder:text-gray-400 focus:border-green-700 focus:ring-0 focus:bg-green-50 sm:text-sm sm:leading-6";
         let styleLabel = "block text-sm font-medium leading-6 text-gray-900";
 
         $('input[type=text], input[type=number], input[type=date], select').each( function() {

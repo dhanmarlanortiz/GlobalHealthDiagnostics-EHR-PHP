@@ -116,7 +116,7 @@ $conn->close();
             </div>
         </div>
         <div class="flex items-center justify-end flex-col sm:flex-row gap-x-1 bg-white mt-0 px-6 py-4 border-t-2 border-green-700">
-            <a href="<?php base_url(); ?>/Organizations.php" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Cancel</a>
+            <a href="<?php base_url(); ?>/organizations.php" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Cancel</a>
             <button type="submit" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">Save</button>
         </div>
     </form>
