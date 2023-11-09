@@ -121,3 +121,32 @@ function print_pre($data = null) {
     print_r($data);
     echo "</pre>";
 }
+
+/*
+$restrictions = [
+    [ 
+        'role' => $role, 
+        'redirect' => $path
+    ],
+]
+*/
+function preventAccess($restrictions = null) {
+    $live = 'app.globalhealth-diagnostics.com';
+    $liveURL = "https://app.globalhealth-diagnostics.com";
+    $devURL = "http://localhost/globalhealth-php";
+    $baseURL = ($_SERVER['HTTP_HOST'] == $live) ? $liveURL : $devURL;
+
+    if(!isset($_SESSION["valid"])){
+        header("location:" . $baseURL . "/login.php");
+        exit();
+    } else {
+        if(null !== $restrictions) {
+            foreach ($restrictions as $r) {
+                if( $_SESSION['role'] == $r['role'] ) {
+                    header("location:" . $baseURL . "/" . $r['redirect']);
+                    exit();
+                }
+            }
+        }
+    }
+}

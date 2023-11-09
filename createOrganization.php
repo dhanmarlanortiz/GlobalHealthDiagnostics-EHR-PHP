@@ -1,17 +1,10 @@
 <?php 
-/* AUTHENTICATION - START */
 ob_start();
 session_start();
 
-if(!isset($_SESSION["valid"])){
-	$url = ($_SERVER['HTTP_HOST'] == 'app.globalhealth-diagnostics.com') ? "https://app.globalhealth-diagnostics.com" : "http://localhost/globalhealth-php";
-    header("location:" . $url . "/login.php");
-    exit();
-}
-/* AUTHENTICATION - END */
-
 require_once('connection.php');
 include('header.php');
+preventAccess([['role' => 2, 'redirect' => 'client/index.php']]);
 include('navbar.php');
 
 $styleInput = "block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6";

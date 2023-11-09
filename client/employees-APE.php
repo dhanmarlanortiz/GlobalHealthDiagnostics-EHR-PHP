@@ -3,15 +3,20 @@
 ob_start();
 session_start();
 
-if(!isset($_SESSION["valid"])){
-	$url = ($_SERVER['HTTP_HOST'] == 'app.globalhealth-diagnostics.com') ? "https://app.globalhealth-diagnostics.com" : "http://localhost/globalhealth-php";
-    header("location:" . $url . "/login.php");
-    exit();
-}
+
+
+// if(!isset($_SESSION["valid"])){
+// 	$url = ($_SERVER['HTTP_HOST'] == 'app.globalhealth-diagnostics.com') ? "https://app.globalhealth-diagnostics.com" : "http://localhost/globalhealth-php";
+//     header("location:" . $url . "/login.php");
+//     exit();
+// }
 /* AUTHENTICATION - END */
 
 require_once('../connection.php');
 include('../header.php');
+
+preventAccess([['role' => 1, 'redirect' => 'home.php']]);
+
 include('navbar.php');
 
 function test_input($data) {

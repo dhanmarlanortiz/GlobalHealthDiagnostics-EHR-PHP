@@ -3,15 +3,9 @@
 ob_start();
 session_start();
 
-if(!isset($_SESSION["valid"])){
-	$url = ($_SERVER['HTTP_HOST'] == 'app.globalhealth-diagnostics.com') ? "https://app.globalhealth-diagnostics.com" : "http://localhost/globalhealth-php";
-    header("location:" . $url . "/login.php");
-    exit();
-}
-/* AUTHENTICATION - END */
-
 require_once('connection.php');
 include('header.php');
+preventAccess([['role' => 2, 'redirect' => 'client/index.php']]);
 include('navbar.php');
 
 $id = 0;
