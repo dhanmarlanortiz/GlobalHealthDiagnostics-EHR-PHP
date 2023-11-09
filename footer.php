@@ -18,7 +18,7 @@
         </footer>
 
         <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-        <script src="https://cdn.datatables.net/1.13.6/js/dataTables.tailwindcss.min.js"></script>
+        <!-- <script src="https://cdn.datatables.net/1.13.6/js/dataTables.tailwindcss.min.js"></script> -->
         <script src="https://cdn.tailwindcss.com"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
@@ -26,7 +26,24 @@
             let dTable = new DataTable('table', {
                 pageLength: 50
             }); 
+
+            // document.addEventListener('DOMContentLoaded', () => {
+            //     const elements = document.querySelectorAll('*');
+
+            //     for (const element of elements) {
+            //         for (const className of element.classList) {
+            //             if (className.startsWith('dark')) {
+            //                 element.classList.remove(className);
+            //             }
+            //         }
+            //     }
+            // });
+             
+
         </script>
+
+
+
 
 </body>
 </html>

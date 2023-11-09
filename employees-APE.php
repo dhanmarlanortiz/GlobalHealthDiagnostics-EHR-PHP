@@ -97,15 +97,15 @@ if ($orgDetailsResult !== false && $orgDetailsResult->num_rows > 0) {
         
     </div> -->
 
-    <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
+    <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200">
         <ul class="flex -mb-px">
             <li class="mr-2">
-                <a href="" class="inline-block p-2 md:p-4 text-green-700 border-b-2 border-green-700 rounded-t-lg active text-left text-xs md:text-sm dark:text-green-800 dark:border-green-800" aria-current="page">
+                <a href="" class="inline-block p-2 md:p-4 text-green-700 border-b-2 border-green-700 rounded-t-lg active text-left text-xs md:text-sm" aria-current="page">
                     Annual Physical Examination
                 </a>
             </li>
             <li class="mr-2">
-                <a href="#" class="inline-block p-2 md:p-4 border-b-2 border-transparent rounded-t-lg text-left text-xs md:text-sm hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">
+                <a href="#" class="inline-block p-2 md:p-4 border-b-2 border-transparent rounded-t-lg text-left text-xs md:text-sm hover:text-gray-600 hover:border-gray-300">
                     Pre-employment Medical Assessment
                 </a>
             </li>
@@ -179,7 +179,7 @@ if ($orgDetailsResult !== false && $orgDetailsResult->num_rows > 0) {
             <div class="dataTables_year p-1">
                 <form id="searchYear-APE" method="GET" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" class="flex flex-col sm:flex-row sm:items-center max-w-2xl">
                     <label>
-                        Year: <input id="y" value="<?php echo $y; ?>" type="number" id="y" name="y" min="1900" max="2099" step="1"  class="border placeholder-gray-500 ml-2 px-3 py-2 rounded-lg border-gray-200 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 dark:bg-gray-800 dark:border-gray-600 dark:focus:border-blue-500 dark:placeholder-gray-400" required />
+                        Year: <input id="y" value="<?php echo $y; ?>" type="number" id="y" name="y" min="1900" max="2099" step="1"  class="border placeholder-gray-500 ml-2 px-3 py-2 rounded-lg border-gray-200 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" required />
                     </label>
                     <input type="hidden" name="o" value="<?php echo $o; ?>">
                 </form>

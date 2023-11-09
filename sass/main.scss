@@ -6,6 +6,8 @@ $color-primary-darker: #166534; // green-800
 $color-secondary: #fbbf24; // amber-400
 $color-secondary-darker: #eab308; // amber-400
 
+$text-color: #1f2937;
+
 header h1 {
     color: $color-primary !important;
 }
@@ -95,6 +97,10 @@ table {
             padding-top: 20px;
             padding-bottom: 20px;
         }
+
+        td {
+            color: $text-color;
+        }
     }
 
 
@@ -128,7 +134,7 @@ table {
     }
 }
 
-.dataTables_length {
+.dataTables_wrapper .dataTables_length {
     @media screen and (max-width: 639px) {
         margin-bottom: 10px;
     }
@@ -136,6 +142,7 @@ table {
     label {
         font-size: 12px;
         font-weight: 500;
+        color: $text-color;
     }
 
     select {
@@ -153,6 +160,7 @@ table {
     label {
         font-size: 12px;
         font-weight: 500;
+        color: $text-color;
     }
 
     input {
@@ -184,6 +192,18 @@ table {
     @media screen and (max-width: 639px) {
         margin-bottom: 10px;
     }
+}
+
+.dataTables_wrapper {
+background-color: #fff; /* Set the background color to white */
+}
+
+.dataTables_wrapper .dataTables_scrollHead {
+background-color: #f5f5f5; /* Set the header background color to light grey */
+}
+
+.dataTables_wrapper .dataTables_processing {
+background-color: #fff; /* Set the processing overlay background color to white */
 }
 
 

@@ -92,7 +92,7 @@ $conn->close();
     </header>
     <main class='mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8'>
         <div class="mx-auto rounded-b-box rounded-b-box max-w-3xl">
-            <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
+            <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200">
                 <ul class="flex -mb-px">
                     <li class="w-full bg-white inline-block p-6 text-green-700 border-b-2 border-green-700 active text-left text-sm">
                         Organization Details
