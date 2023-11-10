@@ -26,6 +26,20 @@ global $classInputPrimary;
 $classMainContainer = "mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8";
 global $classMainContainer;
 
+
+function base_url($print = true) {
+    $host = "app.globalhealth-diagnostics.com";
+    $liveURL = "https://app.globalhealth-diagnostics.com";
+    $devURL = "http://localhost/globalhealth-php";
+    
+    $url = ($_SERVER['HTTP_HOST'] == $host) ? $liveURL : $devURL;
+    if($print === true) {
+        echo $url;
+    } else {
+        return $url;
+    }
+}
+
 function getOrganization($id = null) {
     require("connection.php");
 

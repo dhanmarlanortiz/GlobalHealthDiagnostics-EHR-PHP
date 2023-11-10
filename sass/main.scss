@@ -148,7 +148,8 @@ table {
     select {
         padding-right: 20px;	
         margin: 0 5px;
-        
+        font-size: 12px;
+
         @media screen and (max-width: 639px) {
             margin: 0 10px 0 19px;
             width: calc(100% - 110px);
@@ -259,4 +260,26 @@ form {
     background: #fff;
     padding: 1.5rem;
     color: #f87171;
+}
+
+.alert-list {
+    list-style: auto;
+    padding: 15px 20px 15px 35px;
+    width: auto;
+    border-radius: 4px;
+    display: inline-block;
+
+    &.alert-list--success {
+        background: rgba(21, 128, 61, .1);
+    }
+
+    &.alert-list--error {
+        background: #fee2e2;
+    }
+
+    li {
+        font-size: 13px;
+        padding: 2px 0;
+        color: #525252;
+    }
 }

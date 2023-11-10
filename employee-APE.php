@@ -52,11 +52,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $department = test_input( $_POST['department'] );
     $level = test_input( $_POST['level'] );
     $dateRegistered = test_input( $_POST['dateRegistered'] );
-    // $dateCompleted = date("Y-m-d", $_POST['dateCompleted']);
     $examination = test_input( $_POST['examination'] );
     $remarks = test_input( $_POST['remarks'] );
-
-    
 
     $apeUpdateQuery =  "UPDATE APE SET 
                         headCount = $headCount,
@@ -84,7 +81,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     } else {
         echo $conn->error;
-        // echo "<script>$.notify('Failed')</script>";
     }
 }
 
