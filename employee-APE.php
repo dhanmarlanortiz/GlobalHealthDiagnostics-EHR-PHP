@@ -4,8 +4,13 @@ session_start();
 
 require_once('connection.php');
 include('header.php');
-preventAccess([['role' => 2, 'redirect' => 'client/index.php']]);
-include('navbar.php');
+// preventAccess([['role' => 2, 'redirect' => 'client/index.php']]);
+
+if($_SESSION['role'] == 1) {
+    include('navbar.php');
+} else if($_SESSION['role'] == 2) { 
+    include('client/navbar.php');
+}
 
 /* ORGANIZATION MYSQL - START */
 $orgQuery = "SELECT * FROM Organization";
@@ -89,32 +94,15 @@ $y = date('Y', strtotime($_POST['dateRegistered']));
 
 $conn->close();
 
-$styleButtonPrimary = "btn rounded normal-case bg-blue-600 hover:bg-blue-800";
-$styleButtonLink = "text-sm font-semibold leading-6 text-gray-900";
-$styleTextError = "mt-2 text-red-400 text-xs";
 ?>
 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id=" . $_GET['id'] ) ;?>">
-    <header class="bg-white shadow-sm">
-        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center overflow-hidden"> 
-                <div>
-                    <h1 class="text-3xl font-bold tracking-tight text-gray-900 mb-2">
-                        <span class="pr-3"><?php echo $organizationDetail['name']; ?></span>
-                        <span class="font-normal text-xl border-l-2 border-green-700 pl-3">APE Information</span>
-                    </h1>
-                    <div class="text-xs breadcrumbs p-0 text-gray-800">
-                        <ul>
-                            <li>Home</li> 
-                            <li>Organizations</li> 
-                            <li><?php echo $organizationDetail['name']; ?></li> 
-                            <li>Annual Physical Examination</li>
-                            <li>Information</li> 
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
+    <?php 
+        if($_SESSION['role'] == 1) {
+            createMainHeader($organizationDetail['name'], array("Home", "Organizations", $organizationDetail['name'], "Annual Physical Examination", "Information"));
+        } else if($_SESSION['role'] == 2) { 
+            createMainHeader($organizationDetail['name'], array("Annual Physical Examination", "Information Sheet"));
+        }
+    ?>
     <main class='mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8'>
         <div class="mx-auto rounded-b-box rounded-b-box max-w-3xl">
             <!-- <h2 class="px-6 py-4 bg-gray-200 font-semibold rounded-t-box shadow-sm">Registration Form</h2> -->
@@ -252,8 +240,13 @@ $styleTextError = "mt-2 text-red-400 text-xs";
                 </div>
             </div>
             <div class="flex items-center justify-end flex-col sm:flex-row gap-x-1 bg-white mt-0 px-6 py-4 border-t-2 border-green-700">
+            <?php if($_SESSION['role'] == 1) { ?>
                 <a href="<?php echo base_url(false) . '/employees-APE.php?o=' . $o . '&y=' . $y; ?>" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Cancel</a>
-                <button type="submit" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">Save Changes</button>
+                <button type="submit" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">Save Changes</button>  
+            <?php } else if($_SESSION['role'] == 2) {  ?>
+                <a href="<?php echo base_url(false) . '/client'; ?>" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Close</a>
+            <?php } ?>
+                
             </div>
         </div>        
     </main>
