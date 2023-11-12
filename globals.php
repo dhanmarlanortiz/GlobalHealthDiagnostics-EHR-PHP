@@ -167,3 +167,20 @@ function preventAccess($restrictions = null) {
         }
     }
 }
+
+
+function getHeadCountAPE($organizationId, $year) {
+    require("connection.php");
+
+    $headCount = 1;
+    $headCountQuery = "SELECT MAX(headCount) FROM APE WHERE organizationId = $organizationId AND (dateRegistered BETWEEN '" . $year . "-01-01' AND '" . $year . "-12-31')";
+    $headCountResult = $conn->query($headCountQuery);
+
+    if ($headCountResult !== false && $headCountResult->num_rows > 0) {
+        while($hc = $headCountResult->fetch_assoc()) {
+            $headCount = $hc['MAX(headCount)'] + 1;
+        }
+    }
+
+    return $headCount;
+}

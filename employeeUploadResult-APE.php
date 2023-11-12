@@ -11,9 +11,10 @@ include('header.php');
 preventAccess([['role' => 2, 'redirect' => 'client/index.php']]);
 include('navbar.php');
 
-$o = $y = 0;
+$o = $y = $apeId = 0;
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
+    $apeId = clean(isset($_GET['id']) ? $_GET['id'] : 0);
     $o = clean(isset($_GET['o']) ? $_GET['o'] : 0);
     $y = clean(isset($_GET['y']) ? $_GET['y'] : date("Y"));
 }

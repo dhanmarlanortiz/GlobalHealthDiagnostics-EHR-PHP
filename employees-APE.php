@@ -136,7 +136,7 @@ if ($orgDetailsResult !== false && $orgDetailsResult->num_rows > 0) {
                             "<tr>" .
                                 "<td class='text-center'>" . $emp["headCount"] . "</td>" .
                                 "<td>
-                                    <a href='" . base_url(false) . "/employee-APE.php?id=" . $emp['id'] . "' class='text-green-700'>" . 
+                                    <a href='" . base_url(false) . "/employee-APE.php?id=" . $emp['id'] . "' class='whitespace-nowrap uppercase text-green-700'>" . 
                                         $emp["lastName"] . ", " . $emp["firstName"] . ", " . $emp["middleName"] .  
                                     "</a>
                                 </td>" .

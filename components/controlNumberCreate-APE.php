@@ -5,6 +5,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 require_once('../connection.php');
+require ('../functions/flash.php');
 
 function base_url($print = true) {
     $url = ($_SERVER['HTTP_HOST'] == 'app.globalhealth-diagnostics.com') ? "https://app.globalhealth-diagnostics.com" : "http://localhost/globalhealth-php";
@@ -56,11 +57,11 @@ function setControlNumber($id, $controlNumber) {
     echo $sql;
     $result = $conn->query($sql);
     
-    // if ($conn->query($result) === TRUE) {
-
-    // } else {
-    //     echo $conn->error;
-    // }
+    if ($conn->query($result) === TRUE) {
+        create_flash_message('generate-control-number-success', '<strong>Success!</strong> Control number has been generated.', FLASH_SUCCESS);
+    } else {
+        create_flash_message('generate-control-number-error', '<strong>FAILED!</strong> An error occurred while generating control number.', FLASH_ERROR);
+    }
 
     $conn->close();
 }
@@ -74,6 +75,7 @@ if( null !== $_GET['id'] ) {
     $url = base_url(false) . "/employee-APE.php?id=" . $id;
     header("Location: " . $url ."");
 } else {
+
     $url = base_url(false) . "/employees-APE.php";    
     header("Location: " . $url ."");
 }
