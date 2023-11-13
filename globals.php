@@ -93,12 +93,8 @@ function getUser($id = null) {
 
 function createFormHeader($header = 'Form') {
     echo 
-        '<div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200">
-            <ul class="flex -mb-px">
-                <li class="w-full bg-white inline-block p-6 text-green-700 border-b-2 border-green-700 active text-left text-sm">
-                    ' . $header . '
-                </li>
-            </ul>
+        '<div class="bg-white px-3 sm:px-6 py-6 border-b-2 border-green-700">
+            <h2 class="font-medium text-green-700 text-sm">' . $header . '</h2>
         </div>';
 }
 
@@ -106,21 +102,14 @@ function createMainHeader($headerText = "", $pagination = array()) {
     echo '
         <header class="bg-white shadow-sm">
             <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <h1 class="text-3xl font-bold tracking-tight text-gray-900 mb-2">' . $headerText . '</h1>
-                        <div class="text-xs breadcrumbs p-0 text-gray-800">
-                            <ul>';
-                                
-                            foreach ($pagination as $key => $value) {
-                                echo "<li>" . $value . "</li>";
-                            }
+                <h1 class="text-3xl font-bold tracking-tight text-gray-900 mb-2">' . $headerText . '</h1>
+                <div class="text-xs breadcrumbs p-0 text-gray-800 overflow-hidden">
+                    <ul>';
+                        foreach ($pagination as $key => $value) {
+                            echo "<li>" . $value . "</li>";
+                        }
                             
-    echo                    '</ul>
-                        </div>
-                    </div>
-                    <div>
-                    </div>
+    echo            '</ul>
                 </div>
             </div>
         </header>';
@@ -183,4 +172,29 @@ function getHeadCountAPE($organizationId, $year) {
     }
 
     return $headCount;
+}
+
+
+function getMedicalExamination() {
+    require("connection.php");
+    $examArray = array();
+    $examSql = "SELECT * FROM MedicalExamination";
+    $examResult = $conn->query($examSql);
+
+    if ($examResult !== false && $examResult->num_rows > 0) {
+        while($exam = $examResult->fetch_assoc()) {
+            array_push($examArray, $exam);
+        }
+    }
+    return $examArray;
+}
+
+
+function print_c($data) {
+    $data = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT); 
+    echo "<script>";
+    echo "console.log(";
+    echo $data;
+    echo ")";
+    echo "</script>";
 }

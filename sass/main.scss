@@ -265,6 +265,14 @@ form {
     color: #f87171;
 }
 
+.flash.flash-info {
+    margin: 1.5rem 0 !important;
+    background: #fff;
+    padding: 1.5rem;
+    color: $text-color;
+}
+
+
 .alert-list {
     list-style: auto;
     padding: 15px 20px 15px 35px;
@@ -284,5 +292,25 @@ form {
         font-size: 13px;
         padding: 2px 0;
         color: #525252;
+    }
+}
+
+
+#employee-APE-form {
+    label[for='controlDate'] {
+        display: none;
+
+        + div {
+            margin: 0;
+            display: inline-block;
+        }
+    }
+
+    #controlDate {
+        padding: 0;
+        background: transparent;
+        border: none;
+        color: rgb(75, 85, 99);
+        font-size: 12px;
     }
 }

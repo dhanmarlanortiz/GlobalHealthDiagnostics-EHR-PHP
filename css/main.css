@@ -226,6 +226,13 @@ form.input-error--username #username:focus {
   color: #f87171;
 }
 
+.flash.flash-info {
+  margin: 1.5rem 0 !important;
+  background: #fff;
+  padding: 1.5rem;
+  color: #1f2937;
+}
+
 .alert-list {
   list-style: auto;
   padding: 15px 20px 15px 35px;
@@ -243,6 +250,21 @@ form.input-error--username #username:focus {
   font-size: 13px;
   padding: 2px 0;
   color: #525252;
+}
+
+#employee-APE-form label[for=controlDate] {
+  display: none;
+}
+#employee-APE-form label[for=controlDate] + div {
+  margin: 0;
+  display: inline-block;
+}
+#employee-APE-form #controlDate {
+  padding: 0;
+  background: transparent;
+  border: none;
+  color: #4b5563;
+  font-size: 12px;
 }
 
 /*# sourceMappingURL=main.css.map */

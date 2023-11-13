@@ -1,8 +1,15 @@
 <?php 
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+
 ob_start();
 session_start();
 
 require_once('connection.php');
+require_once 'FileUploader.php';
 include('header.php');
 // preventAccess([['role' => 2, 'redirect' => 'client/index.php']]);
 
@@ -20,18 +27,25 @@ function test_input($data) {
 
 $id = 0;
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
+    print_c("GET");
     $id = $_GET['id'];
     $apeDetailsQuery = "SELECT * FROM APE WHERE id = $id";
     $apeDetailsResult = $conn->query($apeDetailsQuery);
-
+    print_c($apeDetailsQuery);
     if ($apeDetailsResult !== false && $apeDetailsResult->num_rows > 0) {
+        print_c($apeDetailsResult);
         while($apeDetails = $apeDetailsResult->fetch_assoc()) {
             $_POST = $apeDetails;
+            print_c($_POST);
         }
     }
 }
 
+$uploadDir = 'uploads/';
+$fileUploader = new FileUploader($uploadDir, $conn);
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    print_c("POST");
     $id = $_GET['id'];
     $headCount = test_input( $_POST['headCount'] );
     $controlNumber = test_input( $_POST['controlNumber'] );
@@ -50,35 +64,49 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $examination = test_input( $_POST['examination'] );
     $remarks = test_input( $_POST['remarks'] );
 
-    $apeUpdateQuery =  "UPDATE APE SET 
-                        headCount = $headCount,
-                        " . (($_POST['controlNumber'] > 0) ? "controlNumber = '$_POST[controlNumber]'," : '') . "
-                        firstName = '$firstName',
-                        middleName = '$middleName',
-                        lastName = '$lastName',
-                        age = $age,
-                        sex = '$sex',
-                        organizationId = $organizationId,
-                        employeeNumber = '$employeeNumber',
-                        membership = '$membership',
-                        department = '$department',
-                        level = '$level',
-                        " . (($_POST['dateRegistered'] !== '') ? "dateRegistered = '$_POST[dateRegistered]'," : '') . "
-                        " . (($_POST['dateCompleted'] !== '') ? "dateCompleted = '$_POST[dateCompleted]'," : '') . "
-                        examination = '$examination',
-                        remarks = '$remarks'
-                        WHERE id = $id";
-    
-    if ($conn->query($apeUpdateQuery) === TRUE) {
-        create_flash_message('update-success', '<strong>Update Successful!</strong> User has been successfully updated.', FLASH_SUCCESS);
-
-        $url = base_url(false) . "/employee-APE.php?id=" . $id;
+    if (isset($_POST['updateDetailsForm'])) {
+        $apeUpdateQuery =  "UPDATE APE SET 
+                            headCount = $headCount,
+                            " . (($_POST['controlNumber'] > 0) ? "controlNumber = '$_POST[controlNumber]'," : '') . "
+                            firstName = '$firstName',
+                            middleName = '$middleName',
+                            lastName = '$lastName',
+                            age = $age,
+                            sex = '$sex',
+                            organizationId = $organizationId,
+                            employeeNumber = '$employeeNumber',
+                            membership = '$membership',
+                            department = '$department',
+                            level = '$level',
+                            " . (($_POST['dateRegistered'] !== '') ? "dateRegistered = '$_POST[dateRegistered]'," : '') . "
+                            " . (($_POST['dateCompleted'] !== '') ? "dateCompleted = '$_POST[dateCompleted]'," : '') . "
+                            examination = '$examination',
+                            remarks = '$remarks'
+                            WHERE id = $id";
         
-        header("Location: " . $url ."");
+        if ($conn->query($apeUpdateQuery) === TRUE) {
+            create_flash_message('update-success', '<strong>Update Successful!</strong> User has been successfully updated.', FLASH_SUCCESS);
+
+            $url = base_url(false) . "/employee-APE.php?id=" . $id;
+            
+            header("Location: " . $url ."");
+            exit();
+        } else {
+            create_flash_message('update-error', '<strong>Update Failed!</strong> Please review and try again.', FLASH_ERROR);
+            echo $conn->error;
+        }
+    }
+
+    if (isset($_POST['uploadFileForm'])) { 
+        $allowedTypes = array('jpg', 'jpeg', 'png', 'gif', 'pdf', 'doc', 'docx', 'csv');
+        $medicalExaminationFK = $_POST['medicalExaminationFK'];
+
+        $result = $fileUploader->uploadFile('uploadedFile', $medicalExaminationFK, $allowedTypes);
+        
+        create_flash_message('upload-info', $result, FLASH_INFO);
+
+        header('Location: ' . $_SERVER['REQUEST_URI']);
         exit();
-    } else {
-        create_flash_message('update-error', '<strong>Update Failed!</strong> Please review and try again.', FLASH_ERROR);
-        echo $conn->error;
     }
 }
 
@@ -98,9 +126,9 @@ if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
     $url = base_url(false) . "/page-not-found.php";
     header("Location: " . $url);
 } 
-
 ?>
-<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id=" . $_GET['id'] ) ;?>">
+
+<form id="employee-APE-form" method="post" enctype="multipart/form-data" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id=" . $_GET['id'] ) ;?>">
     <?php 
         if($_SESSION['role'] == 1) {
             createMainHeader($organizationDetail['name'], array("Home", "Organizations", $organizationDetail['name'], "Annual Physical Examination", "Information"));
@@ -109,168 +137,114 @@ if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
         }
     ?>
     <main class='mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8'>
-        <div class="bg-white max-w-7xl lg:max-w-full lg:flex">
-            <div class="">
-                <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 ">
-                    <ul class="flex -mb-px">
-                        <li class="w-full bg-white inline-block p-6 text-green-700 border-b-2 border-green-700 active text-left text-sm">
-                            Personal Information
-                        </li>
-                    </ul>
-                </div>
-                <div class="flex items-center justify-end gap-x-6 bg-white px-6 py-10 border-b">
-                    <div class="space-y-12 w-full">
-                        <div class="">
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-8">
-                                <div class="col-span-1">
-                                    <input type="text" id="firstName" data-label="First Name" required />
-                                </div>
-                                <div class="col-span-1">
-                                    <input type="text" id="middleName" data-label="Middle Name" />
-                                </div>
-                                <div class="col-span-1">
-                                    <input type="text" id="lastName" data-label="Last Name" required />
-                                </div>
-                                <!-- <div class="col-span-">
-                                    <input type="date" id="birthDate" data-label="Date of Birth" />
-                                </div> -->
-                                <div class="col-span-">
-                                    <input type="number" id="age" data-label="Age" min="1" step="1" />
-                                </div>
-                                <div class="col-span-">
-                                    <select id="sex" data-label="Sex" required>
-                                        <option value="" selected disabled>Select</option>
-                                        <option value="Male" 
-                                            <?php echo ( 
-                                                (isset($_POST['sex'])) 
-                                                ? ( ($_POST['sex'] == 'Male') ? 'selected' : '') 
-                                                : '' 
-                                            ) ?>
-                                        >Male</option>
-                                        <option value="Female" 
-                                            <?php echo ( 
-                                                (isset($_POST['sex'])) 
-                                                ? ( ($_POST['sex'] == 'Female') ? 'selected' : '') 
-                                                : '' 
-                                            ) ?>
-                                        >Female</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
+        <?php createFormHeader("Patient"); ?>
+        <div class="flex items-center justify-end gap-x-6 bg-white px-3 sm:px-6 py-10 border-b">
+            <div class="space-y-12 w-full">
+                <div class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-8 gap-x-6 gap-y-8">
+                    <div class="col-span-1 lg:col-span-2">
+                        <input type="text" id="firstName" data-label="First Name" required />
                     </div>
-                </div>
-                
-                <div class="flex items-center justify-end gap-x-6 bg-white px-6 py-10 border-b lg:border-b-0">
-                    <div class="space-y-12 w-full">
-                        <div class="">
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-8">
-                                <input type="hidden" id="organizationId">
-                                <!-- <div class="sm:col-span-2">
-                                    <select id="organizationId" data-label="Organization" required>
-                                        <?php 
-                                            if ($orgResult !== false && $orgResult->num_rows > 0) {
-                                                echo "<option value='' selected disabled>Select</option>";
-                                                while($org = $orgResult->fetch_assoc()) {
-                                                    echo "<option value='" . $org['id'] . "' " . 
-                                                            ( 
-                                                                (isset($_POST['organizationId'])) 
-                                                                ? (($_POST['organizationId'] == $org['id']) ? 'selected' : '') 
-                                                                : '' 
-                                                            )  
-                                                        . " >" . $org['name'] . "</option>";
-                                                }
-                                            } else {
-                                                echo "<option value='null' selected disabled>No record</option>";
-
-                                            }
-                                        ?>
-                                    </select>
-                                </div> -->
-                                <div class="sm:col-span-1">
-                                    <input type="text" id="employeeNumber" data-label="Employee Number" />
-                                </div>
-                                <div class="sm:col-span-2">
-                                    <input type="text" id="department" data-label="Department" />
-                                </div>
-                                <div class="sm:col-span-1">
-                                    <input type="text" id="membership" data-label="Membership" />
-                                </div>
-                                <div class="sm:col-span-2">
-                                    <input type="text" id="level" data-label="Level" />
-                                </div>
-                            </div>
-                        </div>
+                    <div class="col-span-1 lg:col-span-2">
+                        <input type="text" id="middleName" data-label="Middle Name" />
+                    </div>
+                    <div class="col-span-1 lg:col-span-2">
+                        <input type="text" id="lastName" data-label="Last Name" required />
+                    </div>
+                    <div class="col-span-">
+                        <input type="number" id="age" data-label="Age" min="1" step="1" />
+                    </div>
+                    <div class="col-span-">
+                        <select id="sex" data-label="Sex" required>
+                            <option value="" selected disabled>Select</option>
+                            <option value="Male" 
+                                <?php echo ( 
+                                    (isset($_POST['sex'])) 
+                                    ? ( ($_POST['sex'] == 'Male') ? 'selected' : '') 
+                                    : '' 
+                                ) ?>
+                            >Male</option>
+                            <option value="Female" 
+                                <?php echo ( 
+                                    (isset($_POST['sex'])) 
+                                    ? ( ($_POST['sex'] == 'Female') ? 'selected' : '') 
+                                    : '' 
+                                ) ?>
+                            >Female</option>
+                        </select>
                     </div>
                 </div>
             </div>
-
-            <div class="flex flex-col lg:w-1/2">
-                <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200">
-                    <ul class="flex -mb-px">
-                        <li class="w-full bg-white inline-block p-6 text-green-700 border-b-2 border-green-700 active text-left text-sm">
-                            Examination Details
-                        </li>
-                    </ul>
-                </div>
-
-                <?php if($_SESSION['role'] == '1') { ?>
-                <div class="flex items-center justify-end gap-x-6 bg-white px-6 py-10 border-b lg:border-l">
-                    <div class="space-y-12 w-full">
-                        <div class="">
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-8">
-                                <div class="sm:col-span-1">
-                                    <input type="number" name="headCount" id="headCount" data-label="Head Count" readonly min="1" step="1"  />
-                                </div>
-                                <div class="sm:col-span-1">
-                                    <input type="number" name="controlNumber" id="controlNumber" data-label="Control Number" readonly min="1" step="1" placeholder="Not Available" />
-                                    <?php 
-                                    if( isset($_POST['controlDate']) ) {
-                                        echo "<p class='text-xs mt-2 text-gray-600 whitespace-nowrap'><span class='font-medium'>Generated: </span>" . date('M d, Y', strtotime($_POST['controlDate'])) . "</p>";
-                                    } else { ?>
-                                        <a class="text-xs text-sky-400 whitespace-nowrap" href="<?php echo base_url() . '/components/controlNumberCreate-APE.php?id=' . $_POST['id'] ; ?>" >Generate Control Number</a>
-                                    <?php 
-                                    }  ?>
-                                </div>
-                            </div>
-                        </div>
+        </div>
+        <?php createFormHeader("Organization"); ?>
+        <div class="flex items-center justify-end gap-x-6 bg-white px-3 sm:px-6 py-10 border-b">
+            <div class="space-y-12 w-full">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-8">
+                    <input type="hidden" id="organizationId">
+                    <div class="sm:col-span-1">
+                        <input type="text" id="employeeNumber" data-label="Employee Number" />
+                    </div>
+                    <div class="sm:col-span-1">
+                        <input type="text" id="department" data-label="Department" />
+                    </div>
+                    <div class="sm:col-span-1">
+                        <input type="text" id="membership" data-label="Membership" />
+                    </div>
+                    <div class="sm:col-span-1">
+                        <input type="text" id="level" data-label="Level" />
                     </div>
                 </div>
-                <?php } ?>
-                
-                <div class="bg-white border-b flex gap-x-6 h-full lg:border-b-0 lg:border-l px-6 py-10">
-                    <div class="space-y-12 w-full">
-                        <div class="">
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-8">
-                                <div class="sm:col-span-1">
-                                    <input type="date" id="dateRegistered" data-label="Date Registered" required />
-                                </div>
-                                <div class="sm:col-span-1">
-                                    <input type="date" id="dateCompleted" data-label="Date Completed" />
-                                </div> 
-                            
-                                <div class="sm:col-span-3">
-                                    <input type="text" id="examination" data-label="Examination" />
-                                </div>
-                                
-                                <div class="sm:col-span-3">
-                                    <input type="text" id="remarks" data-label="Remarks" />
-                                </div> 
-                            
-                            </div>
-                        </div>
+            </div>
+        </div>
+        <?php createFormHeader("Medical"); ?>
+        <div class="flex items-center justify-end gap-x-6 bg-white px-3 sm:px-6 py-10 border-b">
+            <div class="space-y-12 w-full">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-8">
+                    <?php if($_SESSION['role'] == '1') { ?>
+                    <div class="col-span-1">
+                        <input type="number" id="headCount" data-label="Head Count" readonly min="1" step="1"  />
                     </div>
+                    <div class="col-span-1">
+                        <input type="number" id="controlNumber" data-label="Control Number" readonly min="1" step="1" placeholder="Not Available" />
+                        <?php 
+                        if( isset($_POST['controlDate']) &&  date('Y', strtotime($_POST['controlDate'])) >= 2023) {
+                            echo "<p class='text-xs mt-1 text-gray-600 whitespace-nowrap'><span class='font-medium'>Generated: </span><input type='date' id='controlDate' data-label='Control Date' readonly /></p>";
+                        } else { ?>
+                            <a class="text-xs text-sky-400 whitespace-nowrap" href="<?php echo base_url() . '/components/controlNumberCreate-APE.php?id=' . $id ; ?>" >Generate Control Number</a>
+                        <?php 
+                        }  ?>
+                    </div>
+                    <?php } ?>
+                    <div class="col-span-1">
+                        <input type="date" id="dateRegistered" data-label="Date Registered" required />
+                    </div>
+                    <div class="col-span-1">
+                        <input type="date" id="dateCompleted" data-label="Date Completed" />
+                    </div> 
+                    <div class="col-span-2">
+                        <input type="text" id="examination" data-label="Examination" />
+                    </div>
+                    
+                    <div class="col-span-2">
+                        <input type="text" id="remarks" data-label="Remarks" />
+                    </div> 
                 </div>
-            </div>     
-        </div>     
-        
-        
+            </div>
+        </div>
+        <?php createFormHeader("Results"); ?>
+        <div class="flex items-center justify-end gap-x-6 bg-white px-3 sm:px-6 py-10 border-b">
+            <div class="space-y-12 w-full">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-8">
+                    
+                </div>
+            </div>
+        </div>
+
         <div class="mx-auto rounded-b-box rounded-b-box">  
-            <div class="flex items-center justify-end flex-col sm:flex-row gap-x-1 bg-white mt-0 px-6 py-4 border-t-2 border-green-700">
+            <div class="flex items-center justify-end flex-col sm:flex-row gap-x-1 bg-white mt-0 px-3 sm:px-6 py-4 border-t-2 border-green-700">
                 <?php if($_SESSION['role'] == 1) { ?>
                     <a href="<?php echo base_url(false) . '/employees-APE.php?o=' . $o . '&y=' . $y; ?>" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Back</a>
-                    <a href="<?php echo base_url(false) . '/employeeUploadResult-APE.php?id=' . $id; ?>" class="<?php echo $classBtnAlternate; ?> w-full sm:w-auto mb-2 sm:mb-0">Upload Result</a>
-                    <button type="submit" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">Save Changes</button>  
+                    <button data-modal-target="default-modal" data-modal-toggle="default-modal" class="<?php echo $classBtnAlternate; ?>" type="button">Upload Result</button>
+                    <button type="submit" name="updateDetailsForm" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">Save Changes</button>  
                 <?php } else if($_SESSION['role'] == 2) {  ?>
                     <a href="<?php echo base_url(false) . '/client'; ?>" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Close</a>
                 <?php } ?>
@@ -280,65 +254,75 @@ if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
             <?php flash('generate-control-number-error'); ?>
             <?php flash('update-success'); ?>
             <?php flash('update-error'); ?>
+            <?php flash('upload-info'); ?>
         </div>        
     </main>
-</form>
 
-<main class='mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8'>
-    <div class="mx-auto rounded-b-box rounded-b-box">
-        <!-- <h2 class="px-6 py-4 bg-gray-200 font-semibold rounded-t-box shadow-sm">Registration Form</h2> -->
-        <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 ">
-            <ul class="flex -mb-px">
-                <li class="w-full bg-white inline-block p-6 text-green-700 border-b-2 border-green-700 active text-left text-sm">
-                    Examination Results
-                </li>
-            </ul>
-        </div>
-
-        <div class="bg-white px-6 py-10">
-            <!-- <div class="space-y-12 w-full"> -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-8">
-                <div class="sm:col-span-1">
-                    <select id="name" data-label="Examination" required>
-                        <option value="">Blood Pressure Measurement</option>
-                        <option value="">Complete Blood Count (CBC)</option>
-                        <option value="">Blood Glucose Test</option>
-                        <option value="">Lipid Profile</option>
-                        <option value="">Electrocardiogram (ECG or EKG)</option>
-                        <option value="">Chest X-ray</option>
-                        <option value="">MRI (Magnetic Resonance Imaging)</option>
-                        <option value="">CT Scan (Computed Tomography)</option>
-                        <option value="">Ultrasound</option>
-                        <option value="">Colonoscopy</option>
-                        <option value="">Mammogram</option>
-                        <option value="">Pap Smear</option>
-                        <option value="">Prostate-Specific Antigen (PSA) Test</option>
-                        <option value="">Bone Density Test (DEXA or DXA)</option>
-                        <option value="">Thyroid Function Tests</option>
-                        <option value="">Spirometry</option>
-                        <option value="">Liver Function Tests</option>
-                        <option value="">Kidney Function Tests</option>
-                        <option value="">Hemoglobin A1c Test</option>
-                        <option value="">Skin Biopsy</option>
-                        <option value="">Stool Tests</option>
-                        <option value="">Allergy Testing</option>
-                        <option value="">Genetic Testing</option>
-                        <option value="">Echocardiogram</option>
-                        <option value="">Throat Culture</option>
-                    </select>
+    <div id="default-modal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 flex items-center justify-center overflow-y-auto overflow-x-hidden" style="background: rgba(0,0,0,0.5);">
+        <div class="relative p-4 w-full max-w-2xl max-h-full">
+            <div class="relative bg-white shadow">
+                <div class="flex items-center justify-between p-4 border-b-2 border-green-700">
+                    <h3 class="font-medium text-green-700 text-sm">Upload Result</h3>
+                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="default-modal">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
                 </div>
-                <div class="sm:col-span-1">
-                    <label class="block text-sm font-medium leading-6 text-gray-900">Upload file</label>
-                    <div class="mt-2">
-                       
-<input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" aria-describedby="file_input_help" id="file_input" type="file">
-
+                <div class="p-4 md:p-5 space-y-4">
+                    <div>
+                        
+                        <select id="medicalExaminationFK" data-label="Examination">
+                            <?php
+                                $medicalExamination = getMedicalExamination();
+                                foreach ($medicalExamination as $me) {
+                                    echo "<option value='" . $me['id'] . "'>" . $me['name'] . "</option>";
+                                }
+                            ?>
+                        </select>
                     </div>
+                    <div>
+                        <label class="block text-sm font-medium leading-6 text-gray-900 mb-2">Select File</label>
+                        <label for="uploadedFile" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                                </svg>
+                                <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                                <p id="file-name" class="text-xs text-gray-500 dark:text-gray-400"></p>
+                            </div>
+                            <input id="uploadedFile" type="file" name="uploadedFile" class="hidden" onchange="displayConfirmation()" />
+                        </label>
+                        </div>
+                </div>
+                <div class="flex items-center justify-end flex-col sm:flex-row gap-x-1 p-4 border-t-2 border-green-700">
+                    <button data-modal-hide="default-modal" type="button" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Close</button>
+                    <input type="submit" name="uploadFileForm" value="Upload File" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">
                 </div>
             </div>
         </div>
-    </div>        
-</main>
+    </div>
+
+    <script>
+        const modalToggleButtons = document.querySelectorAll('[data-modal-toggle]');
+        const modalHideButtons = document.querySelectorAll('[data-modal-hide]');
+        const modalOverlay = document.getElementById('default-modal');
+        
+        modalToggleButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                modalOverlay.classList.toggle('hidden');
+            });
+        });
+        
+        modalHideButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                modalOverlay.classList.add('hidden');
+            });
+        });
+    </script>
+
+</form>
 
 <script>
     $(document).ready( function() {
@@ -367,7 +351,6 @@ if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
                 $(this).attr('name', id);
             });
         }
-
     });
 
     /*
@@ -387,7 +370,7 @@ if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
     */
 
     function displayConfirmation() {
-        var input = document.getElementById('dropzone-file');
+        var input = document.getElementById('uploadedFile');
 
         document.getElementById('file-name').innerHTML = ((input.files.length > 0) 
             ? input.files[0].name
