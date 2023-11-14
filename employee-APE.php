@@ -247,7 +247,10 @@ if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
                                 echo "<td>{$fileName}</td>";
                                 echo "<td class='text-right'>";
                                 echo "<a href='{$src}' class='$classTblBtnPrimary mr-1' download>Download</a>";
-                                echo "<a href='employeeDeleteResult-APE.php?fileName=$fileName&medicalExaminationFK=$medicalExaminationFK&APEFK=$id' class='$classTblBtnDanger'>Delete</a>";
+                                
+                                if($_SESSION['role'] == 1) {
+                                    echo "<a href='employeeDeleteResult-APE.php?fileName=$fileName&medicalExaminationFK=$medicalExaminationFK&APEFK=$id' class='$classTblBtnDanger'>Delete</a>";
+                                }
 
                                 echo "</td>";
                                 echo "</tr>";
