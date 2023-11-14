@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL); 
+ini_set('display_errors', 1);
 
 class FileUploader {
     private $uploadDir;
@@ -23,22 +25,30 @@ class FileUploader {
     
                 if (in_array($fileExtension, $allowedTypes)) {
                     if (move_uploaded_file($_FILES[$fileInputName]['tmp_name'], $uploadFile)) {
-    
                         $this->storeInDatabase($uniqueFileName, $medicalExaminationFK);
-    
-                        return 'File is valid, and was successfully uploaded and stored in the database.';
+
+                        create_flash_message('upload-success', '<strong>Success!</strong> File has been successfully uploaded.', FLASH_SUCCESS);
+                        
+                        return;
                     } else {
-                        return 'Error uploading the file.';
+                        create_flash_message('upload-error', '<strong>Failed!</strong> Error uploading the file.', FLASH_ERROR);
+                        
+                        return;
                     }
                 } else {
-                    return 'Invalid file type. Allowed types are: ' . implode(', ', $allowedTypes);
+                    create_flash_message('upload-success', '<strong>Failed!</strong> Invalid file type. Allowed types are: ' . implode(', ', $allowedTypes), FLASH_ERROR);
+
+                    return;
                 }
             } else {
-                return 'File size exceeds the limit.';
+                create_flash_message('upload-success', '<strong>Failed!</strong> File size exceeds the limit.', FLASH_ERROR);
+
+                return;
             }
         }
-    
-        return 'No file uploaded.';
+        create_flash_message('upload-success', '<strong>Failed!</strong> No file uploaded.', FLASH_ERROR);
+
+        return;
     }
     
     private function generateUniqueFileName($fileName) {

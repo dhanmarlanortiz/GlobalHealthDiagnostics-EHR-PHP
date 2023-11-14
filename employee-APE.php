@@ -1,9 +1,6 @@
 <?php 
-
+error_reporting(E_ALL); 
 ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 
 ob_start();
 session_start();
@@ -102,8 +99,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $result = $fileUploader->uploadFile('uploadedFile', $medicalExaminationFK, $allowedTypes);
         
-        create_flash_message('upload-info', $result, FLASH_INFO);
-
         header('Location: ' . $_SERVER['REQUEST_URI']);
         exit();
     }
@@ -285,7 +280,8 @@ if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
             <?php flash('generate-control-number-error'); ?>
             <?php flash('update-success'); ?>
             <?php flash('update-error'); ?>
-            <?php flash('upload-info'); ?>
+            <?php flash('upload-success'); ?>
+            <?php flash('upload-error'); ?>
             <?php flash('delete-success'); ?>
             <?php flash('delete-success'); ?>
         </div>        
