@@ -10,6 +10,7 @@ session_start();
 
 require_once('connection.php');
 require_once 'FileUploader.php';
+require_once 'FileDeleter.php';
 include('header.php');
 // preventAccess([['role' => 2, 'redirect' => 'client/index.php']]);
 
@@ -27,25 +28,23 @@ function test_input($data) {
 
 $id = 0;
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
-    print_c("GET");
     $id = $_GET['id'];
     $apeDetailsQuery = "SELECT * FROM APE WHERE id = $id";
     $apeDetailsResult = $conn->query($apeDetailsQuery);
-    print_c($apeDetailsQuery);
     if ($apeDetailsResult !== false && $apeDetailsResult->num_rows > 0) {
-        print_c($apeDetailsResult);
         while($apeDetails = $apeDetailsResult->fetch_assoc()) {
             $_POST = $apeDetails;
-            print_c($_POST);
         }
     }
 }
 
+/* HANDLES UPLOAD AND DELETE FILE - START  */
 $uploadDir = 'uploads/';
 $fileUploader = new FileUploader($uploadDir, $conn);
+$fileDeleter = new FileDeleter($uploadDir, $conn);
+/* HANDLES UPLOAD AND DELETE FILE - END  */
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    print_c("POST");
     $id = $_GET['id'];
     $headCount = test_input( $_POST['headCount'] );
     $controlNumber = test_input( $_POST['controlNumber'] );
@@ -233,8 +232,40 @@ if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
         <?php createFormHeader("Results"); ?>
         <div class="flex items-center justify-end gap-x-6 bg-white px-3 sm:px-6 py-10 border-b">
             <div class="space-y-12 w-full">
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-8">
-                    
+                <div class="grid grid-cols-1 gap-x-6 gap-y-8">
+                    <div class="col-span-1">
+                    <?php 
+                        $resultsAPE = getResultsAPE($id);
+                        if (!empty($resultsAPE)) {
+                            echo "<div class='overflow-auto p-1'>";
+                            echo "<table class='display'>";
+                            echo "<thead><tr><th>Examination</th><th>Filename</th><th></th></tr></thead>";
+                            echo "<tbody>";
+                            foreach ($resultsAPE as $resAPE) {
+                                $examName = $resAPE['examName']; 
+                                $fileName = $resAPE['fileName'];
+                                $medicalExaminationFK = $resAPE['medicalExaminationFK'];
+                                $src = base_url(false) . "/uploads/" . $fileName;
+
+                                echo "<tr>";
+                                echo "<td>{$examName}</td>";
+                                echo "<td>{$fileName}</td>";
+                                echo "<td class='text-right'>";
+                                echo "<a href='{$src}' class='$classTblBtnPrimary mr-1' download>Download</a>";
+                                echo "<a href='employeeDeleteResult-APE.php?fileName=$fileName&medicalExaminationFK=$medicalExaminationFK&APEFK=$id' class='$classTblBtnDanger'>Delete</a>";
+
+                                echo "</td>";
+                                echo "</tr>";
+                            }
+                            echo "</tbody>";
+                            echo "</table>";
+                            echo "</div>";
+                        }
+                        else {
+                            echo "<p class='text-sm'>Results not available.</p>";
+                        }
+                    ?>
+                    </div>
                 </div>
             </div>
         </div>
@@ -255,6 +286,8 @@ if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
             <?php flash('update-success'); ?>
             <?php flash('update-error'); ?>
             <?php flash('upload-info'); ?>
+            <?php flash('delete-success'); ?>
+            <?php flash('delete-success'); ?>
         </div>        
     </main>
 
@@ -331,7 +364,7 @@ if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
         let styleInput = "block w-full rounded py-1.5 px-2 text-gray-900 border-gray-300 placeholder:text-gray-400 focus:border-green-700 focus:ring-0 focus:bg-green-50 sm:text-sm sm:leading-6";
         let styleLabel = "block text-sm font-medium leading-6 text-gray-900";
 
-        $('input[type=text], input[type=number], input[type=date], select').each( function() {
+        $('input[type=text], input[type=number], input[type=date], select:not([name^=DataTables])').each( function() {
             let id = $(this).attr('id');
             
             $(`<label for='${$(this).attr("id")}' class='${styleLabel}'>${ $(this).attr('data-label') }</label>`).insertBefore($(this));

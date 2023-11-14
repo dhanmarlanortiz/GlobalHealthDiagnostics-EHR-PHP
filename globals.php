@@ -20,12 +20,14 @@ global $classTblBtnPrimary;
 $classTblBtnSecondary = "btn btn-secondary btn-sm text-xs rounded normal-case font-normal";
 global $classTblBtnSecondary;
 
+$classTblBtnDanger = "btn btn-sm text-xs rounded normal-case font-normal bg-red-500 hover:bg-red-600 border-red-500 hover:border-red-600 text-white";
+global $classTblBtnDanger;
+
 $classInputPrimary = "block w-full rounded py-1.5 px-2 text-gray-900 border-gray-300 placeholder:text-gray-400 focus:border-green-700 focus:ring-0 focus:bg-green-50 sm:text-sm sm:leading-6";
 global $classInputPrimary;
 
 $classMainContainer = "mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8";
 global $classMainContainer;
-
 
 function base_url($print = true) {
     $host = "app.globalhealth-diagnostics.com";
@@ -197,4 +199,27 @@ function print_c($data) {
     echo $data;
     echo ")";
     echo "</script>";
+}
+
+
+function getResultsAPE($APEFK) {
+    require("connection.php");
+
+    $sql = "SELECT RA.*, ME.name as examName FROM ResultsAPE RA LEFT JOIN MedicalExamination ME ON RA.medicalExaminationFK = ME.id WHERE APEFK = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $APEFK);
+    $stmt->execute();
+
+    $results = $stmt->get_result();
+    $resultsArray = array();
+
+    if ($results !== false && $results->num_rows > 0) {
+        while ($result = $results->fetch_assoc()) {
+            array_push($resultsArray, $result);
+        }
+    }
+
+    $stmt->close();
+
+    return $resultsArray;
 }

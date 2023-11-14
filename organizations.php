@@ -68,7 +68,7 @@ $result = $conn->query($sql);
                         "</tr>";
                     }
                     echo
-                    "</body>" .
+                    "</tbody>" .
                 "</table>
             </div>";
         } else {
