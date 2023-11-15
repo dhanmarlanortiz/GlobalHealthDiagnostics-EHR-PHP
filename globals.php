@@ -23,6 +23,9 @@ global $classTblBtnSecondary;
 $classTblBtnDanger = "btn btn-sm text-xs rounded normal-case font-normal bg-red-500 hover:bg-red-600 border-red-500 hover:border-red-600 text-white";
 global $classTblBtnDanger;
 
+$classTblBtnAlternate = "btn btn-sm text-xs rounded normal-case font-normal bg-sky-500 hover:bg-sky-600 border-sky-500 hover:border-sky-600 text-white";
+global $classTblBtnAlternate;
+
 $classInputPrimary = "block w-full rounded py-1.5 px-2 text-gray-900 border-gray-300 placeholder:text-gray-400 focus:border-green-700 focus:ring-0 focus:bg-green-50 sm:text-sm sm:leading-6";
 global $classInputPrimary;
 

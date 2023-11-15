@@ -38,7 +38,6 @@
 	?>
 
 	<link href="<?php base_url(); ?>/css/main.css" rel="stylesheet" type="text/css" />
-
 </head>
 <body class="">
 	<div class="relative isolate bg-gray-50" style="min-height: calc(100vh - 52px);">

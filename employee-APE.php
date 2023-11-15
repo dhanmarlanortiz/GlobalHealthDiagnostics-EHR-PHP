@@ -1,7 +1,4 @@
 <?php 
-error_reporting(E_ALL); 
-ini_set('display_errors', 1);
-
 ob_start();
 session_start();
 
@@ -9,7 +6,7 @@ require_once('connection.php');
 require_once 'FileUploader.php';
 require_once 'FileDeleter.php';
 include('header.php');
-// preventAccess([['role' => 2, 'redirect' => 'client/index.php']]);
+preventAccess();
 
 /* ORGANIZATION MYSQL - START */
 $orgQuery = "SELECT * FROM Organization";
@@ -242,10 +239,21 @@ if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
                                 $medicalExaminationFK = $resAPE['medicalExaminationFK'];
                                 $src = base_url(false) . "/uploads/" . $fileName;
 
+                                $resultData = [
+                                                'filePath' => $src, 
+                                                'examName' => $examName, 
+                                                'organizationId' => $o,
+                                                'firstName' => $_POST['firstName'],
+                                                'middleName' => $_POST['middleName'],
+                                                'lastName' => $_POST['lastName']
+                                            ];
+                                $encodeResult = base64_encode(json_encode( $resultData ));
+                                
                                 echo "<tr>";
                                 echo "<td>{$examName}</td>";
                                 echo "<td>{$fileName}</td>";
                                 echo "<td class='text-right'>";
+                                echo "<a href='" . base_url(false) . "/employeeViewResult-APE.php?pdf=$encodeResult' class='$classTblBtnAlternate mr-1'>View</a>";
                                 echo "<a href='{$src}' class='$classTblBtnPrimary mr-1' download>Download</a>";
                                 
                                 if($_SESSION['role'] == 1) {
@@ -268,7 +276,7 @@ if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
             </div>
         </div>
 
-        <div class="mx-auto rounded-b-box rounded-b-box">  
+        <div class="mx-auto rounded-b-box rounded-b-box">
             <div class="flex items-center justify-end flex-col sm:flex-row gap-x-1 bg-white mt-0 px-3 sm:px-6 py-4 border-t-2 border-green-700">
                 <?php if($_SESSION['role'] == 1) { ?>
                     <a href="<?php echo base_url(false) . '/employees-APE.php?o=' . $o . '&y=' . $y; ?>" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Back</a>
