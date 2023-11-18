@@ -64,7 +64,7 @@ createMainHeader("Create User", array("Home", "Users", "Create User"));
 
 
 <main class='<?php echo $classMainContainer; ?>'>
-    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" id="userForm" class="max-w-3xl mx-auto">
+    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" id="userCreateForm" class="prompt-confirm max-w-3xl mx-auto">
         <?php createFormHeader(); ?>
         <div class="flex items-center justify-end gap-x-6 bg-white px-6 py-10 border-b">
             <div class="space-y-12 w-full">
@@ -111,7 +111,7 @@ createMainHeader("Create User", array("Home", "Users", "Create User"));
         </div>
         <div class="flex items-center justify-end flex-col sm:flex-row gap-x-1 bg-white mt-0 px-6 py-4 border-t-2 border-green-700">
             <a href="<?php base_url(); ?>/users.php" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Cancel</a>
-            <button type="submit" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">Save</button>
+            <button type="submit" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">Create</button>
         </div>
 
         <?php flash('create-success'); ?>
@@ -147,7 +147,7 @@ createMainHeader("Create User", array("Home", "Users", "Create User"));
 
     class FormValidation {
         constructor() {
-            this.form = document.getElementById("userForm");
+            this.form = document.getElementById("userCreateForm");
             this.usernameInput = document.getElementById("username");
             this.pattern = /^[a-zA-Z0-9_\-]{3,20}$/;
 

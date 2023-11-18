@@ -17,6 +17,9 @@ global $classBtnAlternate;
 $classTblBtnPrimary = "btn btn-primary btn-sm text-xs rounded normal-case font-normal";
 global $classTblBtnPrimary;
 
+$classBtnDanger = "btn btn-sm text-xs rounded normal-case h-9 bg-red-500 hover:bg-red-600 border-red-500 hover:border-red-600 text-white";
+global $classBtnDanger;
+
 $classTblBtnSecondary = "btn btn-secondary btn-sm text-xs rounded normal-case font-normal";
 global $classTblBtnSecondary;
 

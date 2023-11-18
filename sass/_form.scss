@@ -1,0 +1,33 @@
+input[readonly],
+select[readonly],
+input[disabled],
+select[disabled] {
+    user-select: none;
+    background: #f5f5f4;
+    border-color: #f5f5f4;
+
+    &:focus {
+        background: #f5f5f4;
+        border-color: #f5f5f4;
+    }
+}
+
+
+#employee-APE-form {
+    label[for='controlDate'] {
+        display: none;
+
+        + div {
+            margin: 0;
+            display: inline-block;
+        }
+    }
+
+    #controlDate {
+        padding: 0;
+        background: transparent;
+        border: none;
+        color: rgb(75, 85, 99);
+        font-size: 12px;
+    }
+}

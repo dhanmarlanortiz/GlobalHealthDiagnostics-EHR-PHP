@@ -75,7 +75,7 @@ createMainHeader("User Details", array("Home", "Users", "User Details"));
 ?>
 
 <main class='<?php echo $classMainContainer; ?>'>
-    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" id="userForm" class="max-w-3xl mx-auto">
+    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" id="userUpdateForm" class="prompt-confirm max-w-3xl mx-auto">
         <input type="hidden" id="id" name="id" value="<?php echo $id; ?>">
         <?php createFormHeader("Information"); ?>
         <div class="flex items-center justify-end gap-x-6 bg-white px-6 py-10 border-b">
@@ -128,6 +128,7 @@ createMainHeader("User Details", array("Home", "Users", "User Details"));
             <a href="<?php echo base_url() . '/users.php'; ?>" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Cancel</a>
             <button type="button" class="<?php echo $classBtnSecondary; ?> w-full sm:w-auto">Reset Password</button>
             <button type="submit" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">Save Changes</button>
+            <input type="submit" class="<?php echo $classBtnDanger; ?> w-full sm:w-auto" value="Delete User" />
         </div>
 
         <?php flash('update-success'); ?>
@@ -162,7 +163,7 @@ createMainHeader("User Details", array("Home", "Users", "User Details"));
 
     class FormValidation {
         constructor() {
-            this.form = document.getElementById("userForm");
+            this.form = document.getElementById("userUpdateForm");
             this.usernameInput = document.getElementById("username");
             this.pattern = /^[a-zA-Z0-9_\-]{3,20}$/;
 

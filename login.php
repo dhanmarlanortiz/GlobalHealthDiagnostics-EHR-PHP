@@ -108,7 +108,7 @@ $conn->close();
 					</h1>
 				</div>
 				<div class="sm:mx-auto sm:w-full sm:max-w-sm">
-					<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" class="space-y-6">
+					<form id="loginForm" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" class="space-y-6">
 						<div>
 							<label for="username" class="<?php echo $styleLabel; ?>">Username</label>
 							<div class="mt-2">

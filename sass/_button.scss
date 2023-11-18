@@ -1,0 +1,40 @@
+.btn {
+    border-radius: 0.25rem;
+    text-transform: none;
+    
+    &.btn-default {
+        background: $color-default;
+        border-color: $color-default;
+        color: $color-white;
+
+        &:hover,
+        &:focus {
+            background: $color-default-darker;
+            outline-color: $color-default-darker;
+        }
+    }
+
+    &.btn-primary {
+        background: $color-primary;
+        border-color: $color-primary;
+        color: $color-white;
+
+        &:hover,
+        &:focus {
+            background: $color-primary-darker;
+            outline-color: $color-primary-darker;
+        }
+    }
+
+    &.btn-secondary {
+        background: $color-secondary;
+        border-color: $color-secondary;
+        color: $color-white;
+
+        &:hover,
+        &:focus {
+            background: $color-secondary-darker;
+            outline-color: $color-secondary-darker;
+        }
+    }
+}
