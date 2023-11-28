@@ -189,6 +189,11 @@ if ($orgDetailsResult !== false && $orgDetailsResult->num_rows > 0) {
             </div>
         </div>
     </div>
+
+    <?php 
+        flash('delete-success');
+        flash('delete-failed');
+    ?>
 </main>
 
 

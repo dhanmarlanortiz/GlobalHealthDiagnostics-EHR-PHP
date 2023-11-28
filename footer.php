@@ -11,96 +11,21 @@
                 </div>
 			</div>
 		</div>
+
+        <div class="page-loader">
+            <div class="loading"></div>
+            <p>Loading</p>
+        </div>
+
         <footer class="footer footer-center bottom-0 p-4 bg-white shadow-sm text-base-content">
                 <aside>
                     <p>Copyright © 2023 - All right reserved by Global Health Diagnostics</p>
                 </aside>
         </footer>
 
-
-
-
-        <button class="btn" onclick="prompConfirmModal.showModal()">open modal</button>
-        <dialog id="prompConfirmModal" class="modal">
-            <div class="modal-box">
-                <h3 class="prompt-header font-bold text-lg">Confirm</h3>
-                <p class="py-4">Are you sure want to continue?</p>
-                <div class="modal-action">
-                <form method="dialog">
-                    <!-- if there is a button in form, it will close the modal -->
-                    <button class="prompt-button-no btn">No</button>
-                    <button class="prompt-button-yes btn">Yes</button>
-                </form>
-                </div>
-            </div>
-        </dialog>
-
-        <script>
-            var promptBgColor = '';
-            var promptTextColor = '';
-            var promptButtonText = '';
-            $("[type='submit']").click(function(){
-                let nodeName = $(this).prop('nodeName').toLowerCase();
-                
-                promptBgColor = $(this).css('background-color');
-                promptTextColor = $(this).css('color');
-                promptButtonText = 
-                    nodeName == 'button'
-                        ? $(this).text()
-                        : nodeName == 'input'
-                        ? $(this).val()
-                        : 'Confirm';
-            });
-
-            $("#prompConfirmModal .prompt-button-yes").hover(
-                function() {
-                    $(this).css("background-color", darkenColor(promptBgColor, 10));
-                },
-                function() {
-                    $(this).css("background-color", promptBgColor);
-                }
-            );
-
-            $(".prompt-confirm").on("submit", function(e) {                
-                e.preventDefault();
-
-                let modal = $("#prompConfirmModal");
-                // let actionText = modal.find(".prompt-action-text");
-                let buttonYes = modal.find(".prompt-button-yes");
-                let headerText = modal.find(".prompt-header");
-                
-                headerText.text(promptButtonText);
-
-                buttonYes.css({
-                    'background-color': promptBgColor,
-                    'color': promptTextColor,
-                })
-
-                headerText.css({
-                    'color': promptBgColor,
-                })
-
-                prompConfirmModal.showModal();
-
-            })
-
-            function darkenColor(rgbColor, percent) {
-                // Extract RGB values
-                var rgbValues = rgbColor.match(/\d+/g);
-
-                // Calculate darker color
-                var r = Math.round(rgbValues[0] * (100 - percent) / 100);
-                var g = Math.round(rgbValues[1] * (100 - percent) / 100);
-                var b = Math.round(rgbValues[2] * (100 - percent) / 100);
-
-                // Construct new RGB color
-                var newColor = "rgb(" + r + ", " + g + ", " + b + ")";
-
-                return newColor;
-            }
-        </script>
-
         <?php 
+        include 'components/confirmationModal.php';
+
         $serverName = $_SERVER['SERVER_NAME']; // or $_SERVER['HTTP_HOST']
         if ($serverName === 'localhost' || $serverName === '127.0.0.1') {
             echo '<script src="'. base_url(false) .'/js/jquery.dataTables.min.js"></script>';
@@ -108,7 +33,9 @@
             echo '<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>';
         }
         ?>
-        
+
+        <script src="<?php base_url() ?>/js/main.js"></script>
+
         <script>
             let dTable = new DataTable('table', {
                 pageLength: 25

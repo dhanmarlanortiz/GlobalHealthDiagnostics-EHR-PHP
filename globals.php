@@ -35,6 +35,15 @@ global $classInputPrimary;
 $classMainContainer = "mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8";
 global $classMainContainer;
 
+$flashMessage = [ 'create-success' => '<strong>Success!</strong> New record has been created',
+                  'create-failed' => '<strong>Failed!</strong> An error occured while creating record.',
+                  'update-success' => '<strong>Success!</strong> Details has been updated.',
+                  'update-failed' => '<strong>Failed!</strong> An error occured while updating details.',
+                  'delete-success' => '<strong>Success!</strong> Record has been deleted.',
+                  'delete-failed' => '<strong>Failed!</strong> An error occured while deleting the record.',
+                  'delete-failed-linked' => '<strong>Failed!</strong> Unable to delete a data linked to other record.'];
+global $flashMessage;
+
 function base_url($print = true) {
     $host = "app.globalhealth-diagnostics.com";
     $liveURL = "https://app.globalhealth-diagnostics.com";

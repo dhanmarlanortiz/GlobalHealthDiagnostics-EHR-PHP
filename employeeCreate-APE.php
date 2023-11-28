@@ -18,6 +18,7 @@ function test_input($data) {
 }
 $o = 0;
 $y = date('Y');
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
  
     // $headCount = test_input( $_POST['headCount'] );
@@ -30,13 +31,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sex = test_input( $_POST['sex'] );
     $organizationId = test_input( intval($_POST['organizationId']) );
     $employeeNumber = test_input( $_POST['employeeNumber'] );
-    $membership = test_input( $_POST['membership'] );
-    $department = test_input( $_POST['department'] );
-    $level = test_input( $_POST['level'] );
-    $dateRegistered = test_input( $_POST['dateRegistered'] );
+    // $membership = test_input( $_POST['membership'] );
+    // $department = test_input( $_POST['department'] );
+    // $level = test_input( $_POST['level'] );
+    // $dateRegistered = test_input( $_POST['dateRegistered'] );
+    $dateRegistered = date("Y-m-d");
     // $dateCompleted = ( ($_POST['dateCompleted']!== '') ? test_input( $_POST['dateCompleted'] ) : NULL );
-    $examination = test_input( $_POST['examination'] );
-    // $remarks = test_input( $_POST['remarks'] );
+    // $examination = test_input( $_POST['examination'] );
+    $remarks = test_input( $_POST['remarks'] );
     $userId = test_input( $_SESSION['userId'] );
 
     /* GET HEAD COUNT - START */
@@ -54,15 +56,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $o = $organizationId;
     $y = date('Y', strtotime($dateRegistered));
 
-    $regQuery = "INSERT INTO APE(headCount, firstName, middleName, lastName, age, sex, organizationId, employeeNumber, membership, department, level, dateRegistered, examination, userId) VALUES('$headCount', '$firstName', '$middleName', '$lastName', '$age', '$sex', '$organizationId', '$employeeNumber', '$membership', '$department', '$level', '$dateRegistered', '$examination', '$userId')";
+    $regQuery = "INSERT INTO APE(headCount, firstName, middleName, lastName, age, sex, organizationId, employeeNumber, dateRegistered, remarks, userId) VALUES('$headCount', '$firstName', '$middleName', '$lastName', '$age', '$sex', '$organizationId', '$employeeNumber', '$dateRegistered', '$remarks', '$userId')";
     
     if ($conn->query($regQuery) === TRUE) {
+        create_flash_message('create-success', $flashMessage['create-success'], FLASH_SUCCESS);
         $id = $conn->insert_id;
         // $url = base_url(false) . "/registeredEmployees.php?o=" . $organizationId . "&y=" . date('Y', strtotime($dateRegistered));
         $url = base_url(false) . "/employee-APE.php?id=" . $id;
         header("Location: " . $url ."");
         die;
     } else {
+        create_flash_message('create-failed', $flashMessage['create-failed'], FLASH_ERROR);
         echo $conn->error;
     }
 } else {
@@ -104,8 +108,8 @@ $styleTextError = "mt-2 text-red-400 text-xs";
 </header>
 <main class='mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8'>
     
-    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" class="mx-auto max-w-3xl">
-        
+    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" class="prompt-confirm mx-auto max-w-3xl">
+        <input type="hidden" id="organizationId" name="organizationId"  value="<?php echo $organizationDetail['id']; ?>"/>
         <?php createFormHeader('Registration Form'); ?>
         <!-- 
         <h2 class="px-6 py-4 bg-gray-200 font-semibold rounded-t-box shadow-sm">Registration Form</h2>
@@ -141,10 +145,10 @@ $styleTextError = "mt-2 text-red-400 text-xs";
                         <!-- <div class="col-span-">
                             <input type="date" id="birthDate" data-label="Date of Birth" />
                         </div> -->
-                        <div class="col-span-">
-                            <input type="number" id="age" data-label="Age" min="1" step="1" />
+                        <div class="col-span-1">
+                            <input type="number" id="age" data-label="Age" min="1" step="1" required />
                         </div>
-                        <div class="col-span-">
+                        <div class="col-span-1">
                             <select id="sex" data-label="Sex" required>
                                 <option value="" selected disabled>Select</option>
                                 <option value="Male" 
@@ -163,17 +167,25 @@ $styleTextError = "mt-2 text-red-400 text-xs";
                                 >Female</option>
                             </select>
                         </div>
+                        <div class="col-span-1">
+                            <input type="text" id="employeeNumber" data-label="Employee Number" />
+                        </div>
+                        <!-- <div class="sm:col-span-3">
+                            <input type="text" id="examination" data-label="Examination" />
+                        </div> -->
+                        <div class="sm:col-span-3">
+                            <input type="text" id="remarks" data-label="Remarks" />
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         
-        <div class="flex items-center justify-end gap-x-6 bg-white px-6 py-10 border-b">
+        <!-- <div class="flex items-center justify-end gap-x-6 bg-white px-6 py-10 border-b">
             <div class="space-y-12 w-full">
                 <div class="">
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-8">
-                        <input type="hidden" id="organizationId" name="organizationId"  value="<?php echo $organizationDetail['id']; ?>"/>
-                        <!-- <div class="sm:col-span-2">
+                        <div class="sm:col-span-2">
                             <select id="organizationId" data-label="Organization" required>
                                 <?php 
                                     if ($orgResult !== false && $orgResult->num_rows > 0) {
@@ -193,7 +205,7 @@ $styleTextError = "mt-2 text-red-400 text-xs";
                                     }
                                 ?>
                             </select>
-                        </div> -->
+                        </div> 
                         <div class="sm:col-span-1">
                             <input type="text" id="employeeNumber" data-label="Employee Number" />
                         </div>
@@ -209,37 +221,42 @@ $styleTextError = "mt-2 text-red-400 text-xs";
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
         
-        <div class="flex items-center justify-end gap-x-6 bg-white px-6 py-10">
+        <!-- <div class="flex items-center justify-end gap-x-6 bg-white px-6 py-10">
             <div class="space-y-12 w-full">
                 <div class="">
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-8">
                         <div class="sm:col-span-1">
                             <input type="date" id="dateRegistered" data-label="Date Registered" required />
                         </div>
-                        <!-- 
+                        
                             <div class="sm:col-span-1">
                             <input type="date" id="dateCompleted" data-label="Date Completed" />
                         </div> 
-                        -->
-                        <div class="sm:col-span-2">
+                       
+                        <div class="sm:col-span-3">
                             <input type="text" id="examination" data-label="Examination" />
                         </div>
-                        <!-- 
+                        
                         <div class="sm:col-span-3">
                             <input type="text" id="remarks" data-label="Remarks" />
                         </div> 
-                        -->
+                       
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <div class="flex items-center justify-end flex-col sm:flex-row gap-x-1 bg-white mt-0 px-6 py-4 border-t-2 border-green-700">
             <a href="<?php echo base_url(false) . '/employees-APE.php?o=' . $o . '&y=' . $y; ?>" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Cancel</a>
-            <button type="submit" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">Submit</button>
+            <button type="submit" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">Register</button>
         </div>
+
+        <?php
+        flash('create-success');
+        flash('create-failed'); 
+        ?>
     </form>
 </main>
 

@@ -86,6 +86,10 @@ $result = $conn->query($sql);
             </div>
         </div>
     </div>
+
+    <?php flash('delete-success'); ?>
+    <?php flash('delete-failed'); ?>
+    <?php flash('delete-failed-linked'); ?>
 </main>
 
 

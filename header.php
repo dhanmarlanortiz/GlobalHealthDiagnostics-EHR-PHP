@@ -1,4 +1,5 @@
 <?php
+	date_default_timezone_set('Asia/Manila');
 	ini_set('display_errors', 1);
 	ini_set('display_startup_errors', 1);
 	error_reporting(E_ALL);
@@ -39,7 +40,7 @@
 
 	<link href="<?php base_url(); ?>/css/main.css" rel="stylesheet" type="text/css" />
 </head>
-<body class="">
+<body class="is-loading">
 	<div class="relative isolate bg-gray-50" style="min-height: calc(100vh - 52px);">
 		<div class="absolute opacity-40 inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80" aria-hidden="true">
 			<div

@@ -16,6 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 
 $errVal = $errKey = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    
     $id = clean( $_POST['id'] );
     $username = clean( $_POST['username'] );
     $email = clean( $_POST['email'] );
@@ -23,32 +24,52 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $isActive = clean( $_POST['isActive'] );
     $organizationId = clean( $_POST['organizationId'] );
 
-    $userUpdateQuery =  "UPDATE User SET 
-                        username = '$username',
-                        email = '$email',
-                        role = '$role',
-                        isActive = '$isActive',
-                        organizationId = '$organizationId'
-                        WHERE id = $id";
+    if(isset( $_POST['saveChanges'] )) {
 
-    if ($conn->query($userUpdateQuery) === TRUE) {
-        create_flash_message('update-success', '<strong>Update Successful!</strong> User has been successfully updated.', FLASH_SUCCESS);
+        $userUpdateQuery =  "UPDATE User SET 
+                            username = '$username',
+                            email = '$email',
+                            role = '$role',
+                            isActive = '$isActive',
+                            organizationId = '$organizationId'
+                            WHERE id = $id";
+
+
+        if ($conn->query($userUpdateQuery) === TRUE) {
+            create_flash_message('update-success', '<strong>Update Successful!</strong> User has been successfully updated.', FLASH_SUCCESS);
+            
+            $url = base_url(false) . "/user.php?id=" . $id;
+            header("Location: " . $url ."");
+            
+            exit();
+        } else {
+            create_flash_message('update-failed', '<strong>Update Failed!</strong> Please review and try again.', FLASH_ERROR);
         
-        $url = base_url(false) . "/user.php?id=" . $id;
-        header("Location: " . $url ."");
+            // duplicate entry error
+            if($conn->errno == 1062) {
+                $errMsg = explode("'", $conn->error);
+                $errVal = $errMsg[1];
+                $errKey = $errMsg[3];
+            }
+        }
+    } else if(isset( $_POST['deleteUser'] )) {
+        $userDeleteQuery =  "DELETE FROM User WHERE id = $id";
+
+        if ($conn->query($userDeleteQuery) === TRUE) {
+            create_flash_message('delete-success', '<strong>Success!</strong> User has been successfully deleted.', FLASH_SUCCESS);
+            
+            $url = base_url(false) . "/users.php";
+            header("Location: " . $url ."");
+            
+            exit();
+        } else {
+            create_flash_message('delete-failed', '<strong>Failed!</strong> An error occurred while deleting the user.', FLASH_ERROR);
         
-        exit();
-    } else {
-        create_flash_message('update-failed', '<strong>Update Failed!</strong> Please review and try again.', FLASH_ERROR);
-       
-        // duplicate entry error
-        if($conn->errno == 1062) {
-            $errMsg = explode("'", $conn->error);
-            $errVal = $errMsg[1];
-            $errKey = $errMsg[3];
+            if($conn->errno == 1451) {
+                create_flash_message('delete-failed', '<strong>Failed!</strong> Unable to delete a user linked to other data.', FLASH_ERROR);
+            }
         }
     }
-
 }
 
 /*
@@ -127,12 +148,14 @@ createMainHeader("User Details", array("Home", "Users", "User Details"));
         <div class="flex items-center justify-end flex-col sm:flex-row gap-x-1 bg-white mt-0 px-6 py-4 border-t-2 border-green-700">
             <a href="<?php echo base_url() . '/users.php'; ?>" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Cancel</a>
             <button type="button" class="<?php echo $classBtnSecondary; ?> w-full sm:w-auto">Reset Password</button>
-            <button type="submit" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">Save Changes</button>
-            <input type="submit" class="<?php echo $classBtnDanger; ?> w-full sm:w-auto" value="Delete User" />
+            <button type="submit" name="saveChanges" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">Save Changes</button>
+            <input type="submit" name="deleteUser" class="<?php echo $classBtnDanger; ?> w-full sm:w-auto" value="Delete User" />
         </div>
 
         <?php flash('update-success'); ?>
         <?php flash('update-failed'); ?>
+        <?php flash('delete-success'); ?>
+        <?php flash('delete-failed'); ?>
 
     </form>
 </main>

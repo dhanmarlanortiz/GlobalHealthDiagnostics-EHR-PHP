@@ -28,28 +28,50 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $phone = test_input( $_POST['phone'] );
     $address = test_input( $_POST['address'] );
 
-    $orgUpdateQuery =  "UPDATE Organization SET 
-                        name = '$name',
-                        email = '$email',
-                        phone = '$phone',
-                        address = '$address'
-                        WHERE id = $id";
+    if(isset( $_POST['saveChanges'] )) {
 
-    if ($conn->query($orgUpdateQuery) === TRUE) {
-        create_flash_message('update-success', '<strong>Update Successful!</strong> Your data has been successfully updated.', FLASH_SUCCESS);
+        $orgUpdateQuery =  "UPDATE Organization SET 
+                            name = '$name',
+                            email = '$email',
+                            phone = '$phone',
+                            address = '$address'
+                            WHERE id = $id";
+
+        if ($conn->query($orgUpdateQuery) === TRUE) {
+            create_flash_message('update-success', '<strong>Success!</strong> Record has been updated.', FLASH_SUCCESS);
+            
+            $url = base_url(false) . "/organization.php?id=" . $id;
+            header("Location: " . $url ."");
+            
+            exit();
+        } else {
+            create_flash_message('update-failed', '<strong>Failed!</strong> Please review and try again.', FLASH_ERROR);
+            
+            // duplicate entry error
+            if($conn->errno == 1062) {
+                create_flash_message('update-failed', '<strong>Failed!</strong> An error occurred.', FLASH_ERROR);
+
+                $errMsg = explode("'", $conn->error);
+                $errVal = $errMsg[1];
+                $errKey = $errMsg[3];
+            }
+        }
+    } else if(isset( $_POST['delete'] )) {
+        $deleteQuery =  "DELETE FROM Organization WHERE id = $id";
+
+        if ($conn->query($deleteQuery) === TRUE) {
+            create_flash_message('delete-success', $flashMessage['delete-success'] , FLASH_SUCCESS);
+            
+            $url = base_url(false) . "/organizations.php";
+            header("Location: " . $url ."");
+            
+            exit();
+        } else {
+            create_flash_message('delete-failed', $flashMessage['delete-failed'], FLASH_ERROR);
         
-        $url = base_url(false) . "/organization.php?id=" . $id;
-        header("Location: " . $url ."");
-        
-        exit();
-    } else {
-        create_flash_message('update-failed', '<strong>Update Failed!</strong> Please review and try again.', FLASH_ERROR);
-        
-        // duplicate entry error
-        if($conn->errno == 1062) {
-            $errMsg = explode("'", $conn->error);
-            $errVal = $errMsg[1];
-            $errKey = $errMsg[3];
+            if($conn->errno == 1451) {
+                create_flash_message('delete-failed', $flashMessage['delete-failed-linked'] , FLASH_ERROR);
+            }
         }
     }
 
@@ -60,7 +82,7 @@ $headerText = (null !== getOrganization($id)) ? getOrganization($id)['name'] : "
 $conn->close();
 ?>
 
-<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id=" . $_GET['id'] ) ;?>">
+<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id=" . $_GET['id'] ) ;?>" class="prompt-confirm">
     <input type="hidden" id="id" name="id" value="<?php echo $id; ?>">
 
     <header class="bg-white shadow-sm">
@@ -113,11 +135,14 @@ $conn->close();
             </div>
             <div class="flex items-center justify-end flex-col sm:flex-row gap-x-1 bg-white mt-0 px-6 py-4 border-t-2 border-green-700">
                 <a href="<?php echo base_url() . '/organizations.php'; ?>" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Cancel</a>
-                <button type="submit" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">Save Changes</button>
+                <button type="submit" name="saveChanges" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">Save Changes</button>
+                <input type="submit" name="delete" class="<?php echo $classBtnDanger; ?> w-full sm:w-auto" value="Delete" />
             </div>
 
             <?php flash('update-success'); ?>
             <?php flash('update-failed'); ?>
+            <?php flash('create-success'); ?>
+            <?php flash('create-failed'); ?>
         </div>
     </main>
 

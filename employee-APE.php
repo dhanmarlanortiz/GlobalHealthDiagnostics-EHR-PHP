@@ -99,6 +99,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header('Location: ' . $_SERVER['REQUEST_URI']);
         exit();
     }
+
+    if (isset($_POST['deleteRecord'])) {
+        $deleteQuery =  "DELETE FROM APE WHERE id = $id";
+
+        if ($conn->query($deleteQuery) === TRUE) {
+            create_flash_message('delete-success', $flashMessage['delete-success'] , FLASH_SUCCESS);
+            
+            $url = base_url(false) . "/employees-APE.php?o=" . $organizationId . "&y=" . date("Y", strtotime($dateRegistered));
+            header("Location: " . $url ."");
+            
+            exit();
+        } else {
+            create_flash_message('delete-failed', $flashMessage['delete-failed'], FLASH_ERROR);
+        
+            if($conn->errno == 1451) {
+                create_flash_message('delete-failed', $flashMessage['delete-failed-linked'] , FLASH_ERROR);
+            }
+
+            $url = base_url(false) . "/employee-APE.php?id=" . $id;
+            header("Location: " . $url ."");
+        }
+    }
 }
 
 $organizationDetail = getOrganization($_POST['organizationId']);
@@ -119,7 +141,7 @@ if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
 } 
 ?>
 
-<form id="employee-APE-form" method="post" enctype="multipart/form-data" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id=" . $_GET['id'] ) ;?>">
+<form id="employee-APE-form" method="post" enctype="multipart/form-data" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id=" . $_GET['id'] ) ;?>" class="prompt-confirm">
     <?php 
         if($_SESSION['role'] == 1) {
             createMainHeader($organizationDetail['name'], array("Home", "Organizations", $organizationDetail['name'], "Annual Physical Examination", "Information"));
@@ -282,19 +304,24 @@ if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
                     <a href="<?php echo base_url(false) . '/employees-APE.php?o=' . $o . '&y=' . $y; ?>" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Back</a>
                     <button data-modal-target="default-modal" data-modal-toggle="default-modal" class="<?php echo $classBtnAlternate; ?>" type="button">Upload Result</button>
                     <button type="submit" name="updateDetailsForm" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">Save Changes</button>  
+                    <input type="submit" name="deleteRecord" value="Delete Record" class="<?php echo $classBtnDanger; ?> w-full sm:w-auto">
                 <?php } else if($_SESSION['role'] == 2) {  ?>
                     <a href="<?php echo base_url(false) . '/client'; ?>" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Close</a>
                 <?php } ?>
             </div>
 
-            <?php flash('generate-control-number-success'); ?>
-            <?php flash('generate-control-number-error'); ?>
-            <?php flash('update-success'); ?>
-            <?php flash('update-error'); ?>
-            <?php flash('upload-success'); ?>
-            <?php flash('upload-error'); ?>
-            <?php flash('delete-success'); ?>
-            <?php flash('delete-success'); ?>
+            <?php 
+                flash('generate-control-number-success');
+                flash('generate-control-number-error');
+                flash('update-success');
+                flash('update-error');
+                flash('upload-success');
+                flash('upload-error');
+                flash('delete-success');
+                flash('delete-failed');
+                flash('create-success');
+                flash('create-failed'); 
+            ?>
         </div>        
     </main>
 

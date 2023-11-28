@@ -39,20 +39,23 @@ function test_input($data) {
 
 $errVal = $errKey = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $name = test_input($_POST["name"]);
-  $email = test_input($_POST["email"]);
-  $phone = test_input($_POST["phone"]);
-  $address = test_input($_POST["address"]);
+    $name = test_input($_POST["name"]);
+    $email = test_input($_POST["email"]);
+    $phone = test_input($_POST["phone"]);
+    $address = test_input($_POST["address"]);
   
-  $sql = "INSERT INTO Organization (name, email, phone, address)
-  VALUES ('$name', '$email', '$phone', '$address')";
+    $sql = "INSERT INTO Organization (name, email, phone, address)
+    VALUES ('$name', '$email', '$phone', '$address')";
   
     if ($conn->query($sql) === TRUE) {
+        create_flash_message('create-success', '<strong>Success!</strong> New Organization has been created.', FLASH_SUCCESS);
+
         $id = $conn->insert_id;
         $url = base_url(false) . "/organization.php?id=" . $id;
         header("Location: " . $url ."");
 
     } else {
+        create_flash_message('create-failed', '<strong>Failed!</strong> Please review and try again.', FLASH_ERROR);
 
         // duplicate entry error
         if($conn->errno == 1062) {
@@ -85,33 +88,34 @@ $conn->close();
     </div>
 </header>
 <main class='mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8'>
-    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" class="max-w-md mx-auto">
-        <?php createFormHeader(); ?>
+    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" class="prompt-confirm mx-auto rounded-b-box rounded-b-box max-w-3xl">
+        <?php createFormHeader('Organization Details'); ?>
         <div class="flex items-center justify-end gap-x-6 bg-white px-6 py-10 border-b">
             <div class="space-y-12 w-full">
-                <div class="">
-                    <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                        <div class="sm:col-span-6 <?php echo ($errKey == 'name') ? 'input-error' : ''; ?>">
-                            <input id="name" type="text" data-label="Organization Name" required />
-                            <?php echo ($errKey == 'name') ? '<div class="input-error--message"><p>' . $errVal . ' already exists.</p></div>' : ''; ?>
-                        </div>
-                        <div class="sm:col-span-6">
-                            <input id="email" type="email" data-label="Email Address" required />
-                        </div>
-                        <div class="sm:col-span-6">
-                            <input id="phone" type="number" data-label="Telephone Number" required />
-                        </div>
-                        <div class="sm:col-span-6">
-                            <input id="address" type="text" data-label="Office Address" required />
-                        </div>                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-8">
+                    <div class="sm:col-span-2 <?php echo ($errKey == 'name') ? 'input-error' : ''; ?>">
+                        <input id="name" type="text" data-label="Organization Name" required />
+                        <?php echo ($errKey == 'name') ? '<div class="input-error--message"><p>' . $errVal . ' already exists.</p></div>' : ''; ?>
                     </div>
+                    <div class="sm:col-span-1">
+                        <input id="email" type="email" data-label="Email Address" required />
+                    </div>
+                    <div class="sm:col-span-1">
+                        <input id="phone" type="number" data-label="Telephone Number" required />
+                    </div>
+                    <div class="sm:col-span-2">
+                        <input id="address" type="text" data-label="Office Address" required />
+                    </div>                
                 </div>
             </div>
         </div>
         <div class="flex items-center justify-end flex-col sm:flex-row gap-x-1 bg-white mt-0 px-6 py-4 border-t-2 border-green-700">
             <a href="<?php base_url(); ?>/organizations.php" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Cancel</a>
-            <button type="submit" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">Save</button>
+            <button type="submit" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">Create</button>
         </div>
+
+        <?php flash('create-success'); ?>
+        <?php flash('create-failed'); ?>
     </form>
 </main>
 

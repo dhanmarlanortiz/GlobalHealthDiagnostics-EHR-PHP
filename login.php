@@ -117,12 +117,7 @@ $conn->close();
 						</div>
 						
 						<div>
-							<div class="flex items-center justify-between">
-								<label for="password" class="<?php echo $styleLabel; ?>">Password</label>
-								<!-- <div class="text-sm">
-									<a href="#" class="font-semibold text-indigo-600 hover:text-indigo-500 text-xs">Forgot password?</a>
-								</div> -->
-							</div>
+							<label for="password" class="<?php echo $styleLabel; ?>">Password</label>
 							<div class="mt-2">
 								<input id="password" name="password" type="password" placeholder="Password" autocomplete="current-password" value="<?php echo $password; ?>" class="<?php echo $classInputPrimary; ?>" required />
 							</div>
