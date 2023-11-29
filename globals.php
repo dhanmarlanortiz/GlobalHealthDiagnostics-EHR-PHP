@@ -252,7 +252,7 @@ function getControlNumberAPE($id, $organizationId) {
         }
         
         $date = date('Y-m-d');
-        $updateQuery = "UPDATE APE SET controlNumber = '{$ctr}', controlDate = '{$date}' WHERE id = '{$id}'";
+        echo $updateQuery = "UPDATE APE SET controlNumber = '{$ctr}', controlDate = '{$date}' WHERE id = '{$id}' AND controlNumber is NULL";
 
         if ($conn->query($updateQuery) === TRUE) {
             create_flash_message('generate-control-number-success', '<strong>Success!</strong> Control number has been generated.', FLASH_SUCCESS);
