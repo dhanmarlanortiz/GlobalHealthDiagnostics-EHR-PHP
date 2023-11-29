@@ -112,19 +112,13 @@ if ($orgDetailsResult !== false && $orgDetailsResult->num_rows > 0) {
                 <table class='display compact'>
                     <thead>
                         <tr>
-                            <th>Head Count</th>
+                            <th style='max-width: 54px; text-align: center;'>Head Count</th>
                             <th>Full Name</th>
-                            <th>Control Number</th>
-                            <th>Age</th>
-                            <th>Gender</th>
-                            <th>Membership</th>
-                            <th>Department</th>
-                            <th>Level</th>
-                            <th>Examination</th>
-                            <th>Date Registered</th>
-                            <th>Date Completed</th>
+                            <th style='max-width: 74px; text-align: center;'>Control Number</th>
+                            <th style='max-width: 20px; text-align: center;'>Age</th>
+                            <th style='max-width: 40px;'>Gender</th>
                             <th>Remarks</th>
-                            <th>Information</th>
+                            <th style='max-width: 54px;'></th>
                         </tr>
                     </thead>
                     <tbody>";
@@ -142,13 +136,13 @@ if ($orgDetailsResult !== false && $orgDetailsResult->num_rows > 0) {
                                 </td>" .
                                 "<td class='text-center'>" . $emp["controlNumber"] . "</td>" .
                                 "<td class='text-center'>" . $emp["age"] . "</td>" .
-                                "<td>" . $emp["sex"] . "</td>" .
-                                "<td>" . $emp["membership"] . "</td>" .
-                                "<td>" . $emp["department"] . "</td>" .
-                                "<td>" . $emp["level"] . "</td>" .
-                                "<td>" . $emp["examination"] . "</td>" .
-                                "<td>" . date("M d, 2023", strtotime($emp["dateRegistered"])) . "</td>" .
-                                "<td>" . $dateCompleted . "</td>" .
+                                "<td class=''>" . $emp["sex"] . "</td>" .
+                                // "<td>" . $emp["membership"] . "</td>" .
+                                // "<td>" . $emp["department"] . "</td>" .
+                                // "<td>" . $emp["level"] . "</td>" .
+                                // "<td>" . $emp["examination"] . "</td>" .
+                                // "<td>" . date("M d, 2023", strtotime($emp["dateRegistered"])) . "</td>" .
+                                // "<td>" . $dateCompleted . "</td>" .
                                 "<td>" . $emp["remarks"] . "</td>" .
                                 "<td class='text-center'>
                                     <a class='" . $classTblBtnPrimary . "' href='" . base_url(false) . "/employee-APE.php?id=" . $emp['id'] . "'>

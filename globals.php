@@ -238,3 +238,28 @@ function getResultsAPE($APEFK) {
 
     return $resultsArray;
 }
+
+function getControlNumberAPE($id, $organizationId) {
+    require("connection.php");
+
+    $ctr = 1;
+    $ctrQuery = "SELECT MAX(controlNumber) FROM APE WHERE organizationId = $organizationId AND (dateRegistered BETWEEN '" . date('Y') . "-01-01' AND '" . date('Y') . "-12-31')";
+    $ctrResult = $conn->query($ctrQuery);
+
+    if ($ctrResult !== false && $ctrResult->num_rows > 0) {
+        while($hc = $ctrResult->fetch_assoc()) {
+            $ctr = $hc['MAX(controlNumber)'] + 1;
+        }
+        
+        $date = date('Y-m-d');
+        $updateQuery = "UPDATE APE SET controlNumber = '{$ctr}', controlDate = '{$date}' WHERE id = '{$id}'";
+
+        if ($conn->query($updateQuery) === TRUE) {
+            create_flash_message('generate-control-number-success', '<strong>Success!</strong> Control number has been generated.', FLASH_SUCCESS);
+        } else {
+            create_flash_message('generate-control-number-error', '<strong>FAILED!</strong> An error occurred while generating control number.', FLASH_ERROR);
+        }
+    }
+
+    return $ctr;
+}

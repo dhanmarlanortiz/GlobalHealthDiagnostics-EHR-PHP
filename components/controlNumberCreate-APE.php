@@ -54,7 +54,6 @@ function setControlNumber($id, $controlNumber) {
     require('../connection.php');
 
     $sql = "UPDATE APE SET controlNumber = $controlNumber, controlDate = '" . date('Y-m-d') . "' WHERE id = $id";
-    echo $sql;
     $result = $conn->query($sql);
     
     if ($conn->query($result) === TRUE) {

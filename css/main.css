@@ -22,11 +22,11 @@ table.dataTable > thead > tr > th, table.dataTable.compact > thead > tr > th {
   color: #15803c;
   font-size: 12px;
   border-bottom: solid 1px #15803c;
-  padding-top: 15px;
-  padding-bottom: 15px;
+  padding: 15px;
 }
-table.dataTable td, table.dataTable.compact td {
+table.dataTable tbody td, table.dataTable.compact tbody td {
   color: #1f2937;
+  padding: 5px 15px;
 }
 table:before {
   content: "Generating result ...";

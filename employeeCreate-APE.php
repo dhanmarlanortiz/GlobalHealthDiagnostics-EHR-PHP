@@ -61,9 +61,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($conn->query($regQuery) === TRUE) {
         create_flash_message('create-success', $flashMessage['create-success'], FLASH_SUCCESS);
         $id = $conn->insert_id;
+
+        getControlNumberAPE($id, $o);
+        
         // $url = base_url(false) . "/registeredEmployees.php?o=" . $organizationId . "&y=" . date('Y', strtotime($dateRegistered));
-        // $url = base_url(false) . "/employee-APE.php?id=" . $id;
-        $url = base_url(false) . "/components/controlNumberCreate-APE.php?id=" . $id;
+        $url = base_url(false) . "/employee-APE.php?id=" . $id;
+        // $url = base_url(false) . "/components/controlNumberCreate-APE.php?id=" . $id;
         header("Location: " . $url ."");
         die;
     } else {

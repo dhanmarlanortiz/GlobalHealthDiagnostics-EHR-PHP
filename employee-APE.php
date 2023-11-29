@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id = $_GET['id'];
     $headCount = test_input( $_POST['headCount'] );
     $controlNumber = test_input( $_POST['controlNumber'] );
-    $controlDate = test_input( $_POST['controlDate'] );
+    // $controlDate = test_input( $_POST['controlDate'] );
     $firstName = test_input( $_POST['firstName'] );
     $middleName = test_input( $_POST['middleName'] );
     $lastName = test_input( $_POST['lastName'] );
@@ -51,6 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $organizationId = test_input( $_POST['organizationId'] );
     $employeeNumber = test_input( $_POST['employeeNumber'] );
     $remarks = test_input( $_POST['remarks'] );
+    $dateRegistered = test_input( $_POST['dateRegistered'] );
 
     if (isset($_POST['updateDetailsForm'])) {
         $apeUpdateQuery =  "UPDATE APE SET 
@@ -110,6 +111,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: " . $url ."");
         }
     }
+
+    if (isset($_POST['generateControlNumber'])) {
+        getControlNumberAPE($id, $organizationId);
+
+        header('Location: ' . $_SERVER['REQUEST_URI']);
+        exit();
+    }
 }
 
 $organizationDetail = getOrganization($_POST['organizationId']);
@@ -150,14 +158,13 @@ if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
                                 <input type="number" id="headCount" data-label="Head Count" readonly min="1" step="1"  />
                             </div>
                             <div class="col-span-1">
-                                <input type="number" id="controlNumber" data-label="Control Number" readonly min="1" step="1" placeholder="Not Available" />
+                                <input class="tes" type="number" id="controlNumber" data-label="Control Number" readonly min="1" step="1" placeholder="Not Available" />
                                 <?php 
-                                if( isset($_POST['controlDate']) &&  date('Y', strtotime($_POST['controlDate'])) >= 2023) {
-                                    echo "<p class='text-xs mt-1 text-gray-600 whitespace-nowrap'><span class='font-medium'>Generated: </span><input type='date' id='controlDate' data-label='Control Date' readonly /></p>";
-                                } else { ?>
-                                    <a class="text-xs text-sky-400 whitespace-nowrap" href="<?php echo base_url() . '/components/controlNumberCreate-APE.php?id=' . $id ; ?>" >Generate Control Number</a>
-                                <?php 
-                                }  ?>
+                                if( ! isset($_POST['controlNumber']) ) {
+                                    // echo "<p class='text-xs mt-1 text-gray-600 whitespace-nowrap'><span class='font-medium'>Generated: </span><input type='date' id='controlDate' data-label='Control Date' readonly /></p>";
+                                    echo '<button type="submit" name="generateControlNumber" class="'.$classBtnDefault.' w-full font-normal" style="height:38px;transform:translateY(-38px);">Generate</button>';
+                                }
+                                ?>
                             </div>
                         <?php } ?>
                     </div>
@@ -266,6 +273,7 @@ if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
             <div class="mx-auto rounded-b-box rounded-b-box">
                 <div class="flex items-center justify-end flex-col sm:flex-row gap-x-1 bg-white mt-0 px-3 sm:px-6 py-4">
                     <input type="hidden" id="organizationId">
+                    <input type="hidden" id="dateRegistered">
                     <?php if($_SESSION['role'] == 1) { ?>
                         <a href="<?php echo base_url(false) . '/employees-APE.php?o=' . $o . '&y=' . $y; ?>" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Back</a>
                         <button data-modal-target="default-modal" data-modal-toggle="default-modal" class="<?php echo $classBtnAlternate; ?> w-full sm:w-auto mb-2 sm:mb-0" type="button">Upload Result</button>
