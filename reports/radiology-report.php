@@ -1,100 +1,162 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
+include("../connection.php");
 require('../fpdf/fpdf.php');
 
-class RadiologyReportPDF extends FPDF
-{
-    function header()
-    {
-        $this->SetFont('Arial', 'B', 12);
-        $this->Cell(0, 10, 'Radiology Report', 0, 1, 'C');
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+
+    /* Radiology Report Data - START */
+    $rr_sql = "SELECT * FROM RadiologyReport WHERE APEFK = ?";
+    $rr_stmt = $conn->prepare($rr_sql);
+    $rr_stmt->bind_param('i', $id);
+    $rr_stmt->execute();
+    $rr_sqlresult = $rr_stmt->get_result();
+
+    $rr_APEFK = $rr_caseNumber = $rr_MedicalExamination_FK = 0;
+    $rr_dateCreated = $rr_chestPA = $rr_impression = "";
+
+    if ($rr_sqlresult->num_rows > 0) {
+        $rr_row = $rr_sqlresult->fetch_assoc();
+
+        $rr_APEFK = $rr_row["APEFK"];
+        $rr_caseNumber = $rr_row["caseNumber"];
+        $rr_dateCreated = $rr_row["dateCreated"];
+        $rr_chestPA = $rr_row["chestPA"];
+        $rr_impression = $rr_row["impression"];
+        $rr_MedicalExamination_FK  = $rr_row["MedicalExamination_FK"];
     }
+    /* Radiology Report Data - END */
 
-    function chapterTitle($title)
-    {
-        $this->SetFont('Arial', 'B', 12);
-        $this->Cell(0, 10, $title, 0, 1, 'L');
-        $this->Ln(4);
+    /* APE Data - START */
+    $ape_sql = "SELECT * FROM APE WHERE id = ?";
+    $ape_stmt = $conn->prepare($ape_sql);
+    $ape_stmt->bind_param('i', $id);
+    $ape_stmt->execute();
+    $ape_sqlresult = $ape_stmt->get_result();
+
+    $ape_age = $ape_organizationId = 0;
+    $ape_firstName = $ape_middleName = $ape_lastName = $ape_sex = "";
+
+    if ($ape_sqlresult->num_rows > 0) {
+        $ape_row = $ape_sqlresult->fetch_assoc();
+
+        $ape_firstName = $ape_row["firstName"];
+        $ape_middleName = $ape_row["middleName"];
+        $ape_lastName = $ape_row["lastName"];
+        $ape_age = $ape_row["age"];
+        $ape_sex = $ape_row["sex"];
+        $ape_organizationId = $ape_row["organizationId"];
     }
+    /* APE Data - END */
 
-    function chapterBody($body)
-    {
-        $this->SetFont('Arial', '', 12);
-        $this->MultiCell(0, 10, $body);
-        $this->Ln();
+    /* Organization Data - START */
+    $org_sql = "SELECT * FROM Organization WHERE id = ?";
+    $org_stmt = $conn->prepare($org_sql);
+    $org_stmt->bind_param('i', $ape_organizationId);
+    $org_stmt->execute();
+    $org_sqlresult = $org_stmt->get_result();
+
+    $org_name = "";
+
+    if ($org_sqlresult->num_rows > 0) {
+        $org_row = $org_sqlresult->fetch_assoc();
+
+        $org_name = $org_row["name"];
     }
+    /* Organization - END */
 
-    function addTable()
-    {
-        // Add table with 3 columns
-        $this->SetFont('Arial', 'B', 12);
-        $this->Cell(50, 10, 'Column 1', 1);
-        $this->Cell(50, 10, 'Column 2', 1);
-        $this->Ln();
+    /* Med Exam Data - START */
+    $me_sql = "SELECT * FROM MedicalExamination WHERE id = ?";
+    $me_stmt = $conn->prepare($me_sql);
+    $me_stmt->bind_param('i', $rr_MedicalExamination_FK);
+    $me_stmt->execute();
+    $me_sqlresult = $me_stmt->get_result();
 
-        // Add 1st row data
-        $this->SetFont('Arial', '', 12);
-        $this->Cell(50, 10, 'Data 1', 1);
-        $this->Cell(50, 10, 'Data 2', 1);
-        $this->Ln();
+    $me_name = "";
 
-        // Add 2nd row with 5 columns
-        $this->SetFont('Arial', 'B', 12);
-        $this->Cell(25, 10, 'Col 1', 1);
-        $this->Cell(25, 10, 'Col 2', 1);
-        $this->Cell(25, 10, 'Col 3', 1);
-        $this->Cell(25, 10, 'Col 4', 1);
-        $this->Cell(50, 10, 'Col 5', 1);
-        $this->Ln();
+    if ($me_sqlresult->num_rows > 0) {
+        $me_row = $me_sqlresult->fetch_assoc();
 
-        // Add 2nd row data
-        $this->SetFont('Arial', '', 12);
-        $this->Cell(25, 10, 'Data 3', 1);
-        $this->Cell(25, 10, 'Data 4', 1);
-        $this->Cell(25, 10, 'Data 5', 1);
-        $this->Cell(25, 10, 'Data 6', 1);
-        $this->Cell(50, 10, 'Data 7', 1);
-        $this->Ln();
-
-        // Add 3rd row with 1 column
-        $this->SetFont('Arial', 'B', 12);
-        $this->Cell(150, 10, 'Column 4', 1);
-        $this->Ln();
-
-        // Add 3rd row data
-        $this->SetFont('Arial', '', 12);
-        $this->Cell(150, 10, 'Data 8', 1);
-        $this->Ln();
-
-         // Add 4rd row with 1 column
-         $this->SetFont('Arial', 'B', 12);
-         $this->Cell(150, 10, 'Column 4', 1);
-         $this->Ln();
- 
-         // Add 4rd row data
-         $this->SetFont('Arial', '', 12);
-         $this->Cell(150, 10, 'Data 8', 1);
-         $this->Ln();
+        $me_name = $me_row["name"];
     }
+    /* Med Exam - END */
+
+    $pdf = new FPDF();
+    $pdf->AddPage();
+    
+    list($imageWidth, $imageHeight) = getimagesize('../images/radiology-report.jpg');
+
+    $aspectRatio = $imageWidth / $imageHeight;
+    $newWidth = $pdf->GetPageWidth();
+    $newHeight = $newWidth / $aspectRatio;
+
+    $pdf->Image('../images/radiology-report.jpg', 0, 0, $newWidth, $newHeight);
+
+    $pdf->SetFont('Arial', '', 12);
+    
+    $pdf->Ln(38);
+
+    $pdf->SetFont('Arial', '', 8);
+    $pdf->Cell(95, 5, 'Case Number', 0);
+    $pdf->Cell(95, 5, 'Date', 0);
+    $pdf->Ln();
+    
+    $pdf->SetFont('Arial', 'B', 10);
+    $pdf->Cell(95, 8, $rr_caseNumber, 0);
+    $pdf->Cell(95, 8, $rr_dateCreated, 0);
+    $pdf->Ln(12);
+
+    $pdf->SetFont('Arial', '', 8);
+    $pdf->Cell(47.5, 5, 'Family Name', 0);
+    $pdf->Cell(47.5, 5, 'First Name', 0);
+    $pdf->Cell(31.67, 5, 'Middle Initial', 0);
+    $pdf->Cell(31.67, 5, 'Age', 0);
+    $pdf->Cell(31.67, 5, 'Sex', 0);
+    $pdf->Ln();
+
+    $pdf->SetFont('Arial', 'B', 10);
+    $pdf->Cell(47.5, 8, $ape_lastName, 0);
+    $pdf->Cell(47.5, 8, $ape_firstName, 0);
+    $pdf->Cell(31.67, 8, $ape_middleName, 0);
+    $pdf->Cell(31.67, 8, $ape_age, 0);
+    $pdf->Cell(31.67, 8, $ape_sex, 0);
+    $pdf->Ln(12);
+
+
+
+    $pdf->SetFont('Arial', '', 8);
+    $pdf->Cell(95, 5, 'Company Name', 0);
+    $pdf->Cell(95, 5, 'Type of Examination', 0);
+    $pdf->Ln();
+    
+    $pdf->SetFont('Arial', 'B', 10);
+    $pdf->Cell(95, 8, $org_name, 0);
+    $pdf->Cell(95, 8, $me_name, 0);
+    $pdf->Ln(12);
+
+    $pdf->SetFont('Arial', '', 8);
+    $pdf->Cell(190, 8, "Chest PA", 0);
+    $pdf->Ln();
+    
+    $pdf->SetFont('Arial', 'B', 10);
+    $pdf->MultiCell(0, 5, $rr_chestPA);
+    $pdf->Ln();
+
+    $pdf->SetFont('Arial', '', 8);
+    $pdf->Cell(190, 8, "Impression", 0);
+    $pdf->Ln();
+    
+    $pdf->SetFont('Arial', 'B', 10);
+    $pdf->MultiCell(0, 5, $rr_impression);
+    $pdf->Ln(12);
+
+    $pdf->Output('I');
+    $stmt->close();
+    $conn->close();
+} else {
+    echo "ID not provided.";
 }
-
-// Sample data for the report
-$patientName = "John Doe";
-$studyDate = "2023-11-28";
-$impression = "No significant abnormalities detected.";
-
-// Create a PDF document
-$pdf = new RadiologyReportPDF();
-$pdf->AddPage();
-
-// Add content to the PDF
-$pdf->chapterTitle("Patient: $patientName");
-$pdf->chapterBody("Study Date: $studyDate");
-$pdf->chapterBody("Impression: $impression");
-
-// Add a table
-$pdf->addTable();
-
-// Output the PDF directly to the browser
-$pdf->Output();
 ?>

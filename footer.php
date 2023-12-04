@@ -18,9 +18,9 @@
         </div>
 
         <footer class="footer footer-center bottom-0 p-4 bg-white shadow-sm text-base-content">
-                <aside>
-                    <p>Copyright © 2023 - All right reserved by Global Health Diagnostics</p>
-                </aside>
+            <aside>
+                <p>Copyright © 2023 - All right reserved by Global Health Diagnostics</p>
+            </aside>
         </footer>
 
         <?php 

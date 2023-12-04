@@ -1,7 +1,4 @@
 <?php
-
-
-
 $classBtnPrimary = "btn btn-primary btn-sm text-xs rounded normal-case h-9";
 global $classBtnPrimary;
 
@@ -263,3 +260,47 @@ function getControlNumberAPE($id, $organizationId) {
 
     return $ctr;
 }
+
+function getRadiologyReport($APEFK = null) {
+    require("connection.php");
+
+    if(null !== $APEFK) {
+        $sql = "SELECT * FROM RadiologyReport WHERE APEFK = $APEFK";
+        $result = $conn->query($sql);
+        
+        if ($result !== false && $result->num_rows > 0) {
+            return $result->fetch_assoc();
+        }
+    } else {
+        $sql = "SELECT * FROM RadiologyReport";
+        $result = $conn->query($sql);
+        
+        if ($result !== false && $result->num_rows > 0) {
+            $resArr = array();
+
+            while($arr = $result->fetch_assoc()) {
+                $arr = array(
+                    'caseNumber' => $arr['caseNumber'],
+                    'dateCreated' => $arr['dateCreated'],
+                    'organizationFK' => $arr['organizationFK'],
+                    'MedicalExamination_FK' => $arr['MedicalExamination_FK'],
+                    'chestPA' => $arr['chestPA'],
+                    'impression' => $arr['impression'],
+                    'doctorFK' => $arr['doctorFK']
+                );
+
+                array_push($resArr, $arr);
+            }
+            
+            return $resArr;
+        }
+    }
+}
+
+
+
+
+
+
+
+
