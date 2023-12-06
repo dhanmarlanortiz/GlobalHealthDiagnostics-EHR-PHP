@@ -297,6 +297,66 @@ function getRadiologyReport($APEFK = null) {
     }
 }
 
+function getLaboratoryResult($APEFK = null) {
+    require("connection.php");
+
+    if(null !== $APEFK) {
+        $sql = "SELECT * FROM LaboratoryResult WHERE labRes_APE_FK = $APEFK";
+        $result = $conn->query($sql);
+        
+        if ($result !== false && $result->num_rows > 0) {
+            return $result->fetch_assoc();
+        }
+    } else {
+        $sql = "SELECT * FROM LaboratoryResult";
+        $result = $conn->query($sql);
+        
+        if ($result !== false && $result->num_rows > 0) {
+            $resArr = array();
+
+            while($arr = $result->fetch_assoc()) {
+                $arr = array(
+                    'labRes_APE_FK' => $arr['labRes_APE_FK'],
+                    'labRes_date' => $arr['labRes_date'],
+                    'labRes_hepa_b' => $arr['labRes_hepa_b'],
+                    'labRes_drug_shabu' => $arr['labRes_drug_shabu'],
+                    'labRes_drug_marijuana' => $arr['labRes_drug_marijuana'],
+                    'labRes_hema_hemoglobin' => $arr['labRes_hema_hemoglobin'],
+                    'labRes_hema_hematocrit' => $arr['labRes_hema_hematocrit'],
+                    'labRes_hema_whiteblood' => $arr['labRes_hema_whiteblood'],
+                    'labRes_hema_segmenters' => $arr['labRes_hema_segmenters'],
+                    'labRes_hema_lymphocytes' => $arr['labRes_hema_lymphocytes'],
+                    'labRes_hema_monocytes' => $arr['labRes_hema_monocytes'],
+                    'labRes_hema_eosinophils' => $arr['labRes_hema_eosinophils'],
+                    'labRes_hema_basophils' => $arr['labRes_hema_basophils'],
+                    'labRes_hema_stab' => $arr['labRes_hema_stab'],
+                    'labRes_urin_color' => $arr['labRes_urin_color'],
+                    'labRes_urin_transparency' => $arr['labRes_urin_transparency'],
+                    'labRes_urin_reaction' => $arr['labRes_urin_reaction'],
+                    'labRes_urin_gravity' => $arr['labRes_urin_gravity'],
+                    'labRes_urin_protein' => $arr['labRes_urin_protein'],
+                    'labRes_urin_glucose' => $arr['labRes_urin_glucose'],
+                    'labRes_urin_wbc' => $arr['labRes_urin_wbc'],
+                    'labRes_urin_rbc' => $arr['labRes_urin_rbc'],
+                    'labRes_urin_mucous' => $arr['labRes_urin_mucous'],
+                    'labRes_urin_epithelial' => $arr['labRes_urin_epithelial'],
+                    'labRes_urin_amorphous' => $arr['labRes_urin_amorphous'],
+                    'labRes_urin_bacteria' => $arr['labRes_urin_bacteria'],
+                    'labRes_urin_cast' => $arr['labRes_urin_cast'],
+                    'labRes_urin_crystals' => $arr['labRes_urin_crystals'],
+                    'labRes_para_color' => $arr['labRes_para_color'],
+                    'labRes_para_consistency' => $arr['labRes_para_consistency'],
+                    'labRes_para_result' => $arr['labRes_para_result']
+                );
+
+                array_push($resArr, $arr);
+            }
+            
+            return $resArr;
+        }
+    }
+}
+
 
 
 

@@ -140,6 +140,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->close();
         exit();
     }
+
+    if (isset($_POST['deleteLaboratoryResult'])) {
+        $stmt = $conn->prepare("DELETE FROM LaboratoryResult WHERE labRes_APE_FK = ?");
+        $stmt->bind_param("i", $id);
+    
+        if ($stmt->execute()) {
+            create_flash_message('delete-success', $flashMessage['delete-success'], FLASH_SUCCESS);
+            
+        } else {
+            create_flash_message('delete-failed', $flashMessage['delete-failed'], FLASH_ERROR);
+        
+            if($conn->errno == 1451) {
+                create_flash_message('delete-failed', $flashMessage['delete-failed-linked'] , FLASH_ERROR);
+            }
+        }
+    
+        $url = base_url(false) . "/employee-APE.php?id=" . $id;
+        header("Location: " . $url ."");
+    
+        $stmt->close();
+        exit();
+    }
+
+    
 }
 
 $organizationDetail = getOrganization($_POST['organizationId']);
@@ -149,6 +173,9 @@ $y = date('Y', strtotime($_POST['dateRegistered']));
 
 include("components/radiologyReportModal.php");
 $radiologyReport = getRadiologyReport($id);
+
+include("components/laboratoryResultModal.php");
+$laboratoryResult = getLaboratoryResult($id);
 
 $conn->close();
 
@@ -244,7 +271,6 @@ if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
                     <div class="grid grid-cols-1 gap-x-6 gap-y-8">
                         <div class="col-span-1">
                         <?php 
-                            $rrDetails = ($radiologyReport) ? 'Case Number: ' . $radiologyReport['caseNumber'] . ' | Date Created: ' . $radiologyReport['dateCreated'] : '';
                             echo '<ul role="list" class="divide-y divide-gray-100">';
 
                             echo '<li class="flex flex-col sm:flex-row justify-between gap-x-6 py-5">
@@ -252,25 +278,23 @@ if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
                                         <div class="min-w-0 flex-auto">
                                             <p class="text-sm font-semibold leading-6 text-gray-900">Radiology Report</p>
                                             <p class="text-xs leading-5 text-gray-500 flex gap-x-4">';
+                                                if(($radiologyReport)) {
+                                                    echo '<span class="flex gap-x-1 items-center">';
+                                                    echo    '<svg xmlns="http://www.w3.org/2000/svg" fill="rgb(107, 114, 128)" height="12" width="12" viewBox="0 0 448 512"><path d="M96 32V64H48C21.5 64 0 85.5 0 112v48H448V112c0-26.5-21.5-48-48-48H352V32c0-17.7-14.3-32-32-32s-32 14.3-32 32V64H160V32c0-17.7-14.3-32-32-32S96 14.3 96 32zM448 192H0V464c0 26.5 21.5 48 48 48H400c26.5 0 48-21.5 48-48V192z"/></svg>';
+                                                    echo    date("M d, Y", strtotime($radiologyReport['dateCreated']));
+                                                    echo '</span>';
 
-                                            if(($radiologyReport)) {
-                                                echo '<span class="flex gap-x-1 items-center">';
-                                                echo    '<svg xmlns="http://www.w3.org/2000/svg" fill="rgb(107, 114, 128)" height="12" width="12" viewBox="0 0 448 512"><path d="M96 32V64H48C21.5 64 0 85.5 0 112v48H448V112c0-26.5-21.5-48-48-48H352V32c0-17.7-14.3-32-32-32s-32 14.3-32 32V64H160V32c0-17.7-14.3-32-32-32S96 14.3 96 32zM448 192H0V464c0 26.5 21.5 48 48 48H400c26.5 0 48-21.5 48-48V192z"/></svg>';
-                                                echo    date("M d, Y", strtotime($radiologyReport['dateCreated']));
-                                                echo '</span>';
-
-                                                echo '<span class="flex gap-x-1 items-center">';
-                                                echo    '<svg xmlns="http://www.w3.org/2000/svg" fill="rgb(107, 114, 128)" height="12" width="12" viewBox="0 0 448 512"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z"/></svg>';
-                                                echo    $radiologyReport['caseNumber'];
-                                                echo '</span>';
-                                            } else {
-                                                echo 'Not Available';
-                                            }
+                                                    echo '<span class="flex gap-x-1 items-center">';
+                                                    echo    '<svg xmlns="http://www.w3.org/2000/svg" fill="rgb(107, 114, 128)" height="12" width="12" viewBox="0 0 448 512"><path d="M181.3 32.4c17.4 2.9 29.2 19.4 26.3 36.8L197.8 128h95.1l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3s29.2 19.4 26.3 36.8L357.8 128H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H347.1L325.8 320H384c17.7 0 32 14.3 32 32s-14.3 32-32 32H315.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8l9.8-58.7H155.1l-11.5 69.3c-2.9 17.4-19.4 29.2-36.8 26.3s-29.2-19.4-26.3-36.8L90.2 384H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l21.3-128H64c-17.7 0-32-14.3-32-32s14.3-32 32-32h68.9l11.5-69.3c2.9-17.4 19.4-29.2 36.8-26.3zM187.1 192L165.8 320h95.1l21.3-128H187.1z"/></svg>';
+                                                    echo    $radiologyReport['caseNumber'];
+                                                    echo '</span>';
+                                                } else {
+                                                    echo 'Not Available';
+                                                }
                             echo            '</p>
                                         </div>
                                     </div>
                                     <div class="shrink-0 mt-2 sm:mt-0 sm:flex sm:items-end">';
-
                                         if(($radiologyReport)) {
                                             $radiologyReportData = [
                                                 'href' => '/reports/radiology-report.php?id=' . $id,
@@ -302,6 +326,56 @@ if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
                                             }
                                         }
                                 echo '</div>';
+                            echo "</li>";
+                            
+                            echo '<li class="flex flex-col sm:flex-row justify-between gap-x-6 py-5">
+                                    <div class="flex min-w-0 gap-x-4">
+                                        <div class="min-w-0 flex-auto">
+                                            <p class="text-sm font-semibold leading-6 text-gray-900">Laboratory Result</p>
+                                            <p class="text-xs leading-5 text-gray-500 flex gap-x-4">';
+                                                if(($laboratoryResult)) {
+                                                    echo '<span class="flex gap-x-1 items-center">';
+                                                    echo    '<svg xmlns="http://www.w3.org/2000/svg" fill="rgb(107, 114, 128)" height="12" width="12" viewBox="0 0 448 512"><path d="M96 32V64H48C21.5 64 0 85.5 0 112v48H448V112c0-26.5-21.5-48-48-48H352V32c0-17.7-14.3-32-32-32s-32 14.3-32 32V64H160V32c0-17.7-14.3-32-32-32S96 14.3 96 32zM448 192H0V464c0 26.5 21.5 48 48 48H400c26.5 0 48-21.5 48-48V192z"/></svg>';
+                                                    echo    date("M d, Y", strtotime($laboratoryResult['labRes_date']));
+                                                    echo '</span>';
+                                                } else {
+                                                    echo 'Not Available';
+                                                }
+                            echo            '</p>';
+                            echo '      </div>
+                                    </div>
+                                    <div class="shrink-0 mt-2 sm:mt-0 sm:flex sm:items-end">';
+                                        if(($laboratoryResult)) {
+                                            $laboratoryResultData = [
+                                                'href' => '/reports/laboratory-result.php?id=' . $id,
+                                                'organizationId' => $o,
+                                                'firstName' => $_POST['firstName'],
+                                                'middleName' => $_POST['middleName'],
+                                                'lastName' => $_POST['lastName']
+                                            ];
+                                            $encodeLaboratoryResult = base64_encode(json_encode( $laboratoryResultData ));
+
+                                            echo "<a href='" . base_url(false) . "/employeeViewLaboratoryResult-APE.php?q=$encodeLaboratoryResult' title='View' class='btn btn-sm bg-green-700 hover:bg-green-800'>
+                                                    <svg xmlns='http://www.w3.org/2000/svg' fill='#fff' height='1em' viewBox='0 0 448 512'><path d='M32 32C14.3 32 0 46.3 0 64v96c0 17.7 14.3 32 32 32s32-14.3 32-32V96h64c17.7 0 32-14.3 32-32s-14.3-32-32-32H32zM64 352c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7 14.3 32 32 32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H64V352zM320 32c-17.7 0-32 14.3-32 32s14.3 32 32 32h64v64c0 17.7 14.3 32 32 32s32-14.3 32-32V64c0-17.7-14.3-32-32-32H320zM448 352c0-17.7-14.3-32-32-32s-32 14.3-32 32v64H320c-17.7 0-32 14.3-32 32s14.3 32 32 32h96c17.7 0 32-14.3 32-32V352z'/></svg>
+                                                </a>";
+                                            echo "<a href='" . base_url(false) . "/reports/laboratory-result.php?id=" . $id . "' title='Download' class='btn btn-sm ml-1 bg-sky-400 hover:bg-sky-500' download>
+                                                    <svg xmlns='http://www.w3.org/2000/svg' fill='#fff' height='1em' viewBox='0 0 512 512'><path d='M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32V274.7l-73.4-73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l128 128c12.5 12.5 32.8 12.5 45.3 0l128-128c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L288 274.7V32zM64 352c-35.3 0-64 28.7-64 64v32c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V416c0-35.3-28.7-64-64-64H346.5l-45.3 45.3c-25 25-65.5 25-90.5 0L165.5 352H64zm368 56a24 24 0 1 1 0 48 24 24 0 1 1 0-48z'/></svg>
+                                                </a>";
+                                            
+                                            if($_SESSION['role'] == 1) {
+                                                echo "<button type='submit' name='deleteLaboratoryResult' title='delete' class='btn btn-sm ml-1 bg-red-500 hover:bg-red-600 text-white'>
+                                                    <span class='sr-only'>Delete Laboratory Result</span>
+                                                    <svg xmlns='http://www.w3.org/2000/svg' fill='#fff' height='1em' viewBox='0 0 448 512'><path d='M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z'/></svg>
+                                                </button>";
+                                            }
+                                        } else {
+                                            if($_SESSION['role'] == 1) {
+                                                echo "<button type='button' onClick='laboratoryResultModal.showModal()' title='Create' class='btn btn-sm bg-green-700 hover:bg-green-800'>
+                                                        <svg xmlns='http://www.w3.org/2000/svg' fill='#fff' height='14' width='12' viewBox='0 0 448 512'><path d='M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z'/></svg>
+                                                    </button>";
+                                            }
+                                        }
+                            echo   '</div>';
                             echo "</li>";
 
                             $resultsAPE = getResultsAPE($id);
@@ -452,7 +526,7 @@ if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
 </form>
 
 <script>
-    $(document).ready( function() {
+    $(document).ready( function() { 
         var post = <?php echo json_encode($_POST); ?>;
         var role = <?php echo $_SESSION['role']; ?>;
         let styleInput = "block w-full rounded py-1.5 px-2 text-gray-900 border-gray-300 placeholder:text-gray-400 focus:border-green-700 focus:ring-0 focus:bg-green-50 sm:text-sm sm:leading-6";
