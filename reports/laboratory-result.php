@@ -1,171 +1,253 @@
 <?php
-// error_reporting(E_ALL);
-// ini_set('display_errors', 1);
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ob_start();
+session_start();
+
+$live = 'app.globalhealth-diagnostics.com';
+$liveURL = "https://app.globalhealth-diagnostics.com";
+$devURL = "http://localhost/globalhealth-php";
+$baseURL = ($_SERVER['HTTP_HOST'] == $live) ? $liveURL : $devURL;
+
+// Check if logged in
+if(!isset($_SESSION["valid"])){
+    header("location:" . $baseURL . "/login.php");
+    exit();
+}
+
+// Check if ID is set
+if (!isset($_GET['id'])) {
+    header("location:" . $baseURL . "/page-not-found.php");
+    exit();
+}
 
 include("../connection.php");
+include("../globals.php");
 require('../fpdf/fpdf.php');
 
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
+$id = $_GET['id'];
+$apeDetails = fetchApeDetailsById($conn, $id);
+$orgDetails = fetchOrgDetailsById($conn, $apeDetails['organizationId']);
+$labResults = fetchLabResultByApeId($conn, $id);
 
-    /* Radiology Report Data - START */
-    $labRes_sql = "SELECT * FROM LaboratoryResult WHERE labRes_APE_FK = ?";
-    $labRes_stmt = $conn->prepare($labRes_sql);
-    $labRes_stmt->bind_param('i', $id);
-    $labRes_stmt->execute();
-    $labRes_sqlresult = $labRes_stmt->get_result();    
-
-    $labRes_APE_FK = $labRes_user_FK = $labRes_date = $labRes_hepa_b = $labRes_drug_shabu = $labRes_drug_marijuana = $labRes_hema_hemoglobin = $labRes_hema_hematocrit = $labRes_hema_whiteblood = $labRes_hema_segmenters = $labRes_hema_lymphocytes = $labRes_hema_monocytes = $labRes_hema_eosinophils = $labRes_hema_basophils = $labRes_hema_stab = $labRes_urin_color = $labRes_urin_transparency = $labRes_urin_reaction = $labRes_urin_gravity = $labRes_urin_protein = $labRes_urin_glucose = $labRes_urin_wbc = $labRes_urin_rbc = $labRes_urin_mucous = $labRes_urin_epithelial = $labRes_urin_amorphous = $labRes_urin_bacteria = $labRes_urin_cast = $labRes_urin_crystals = $labRes_para_color = $labRes_para_consistency = $labRes_para_result = "";
-
-    if ($labRes_sqlresult->num_rows > 0) {
-        $labRes_row = $labRes_sqlresult->fetch_assoc();
-
-        $labRes_APE_FK = $labRes_row["$labRes_APE_FK"];
-        $labRes_user_FK = $labRes_row["$labRes_user_FK"];
-        $labRes_date = $labRes_row["$labRes_date"];
-        $labRes_hepa_b = $labRes_row["$labRes_hepa_b"];
-        $labRes_drug_shabu = $labRes_row["$labRes_drug_shabu"];
-        $labRes_drug_marijuana = $labRes_row["$labRes_drug_marijuana"];
-        $labRes_hema_hemoglobin = $labRes_row["$labRes_hema_hemoglobin"];
-        $labRes_hema_hematocrit = $labRes_row["$labRes_hema_hematocrit"];
-        $labRes_hema_whiteblood = $labRes_row["$labRes_hema_whiteblood"];
-        $labRes_hema_segmenters = $labRes_row["$labRes_hema_segmenters"];
-        $labRes_hema_lymphocytes = $labRes_row["$labRes_hema_lymphocytes"];
-        $labRes_hema_monocytes = $labRes_row["$labRes_hema_monocytes"];
-        $labRes_hema_eosinophils = $labRes_row["$labRes_hema_eosinophils"];
-        $labRes_hema_basophils = $labRes_row["$labRes_hema_basophils"];
-        $labRes_hema_stab = $labRes_row["$labRes_hema_stab"];
-        $labRes_urin_color = $labRes_row["$labRes_urin_color"];
-        $labRes_urin_transparency = $labRes_row["$labRes_urin_transparency"];
-        $labRes_urin_reaction = $labRes_row["$labRes_urin_reaction"];
-        $labRes_urin_gravity = $labRes_row["$labRes_urin_gravity"];
-        $labRes_urin_protein = $labRes_row["$labRes_urin_protein"];
-        $labRes_urin_glucose = $labRes_row["$labRes_urin_glucose"];
-        $labRes_urin_wbc = $labRes_row["$labRes_urin_wbc"];
-        $labRes_urin_rbc = $labRes_row["$labRes_urin_rbc"];
-        $labRes_urin_mucous = $labRes_row["$labRes_urin_mucous"];
-        $labRes_urin_epithelial = $labRes_row["$labRes_urin_epithelial"];
-        $labRes_urin_amorphous = $labRes_row["$labRes_urin_amorphous"];
-        $labRes_urin_bacteria = $labRes_row["$labRes_urin_bacteria"];
-        $labRes_urin_cast = $labRes_row["$labRes_urin_cast"];
-        $labRes_urin_crystals = $labRes_row["$labRes_urin_crystals"];
-        $labRes_para_color = $labRes_row["$labRes_para_color"];
-        $labRes_para_consistency = $labRes_row["$labRes_para_consistency"];
-        $labRes_para_result = $labRes_row["$labRes_para_result"];
+// If not admin, check if user org and patient org is the same
+if( $_SESSION['role'] != 1 ) {
+    if( $_SESSION['organizationId'] != $apeDetails['organizationId'] ) {
+        header("location:" . $baseURL . "/page-not-found.php");
+        exit();
     }
-    /* Radiology Report Data - END */
-
-    /* APE Data - START */
-    $ape_sql = "SELECT * FROM APE WHERE id = ?";
-    $ape_stmt = $conn->prepare($ape_sql);
-    $ape_stmt->bind_param('i', $id);
-    $ape_stmt->execute();
-    $ape_sqlresult = $ape_stmt->get_result();
-
-    $ape_age = $ape_organizationId = 0;
-    $ape_firstName = $ape_middleName = $ape_lastName = $ape_sex = "";
-
-    if ($ape_sqlresult->num_rows > 0) {
-        $ape_row = $ape_sqlresult->fetch_assoc();
-
-        $ape_firstName = $ape_row["firstName"];
-        $ape_middleName = $ape_row["middleName"];
-        $ape_lastName = $ape_row["lastName"];
-        $ape_age = $ape_row["age"];
-        $ape_sex = $ape_row["sex"];
-        $ape_organizationId = $ape_row["organizationId"];
-    }
-    /* APE Data - END */
-
-    /* Organization Data - START */
-    $org_sql = "SELECT * FROM Organization WHERE id = ?";
-    $org_stmt = $conn->prepare($org_sql);
-    $org_stmt->bind_param('i', $ape_organizationId);
-    $org_stmt->execute();
-    $org_sqlresult = $org_stmt->get_result();
-
-    $org_name = "";
-
-    if ($org_sqlresult->num_rows > 0) {
-        $org_row = $org_sqlresult->fetch_assoc();
-
-        $org_name = $org_row["name"];
-    }
-    /* Organization - END */
-
-    $pdf = new FPDF();
-    $pdf->AddPage();
-    
-    // list($imageWidth, $imageHeight) = getimagesize('../images/radiology-report.jpg');
-
-    // $aspectRatio = $imageWidth / $imageHeight;
-    // $newWidth = $pdf->GetPageWidth();
-    // $newHeight = $newWidth / $aspectRatio;
-
-    // $pdf->Image('../images/radiology-report.jpg', 0, 0, $newWidth, $newHeight);
-
-    $pdf->SetFont('Arial', '', 12);
-    
-    $pdf->Ln(38);
-
-    $pdf->SetFont('Arial', '', 8);
-    $pdf->Cell(95, 5, 'Case Number', 0);
-    $pdf->Cell(95, 5, 'Date', 0);
-    $pdf->Ln();
-    
-    $pdf->SetFont('Arial', 'B', 10);
-    $pdf->Cell(95, 8, $labRes_caseNumber, 0);
-    $pdf->Cell(95, 8, $labRes_dateCreated, 0);
-    $pdf->Ln(12);
-
-    $pdf->SetFont('Arial', '', 8);
-    $pdf->Cell(47.5, 5, 'Family Name', 0);
-    $pdf->Cell(47.5, 5, 'First Name', 0);
-    $pdf->Cell(31.67, 5, 'Middle Initial', 0);
-    $pdf->Cell(31.67, 5, 'Age', 0);
-    $pdf->Cell(31.67, 5, 'Sex', 0);
-    $pdf->Ln();
-
-    $pdf->SetFont('Arial', 'B', 10);
-    $pdf->Cell(47.5, 8, $ape_lastName, 0);
-    $pdf->Cell(47.5, 8, $ape_firstName, 0);
-    $pdf->Cell(31.67, 8, $ape_middleName, 0);
-    $pdf->Cell(31.67, 8, $ape_age, 0);
-    $pdf->Cell(31.67, 8, $ape_sex, 0);
-    $pdf->Ln(12);
-
-
-
-    $pdf->SetFont('Arial', '', 8);
-    $pdf->Cell(95, 5, 'Company Name', 0);
-    $pdf->Cell(95, 5, 'Type of Examination', 0);
-    $pdf->Ln();
-    
-    $pdf->SetFont('Arial', 'B', 10);
-    $pdf->Cell(95, 8, $org_name, 0);
-    $pdf->Cell(95, 8, $me_name, 0);
-    $pdf->Ln(12);
-
-    $pdf->SetFont('Arial', '', 8);
-    $pdf->Cell(190, 8, "Chest PA", 0);
-    $pdf->Ln();
-    
-    $pdf->SetFont('Arial', 'B', 10);
-    $pdf->MultiCell(0, 5, $labRes_chestPA);
-    $pdf->Ln();
-
-    $pdf->SetFont('Arial', '', 8);
-    $pdf->Cell(190, 8, "Impression", 0);
-    $pdf->Ln();
-    
-    $pdf->SetFont('Arial', 'B', 10);
-    $pdf->MultiCell(0, 5, $labRes_impression);
-    $pdf->Ln(12);
-
-    $pdf->Output('I');
-    $stmt->close();
-    $conn->close();
-} else {
-    echo "ID not provided.";
 }
-?>
+
+// list($imageWidth, $imageHeight) = getimagesize('../images/radiology-report.jpg');
+class PDF extends FPDF {
+    
+    function Header() {
+        $this->Image('../images/ghd-logo-with-text.png', 10, 10, 60);
+        $this->SetFont('Arial','', 8);
+        $this->SetTextColor(83,99,113);
+        $this->ln(1);
+        $this->Cell(0,4.5,'3/F LMB Bldg., 158 San Antonio Ave., San Antonio Valley I,', 0, 1, 'R');
+        $this->Cell(0,4.5,'Paranaque City, Metro Manila', 0, 1, 'R');
+        $this->Cell(0,4.5,'Tel/Fax No. 8825-9964', 0, 1, 'R');
+        $this->Ln(10);
+    }
+
+    // Page footer
+    function Footer() {
+        $this->SetY(-15);
+        $this->SetFont('Arial','I',8);
+        $this->Cell(0,10,'Page '.$this->PageNo().'/{nb}',0,0,'C');
+    }
+
+    function thFontStyle() {
+        $this->SetFont('Arial','B', 8);
+        $this->SetTextColor(83,99,113);
+        $this->SetFillColor(249,250,251);
+    }
+
+    function tdFontStyle() {
+        $this->SetFont('Arial','', 8);   
+        $this->SetTextColor(17, 24, 39);
+    }
+
+    function row($title, $value, $default = null) {
+        $border = 0;
+        $lineHeight = 5;
+        $toRight = 0;
+        $space = " ";
+
+        $this->SetFont('Arial','', 8);   
+        $this->SetTextColor(83,99,113);
+        $this->Cell(30, $lineHeight, $space.$title.$space , $border, $toRight, 'L', false);
+        
+        $this->SetFont('Arial','B', 8);   
+        $this->SetTextColor(17, 24, 39);
+        $this->Cell(25, $lineHeight, $space.$value.$space, $border, $toRight);
+
+        $this->SetFont('Arial','', 8); 
+        $this->SetTextColor(83,99,113); 
+        $this->Cell(35, $lineHeight, $space.$default.$space, $border, $toRight);
+        $this->Cell(10, $lineHeight, $space, $border, $toRight);
+    }
+
+    function rowCol4($title, $value) {
+        $border = 0;
+        $lineHeight = 5;
+        $toRight = 0;
+        $space = " ";
+
+        $this->SetFont('Arial','', 8);   
+        $this->SetTextColor(83,99,113);
+        $this->Cell(55, $lineHeight, $space.$title.$space , $border, $toRight, 'L', false);
+        
+        $this->SetFont('Arial','B', 8);   
+        $this->SetTextColor(17, 24, 39);
+        $this->Cell(35, $lineHeight, $space.$value.$space, $border, $toRight);
+        $this->Cell(10, $lineHeight, $space, $border, $toRight);
+    }
+
+}
+
+// Instanciation of inherited class
+$pdf = new PDF();
+$vw = $pdf->GetPageWidth();
+$border = "T L R";
+$lineHeight = 8;
+$toRight = 0;
+$toBegin = 1;
+$toBelow = 2;
+$space = " ";
+
+$pdf->AliasNbPages();
+$pdf->AddPage();
+$pdf->SetFont('Arial','B', 10);
+$pdf->SetTextColor(17, 24, 39);
+$pdf->SetDrawColor(241, 245, 249);
+$pdf->Cell(0,4.5,'LABORATORY RESULT', 0, 1, 'L');
+
+$pdf->ln(5);
+
+// Name
+$pdf->thFontStyle();
+$pdf->Cell(20, $lineHeight,' Name: ', $border, $toRight, 'L', true);
+$pdf->tdFontStyle();
+$pdf->Cell(85, $lineHeight, $space.$apeDetails['lastName'] . ", " . $apeDetails['firstName'].$space, $border);
+
+// Sex
+$pdf->thFontStyle();
+$pdf->Cell(10, $lineHeight,' Sex: ', $border, $toRight, 'L', true);
+$pdf->tdFontStyle();
+$pdf->Cell(15, $lineHeight, $space.substr($apeDetails['sex'], 0,1).$space , $border);
+
+// Age
+$pdf->thFontStyle();
+$pdf->Cell(10, $lineHeight,' Age: ', $border, $toRight, 'L', true);
+$pdf->tdFontStyle();
+$pdf->Cell(15, $lineHeight, $space.$apeDetails['age'].$space , $border);
+
+// Date
+$pdf->thFontStyle();
+$pdf->Cell(10, $lineHeight,' Date: ', $border, $toRight, 'L', true);
+$pdf->tdFontStyle();
+$pdf->Cell(25, $lineHeight, $space.date('d-M-y', strtotime($labResults['labRes_date'])).$space, $border, $toBegin);
+
+// Company
+$pdf->thFontStyle();
+$pdf->Cell(20, $lineHeight,' Company: ', $border, $toRight, 'L', true);
+$pdf->tdFontStyle();
+$pdf->MultiCell(170, $lineHeight, $space.$orgDetails['name'].$space, $border);
+
+$pdf->Cell(0, 1,'', 'T', $toBegin);
+
+$pdf->ln(5);
+
+$pdf->thFontStyle();
+$pdf->MultiCell(190, $lineHeight, ' REQUEST: ', 0);
+$pdf->rowCol4('HEPATITIS B SCREENING:', html_entity_decode($labResults['labRes_hepa_b']));
+$pdf->rowCol4('', '');
+$pdf->ln(7);
+$pdf->rowCol4('DRUG TEST:', '');
+$pdf->rowCol4('', '');
+$pdf->ln(6);
+$pdf->rowCol4('Methamphetamine (shabu):', $labResults['labRes_drug_shabu']);
+$pdf->rowCol4('', '');
+$pdf->ln();
+$pdf->rowCol4('Tetrahydrocannabinol (marijuana):', $labResults['labRes_drug_marijuana']);
+$pdf->rowCol4('', '');
+$pdf->Cell(0, 1,'', 'T', $toBegin);
+$pdf->ln(9);
+
+$pdf->thFontStyle();
+$pdf->MultiCell(190, $lineHeight, ' HEMATOLOGY: ', 0);
+$pdf->row('', '', 'Normal Values:');
+$pdf->row('', '', 'Normal Values:');
+$pdf->ln();
+$pdf->row('Hemoglobin:', $labResults['labRes_hema_hemoglobin'], 'Female: 12-16 gsm/L');
+$pdf->row('Segmenters:', $labResults['labRes_hema_segmenters'], '50-70%');
+$pdf->ln();
+$pdf->row('', '', 'Male: 14-18 gsm/L');
+$pdf->row('Lymphocytes:', $labResults['labRes_hema_lymphocytes'], '20-40%');
+$pdf->ln();
+$pdf->row('Hematocrit:', $labResults['labRes_hema_hematocrit'], 'Female: 37-47 vol%');
+$pdf->row('Monocytes:', $labResults['labRes_hema_monocytes'], '2-8%');
+$pdf->ln();
+$pdf->row('', '', 'Male: 40-54 vol%');
+$pdf->row('Eosinophils:', $labResults['labRes_hema_eosinophils'], '1-3%');
+$pdf->ln();
+$pdf->row('White Blood Cell:', $labResults['labRes_hema_whiteblood'], '5,000-10,000/cu.mm.');
+$pdf->row('Basophils:', $labResults['labRes_hema_basophils'], '0-2%');
+$pdf->ln();
+$pdf->row('', '', '');
+$pdf->row('Slab:', $labResults['labRes_hema_stab'], '');
+$pdf->Cell(0, 1,'', 'T', $toBegin);
+$pdf->ln(5);
+
+$pdf->thFontStyle();
+$pdf->MultiCell(190, $lineHeight, ' URINALISYS: ', 0);
+$pdf->row('Color:', $labResults['labRes_urin_color']);
+$pdf->row('WBC:', $labResults['labRes_urin_wbc']);
+$pdf->ln();
+$pdf->row('Transparency:', $labResults['labRes_urin_transparency']);
+$pdf->row('RBC:', $labResults['labRes_urin_rbc']);
+$pdf->ln();
+$pdf->row('Reaction:', $labResults['labRes_urin_reaction']);
+$pdf->row('Mucous Threads:', $labResults['labRes_urin_mucous']);
+$pdf->ln();
+$pdf->row('Specific gravity:', $labResults['labRes_urin_gravity']);
+$pdf->row('Epithelial Cells:', $labResults['labRes_urin_epithelial']);
+$pdf->ln();
+$pdf->row('Protein:', $labResults['labRes_urin_protein']);
+$pdf->row('Amorphous URATES:', $labResults['labRes_urin_amorphous']);
+$pdf->ln();
+$pdf->row('Glucose:', $labResults['labRes_urin_glucose']);
+$pdf->row('Bacteria:', $labResults['labRes_urin_bacteria']);
+$pdf->ln();
+$pdf->row('', '', '');
+$pdf->row('Cast:', $labResults['labRes_urin_cast']);
+$pdf->ln();
+$pdf->row('', '', '');
+$pdf->row('Crystals:', $labResults['labRes_urin_crystals']);
+$pdf->Cell(0, 1,'', 'T', $toBegin);
+$pdf->ln(5);
+
+$pdf->thFontStyle();
+$pdf->MultiCell(190, $lineHeight, ' PARASITOLOGY: ', 0);
+$pdf->row('Color:', $labResults['labRes_para_color']);
+$pdf->row('', '', '');
+$pdf->ln();
+$pdf->row('Consistency:', $labResults['labRes_para_consistency']);
+$pdf->row('', '', '');
+$pdf->ln();
+$pdf->row('Result:', $labResults['labRes_para_result']);
+$pdf->row('', '', '');
+$pdf->Cell(0, 1,'', 'T', $toBegin);
+$pdf->ln(5);
+
+
+$pdf->Image('../images/angel-baquiran.png', 10, 240, 40);
+
+$pdf->Image('../images/nova-angela-buyagan.png', 75, 240, 50);
+$pdf->Image('../images/noel-c-santos.png', 140, 240, 60);
+
+$pdf->Output();
+$conn->close();

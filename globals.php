@@ -297,6 +297,22 @@ function getRadiologyReport($APEFK = null) {
     }
 }
 
+function fetchLabResultByApeId($conn, $id) {
+    $sql = "SELECT * FROM LaboratoryResult WHERE labRes_APE_FK = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+
+        return $row;
+    } else {
+        return;
+    }
+}
+
 function getLaboratoryResult($APEFK = null) {
     require("connection.php");
 
@@ -357,9 +373,37 @@ function getLaboratoryResult($APEFK = null) {
     }
 }
 
+function fetchApeDetailsById($conn, $id) {
+    $sql = "SELECT firstName, middleName, lastName, age, sex, organizationId FROM APE WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
 
+        return $row;
+    } else {
+        return;
+    }
+}
 
+function fetchOrgDetailsById($conn, $id) {
+    $sql = "SELECT * FROM Organization WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+
+        return $row;
+    } else {
+        return;
+    }
+}
 
 
 
