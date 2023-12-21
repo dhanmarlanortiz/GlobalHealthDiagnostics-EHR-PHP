@@ -29,6 +29,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // $birthDate = test_input( $_POST['birthDate'] );
     $age = test_input( $_POST['age'] );
     $sex = test_input( $_POST['sex'] );
+    $civilStatus = test_input( $_POST['civilStatus'] );
+    $homeAddress = test_input( $_POST['homeAddress'] );
     $organizationId = test_input( intval($_POST['organizationId']) );
     $employeeNumber = test_input( $_POST['employeeNumber'] );
     // $membership = test_input( $_POST['membership'] );
@@ -40,6 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // $examination = test_input( $_POST['examination'] );
     $remarks = test_input( $_POST['remarks'] );
     $userId = test_input( $_SESSION['userId'] );
+    
 
     /* GET HEAD COUNT - START */
     $headCount = 1;
@@ -56,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $o = $organizationId;
     $y = date('Y', strtotime($dateRegistered));
 
-    $regQuery = "INSERT INTO APE(headCount, firstName, middleName, lastName, age, sex, organizationId, employeeNumber, dateRegistered, remarks, userId) VALUES('$headCount', '$firstName', '$middleName', '$lastName', '$age', '$sex', '$organizationId', '$employeeNumber', '$dateRegistered', '$remarks', '$userId')";
+    $regQuery = "INSERT INTO APE(headCount, firstName, middleName, lastName, age, sex, civilStatus, homeAddress, organizationId, employeeNumber, dateRegistered, remarks, userId) VALUES('$headCount', '$firstName', '$middleName', '$lastName', '$age', '$sex', '$civilStatus', '$homeAddress', '$organizationId', '$employeeNumber', '$dateRegistered', '$remarks', '$userId')";
     
     if ($conn->query($regQuery) === TRUE) {
         create_flash_message('create-success', $flashMessage['create-success'], FLASH_SUCCESS);
@@ -170,6 +173,12 @@ $styleTextError = "mt-2 text-red-400 text-xs";
                                     ) ?>
                                 >Female</option>
                             </select>
+                        </div>
+                        <div class="col-span-1">
+                            <input type="text" id="civilStatus" data-label="Civil Status" />
+                        </div>
+                        <div class="col-span-1 sm:col-span-2">
+                            <input type="text" id="homeAddress" data-label="Home Address" />
                         </div>
                         <div class="col-span-1">
                             <input type="text" id="employeeNumber" data-label="Employee Number" />

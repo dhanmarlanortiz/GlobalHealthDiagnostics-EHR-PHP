@@ -1,0 +1,11 @@
+$("input[name^=medExamReport_history]").each(function() {
+    $(this).val( $(this).attr('name') + " test" );
+})
+
+TRUNCATE `medExamReport_family`;
+TRUNCATE `medExamReport_history`;
+TRUNCATE `medExamReport_personalSocial`;
+TRUNCATE `medExamReport_physical`;
+TRUNCATE `medExamReport_recommendation`;
+TRUNCATE `medExamReport_system`;
+TRUNCATE `medExamReport_xrayEcgLab`;

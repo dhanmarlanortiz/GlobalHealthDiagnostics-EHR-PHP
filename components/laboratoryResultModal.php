@@ -50,7 +50,7 @@ if (isset($_POST['generatelaboratoryResult'])) {
     exit();
 }
 ?>
-<form id="laboratoryResultForm" method="post" enctype="multipart/form-data" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id=" . $_GET['id'] ) ;?>" class="prompt-confirm">
+<form id="laboratoryResultForm" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id=" . $_GET['id'] ) ;?>" class="prompt-confirm">
     <dialog id="laboratoryResultModal" class="modal">
         <div class="modal-box rounded-none max-w-7xl p-0">
                 <div class="flex items-center justify-between p-4 border-b-2 border-green-700">
@@ -106,13 +106,13 @@ if (isset($_POST['generatelaboratoryResult'])) {
                         </h4>
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-8">
                             <div class="col-span-1">
-                                <input type="text" id="para-color" data-label="Color" placeholder="Color" title="Parasitology: Color" />
+                                <input type="text" id="labRes_para_color" data-label="Color" placeholder="Color" title="Parasitology: Color" />
                             </div>
                             <div class="col-span-1">
-                                <input type="text" id="para-consistency" data-label="Consistency" placeholder="Consistency" title="Parasitology: Consistency" />
+                                <input type="text" id="labRes_para_consistency" data-label="Consistency" placeholder="Consistency" title="Parasitology: Consistency" />
                             </div>
                             <div class="col-span-1">
-                                <input type="text" id="para-result" data-label="Result" placeholder="Result" title="Parasitology: Result" />
+                                <input type="text" id="labRes_para_result" data-label="Result" placeholder="Result" title="Parasitology: Result" />
                             </div>
                         </div>
                     </div>

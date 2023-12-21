@@ -192,7 +192,7 @@ function getHeadCountAPE($organizationId, $year) {
 function getMedicalExamination() {
     require("connection.php");
     $examArray = array();
-    $examSql = "SELECT * FROM MedicalExamination";
+    $examSql = "SELECT * FROM MedicalExamination ORDER BY name";
     $examResult = $conn->query($examSql);
 
     if ($examResult !== false && $examResult->num_rows > 0) {
@@ -373,8 +373,66 @@ function getLaboratoryResult($APEFK = null) {
     }
 }
 
+function getMedExamReport($conn, $ape_fk = null) {
+    if(null !== $ape_fk) {
+        $medExamReport_all = array();
+
+        $medExamReport_family_sql = "SELECT * FROM medExamReport_family WHERE medExamReport_family_ape_fk = $ape_fk";
+        $medExamReport_family_result = $conn->query($medExamReport_family_sql);
+
+        $medExamReport_history_sql = "SELECT * FROM medExamReport_history WHERE medExamReport_history_ape_fk = $ape_fk";
+        $medExamReport_history_result = $conn->query($medExamReport_history_sql);
+
+        $medExamReport_personalSocial_sql = "SELECT * FROM medExamReport_personalSocial WHERE medExamReport_personalSocial_ape_fk = $ape_fk";
+        $medExamReport_personalSocial_result = $conn->query($medExamReport_personalSocial_sql);
+
+        $medExamReport_physical_sql = "SELECT * FROM medExamReport_physical WHERE medExamReport_physical_ape_fk = $ape_fk";
+        $medExamReport_physical_result = $conn->query($medExamReport_physical_sql);
+
+        $medExamReport_recommendation_sql = "SELECT * FROM medExamReport_recommendation WHERE medExamReport_recommendation_ape_fk = $ape_fk";
+        $medExamReport_recommendation_result = $conn->query($medExamReport_recommendation_sql);
+
+        $medExamReport_system_sql = "SELECT * FROM medExamReport_system WHERE medExamReport_system_ape_fk = $ape_fk";
+        $medExamReport_system_result = $conn->query($medExamReport_system_sql);
+
+        $medExamReport_xrayEcgLab_sql = "SELECT * FROM medExamReport_xrayEcgLab WHERE medExamReport_xrayEcgLab_ape_fk = $ape_fk";
+        $medExamReport_xrayEcgLab_result = $conn->query($medExamReport_xrayEcgLab_sql);
+        
+            
+        if($medExamReport_family_result !== false && $medExamReport_family_result->num_rows > 0) {
+            $medExamReport_all += $medExamReport_family_result->fetch_assoc();
+        }       
+            
+        if($medExamReport_history_result !== false && $medExamReport_history_result->num_rows > 0) {
+            $medExamReport_all += $medExamReport_history_result->fetch_assoc();
+        }       
+            
+        if($medExamReport_personalSocial_result !== false && $medExamReport_personalSocial_result->num_rows > 0) {
+            $medExamReport_all += $medExamReport_personalSocial_result->fetch_assoc();
+        }       
+            
+        if($medExamReport_physical_result !== false && $medExamReport_physical_result->num_rows > 0) {
+            $medExamReport_all += $medExamReport_physical_result->fetch_assoc();
+        }       
+            
+        if($medExamReport_recommendation_result !== false && $medExamReport_recommendation_result->num_rows > 0) {
+            $medExamReport_all += $medExamReport_recommendation_result->fetch_assoc();
+        }       
+            
+        if($medExamReport_system_result !== false && $medExamReport_system_result->num_rows > 0) {
+            $medExamReport_all += $medExamReport_system_result->fetch_assoc();
+        }       
+            
+        if($medExamReport_xrayEcgLab_result !== false && $medExamReport_xrayEcgLab_result->num_rows > 0) {
+            $medExamReport_all += $medExamReport_xrayEcgLab_result->fetch_assoc();
+        }      
+        
+        return $medExamReport_all;
+    }
+}
+
 function fetchApeDetailsById($conn, $id) {
-    $sql = "SELECT firstName, middleName, lastName, age, sex, organizationId FROM APE WHERE id = ?";
+    $sql = "SELECT firstName, middleName, lastName, age, sex, homeAddress, civilStatus, organizationId FROM APE WHERE id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('i', $id);
     $stmt->execute();
@@ -405,6 +463,75 @@ function fetchOrgDetailsById($conn, $id) {
     }
 }
 
+function medExamRadioAndInput($mainClass, $label, $checkBoxId, $inputLabel=null, $inputId=null) {
+    echo '<div class="'.$mainClass.'">
+            <label for="" class="block text-sm font-medium leading-6 text-gray-900">'.$label.'</label>
+            <div class="flex flex-wrap gap-x-5 gap-y-1.5 border border-l border-r-0 border-t-0 border-b-0 pl-4 items-center sm:flex-nowrap sm:pl-0 sm:border-0">
+                <div class="flex items-center py-3">
+                    <input id="'.$checkBoxId.'" type="radio" value="yes" name="'.$checkBoxId.'" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300">
+                    <label for="'.$checkBoxId.'" class="ms-2 text-xs font-medium text-gray-500">Yes</label>
+                </div>
+                <div class="flex items-center py-3">
+                    <input id="'.$checkBoxId.'" type="radio" value="no" name="'.$checkBoxId.'" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300">
+                    <label for="'.$checkBoxId.'" class="ms-2 text-xs font-medium text-gray-500">No</label>
+                </div>';
 
+    if($inputLabel !== null) {
+    echo        '<div class="sm:flex sm:items-baseline sm:gap-2 sm:pl-4 w-full">
+                    <label for="'.$inputId.'" class="block text-xs font-medium whitespace-nowrap text-gray-500 mb-2 sm:mb-0">'.$inputLabel.'</label>
+                    <input type="text" id="'.$inputId.'" class="block w-full rounded py-1.5 px-2 text-gray-500 border-gray-300 placeholder:text-gray-400 focus:border-green-700 focus:ring-0 focus:bg-green-50 sm:text-xs sm:leading-6" name="'.$inputId.'" html-transform="false">
+                </div>';
+    }
 
+    echo '</div>
+    </div>
+    ';
+}
+
+function medExamRadioMulti($mainClass, $mainId, $label, $options, $inputLabel=null, $inputId=null) {
+    echo '<div class="'.$mainClass.'">
+            <label for="" class="flex items-center text-sm font-medium leading-6 text-gray-900">'.$label.'</label>';
+
+            if(!empty($options)) {
+                echo '<div class="flex flex-wrap gap-x-5 gap-y-1.5 border border-l border-r-0 border-t-0 border-b-0 pl-4 items-center sm:pl-0 sm:border-0">';
+                foreach ($options as $o => $opt) {
+                    echo '<div class="flex items-center py-3">
+                            <input id="'.$mainId.$o.'" type="radio" value="'.$opt.'" name="'.$mainId.'" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300" html-transform="false">
+                            <label for="'.$mainId.$o.'" class="ms-2 text-xs font-medium text-gray-500">'.$opt.'</label>
+                        </div>';
+                }
+                if($inputLabel !== null) {
+                    echo '<div class="flex items-center">
+                            <input id="'.$mainId.$o.'" type="radio" value="'.$opt.'" name="'.$mainId.'" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300" html-transform="false">
+                            <label for="'.$mainId.$o.'" class="ms-2 mr-2 text-xs font-medium text-gray-500">'.$inputLabel.'</label>                                            
+                            <input type="text" id="'.$inputId.'" class="block w-full rounded py-1.5 px-2 text-gray-500 border-gray-300 placeholder:text-gray-400 focus:border-green-700 focus:ring-0 focus:bg-green-50 sm:text-xs sm:leading-6" name="'.$inputId.'" html-transform="false">
+                        </div>';
+                }
+                echo '</div>';
+            }
+    echo '</div>';
+}
+
+function medExamInput($mainClass, $type, $inputLabel, $inputId, $value=null, $attribute=null) {
+    echo '<div class="'.$mainClass.'">
+            <input type="'.$type.'" id="'.$inputId.'" value="'.$value.'" data-label="'.$inputLabel.'" '.$attribute.' />
+        </div>
+    ';
+}
+
+function medExamHeader($mainClass, $headerTitle, $sectionId) {
+    echo '<div class="'.$mainClass.'" id="'.$sectionId.'">
+            <h4 class="border-b border-gray-300 font-normal text-xs tracking-wider uppercase mt-4">
+                <span class="bg-gray-300 inline-block px-3 pt-2 pb-1 rounded-t-md">'.$headerTitle.'</span>
+            </h4>
+        </div>';
+}
+
+function sectionOpen($sectionClass=null, $sectionId=null) {
+    echo "<section id='$sectionId' class='$sectionClass'>";
+}
+
+function sectionClose() {
+    echo "</section>";
+}
 
