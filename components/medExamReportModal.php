@@ -884,16 +884,18 @@ if (isset($_POST['generateMedExamReport'])) {
                         'text', 
                         'Examining Physician', 
                         'medExamReport_recommendation_physicianName',
-                        $medExamReport['medExamReport_recommendation_physicianName'] ?? '',
-                        'maxLength="60"'
+                        // $medExamReport['medExamReport_recommendation_physicianName'] ?? '',
+                        'JACQUELINE ESGUERRA, MD',
+                        'maxLength="60" readonly'
                     );
                     medExamInput(
                         'col-span-1', 
                         'text', 
                         'License Number', 
                         'medExamReport_recommendation_physicianLicense',
-                        $medExamReport['medExamReport_recommendation_physicianLicense'] ?? '',
-                        'maxLength="60"'
+                        // $medExamReport['medExamReport_recommendation_physicianLicense'] ?? '',
+                        '119451',
+                        'maxLength="60" readonly'
                     );
                     medExamInput(
                         'col-span-1', 

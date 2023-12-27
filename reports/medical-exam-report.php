@@ -351,19 +351,31 @@ $pdf->MultiCell(190, $lineHeight, ' RECOMMENDATIONS: ', 0);
 $pdf->row('Ratings: ', $medExamReports['medExamReport_recommendation_ratings_note'] . '     ' . $medExamReports['medExamReport_recommendation_ratings']);
 $pdf->ln();
 $pdf->row('Remarks: ', $medExamReports['medExamReport_recommendation_remarks']);
-$pdf->ln();
-$pdf->ln();
-$pdf->ln();
-$pdf->row('Examining Physician:', $medExamReports['medExamReport_recommendation_physicianName']);
-$pdf->ln();
-$pdf->row('License No.: ', $medExamReports['medExamReport_recommendation_physicianLicense']);
-$pdf->row('Date:', $medExamReports['medExamReport_recommendation_date']);
-$pdf->ln(10);
+$pdf->ln(30);
+// $pdf->row('Examining Physician:', $medExamReports['medExamReport_recommendation_physicianName']);
 
-// $pdf->Image('../images/angel-baquiran.png', 10, 240, 40);
 
-// $pdf->Image('../images/nova-angela-buyagan.png', 75, 240, 50);
-// $pdf->Image('../images/noel-c-santos.png', 140, 240, 60);
 
+
+$pdf->SetFont('Arial','B', 8);
+$pdf->SetTextColor(17, 24, 39);
+$pdf->SetDrawColor(83,99,113);
+$pdf->Image('../images/jacqueline-esguerra-md-signature.png', 20, 175, 40);
+$pdf->Cell(10, 8, '' , '', 0, 'L');
+$pdf->Cell(50, 8, 'JACQUELINE ESGUERRA, MD' , 'B', 0, 'C');
+$pdf->ln();
+$pdf->SetFont('Arial','', 8);
+$pdf->Cell(10, 8, '' , '', 0, 'L');
+$pdf->Cell(50, 8, 'Examining Physician' , '', 0, 'C');
+$pdf->ln();
+$pdf->Cell(10, 8, '' , '', 0, 'L');
+$pdf->Cell(18, 8, 'License No.:' , '', 0, 'L');
+$pdf->SetFont('Arial','B', 8);
+$pdf->Cell(12, 8, '119451' , '', 0, 'C');
+$pdf->SetFont('Arial','', 8);
+$pdf->Cell(5, 8, '' , '', 0, 'L',);
+$pdf->Cell(9, 8, 'Date:' , '', 0, 'L');
+$pdf->SetFont('Arial','B', 8);
+$pdf->Cell(17, 8, $medExamReports['medExamReport_recommendation_date'], '', 0, 'C');
 $pdf->Output();
 $conn->close();
