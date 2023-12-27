@@ -5,7 +5,7 @@
 if (isset($_POST['generatelaboratoryResult'])) {
 
     $labResGenQuery =   "INSERT INTO LaboratoryResult(
-                        labRes_APE_FK, labRes_user_FK, labRes_date, labRes_hepa_b, labRes_drug_shabu, labRes_drug_marijuana, labRes_hema_hemoglobin, labRes_hema_hematocrit, labRes_hema_whiteblood, labRes_hema_segmenters, labRes_hema_lymphocytes, labRes_hema_monocytes, labRes_hema_eosinophils, labRes_hema_basophils, labRes_hema_stab, labRes_urin_color, labRes_urin_transparency, labRes_urin_reaction, labRes_urin_gravity, labRes_urin_protein, labRes_urin_glucose, labRes_urin_wbc, labRes_urin_rbc, labRes_urin_mucous, labRes_urin_epithelial, labRes_urin_amorphous, labRes_urin_bacteria, labRes_urin_cast, labRes_urin_crystals, labRes_para_color, labRes_para_consistency, labRes_para_result)
+                        labRes_APE_FK, labRes_user_FK, labRes_date, labRes_hepa_b, labRes_drug_shabu, labRes_drug_marijuana, labRes_hema_hemoglobin, labRes_hema_hematocrit, labRes_hema_whiteblood, labRes_hema_segmenters, labRes_hema_lymphocytes, labRes_hema_monocytes, labRes_hema_eosinophils, labRes_hema_basophils, labRes_hema_rbc, labRes_urin_color, labRes_urin_transparency, labRes_urin_reaction, labRes_urin_gravity, labRes_urin_protein, labRes_urin_glucose, labRes_urin_wbc, labRes_urin_rbc, labRes_urin_mucous, labRes_urin_epithelial, labRes_urin_amorphous, labRes_urin_bacteria, labRes_urin_cast, labRes_urin_crystals, labRes_para_color, labRes_para_consistency, labRes_para_result)
                      VALUES('" . clean( $_POST['labRes_APE_FK'] ) . "',
                             '" . clean( $_POST['labRes_user_FK'] ) . "',
                             '" . clean( $_POST['labRes_date'] ) . "',
@@ -20,7 +20,7 @@ if (isset($_POST['generatelaboratoryResult'])) {
                             '" . clean( $_POST['labRes_hema_monocytes'] ) . "',
                             '" . clean( $_POST['labRes_hema_eosinophils'] ) . "',
                             '" . clean( $_POST['labRes_hema_basophils'] ) . "',
-                            '" . clean( $_POST['labRes_hema_stab'] ) . "',
+                            '" . clean( $_POST['labRes_hema_rbc'] ) . "',
                             '" . clean( $_POST['labRes_urin_color'] ) . "',
                             '" . clean( $_POST['labRes_urin_transparency'] ) . "',
                             '" . clean( $_POST['labRes_urin_reaction'] ) . "',
@@ -83,7 +83,7 @@ if (isset($_POST['generatelaboratoryResult'])) {
                         <h4 class="border-b border-gray-300 font-medium text-xs tracking-wider uppercase mt-4 mb-8">
                             <span class="bg-gray-300 inline-block px-3 pt-2 pb-1 rounded-t-md">Hepatitis</span>
                         </h4>
-                        <input type="text" id="labRes_hepa_b" data-label="<span class='block overflow-hidden text-ellipsis whitespace-nowrap'>Hepatitis B Screening</span>" placeholder="Hepatitis B Screening" title="Hepatitis: Hepatitis B Screening" />
+                        <input type="text" id="labRes_hepa_b" data-label="<span class='block overflow-hidden text-ellipsis whitespace-nowrap'>Hepatitis B Screening</span>" placeholder="Hepatitis B Screening" title="Hepatitis: Hepatitis B Screening" value="Non-Reactive" />
                     </div>
 
                     <div class="col-span-1 sm:col-span-2">
@@ -92,10 +92,10 @@ if (isset($_POST['generatelaboratoryResult'])) {
                         </h4>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-8">
                             <div class="col-span-1">
-                                <input type="text" id="labRes_drug_shabu" data-label="<span class='block overflow-hidden text-ellipsis whitespace-nowrap'>Methamphetamine <span class='font-light text-xs'>(Shabu)</span></span>" placeholder="Methamphetamine" title="Drug Test: Methamphetamine" />
+                                <input type="text" id="labRes_drug_shabu" data-label="<span class='block overflow-hidden text-ellipsis whitespace-nowrap'>Methamphetamine <span class='font-light text-xs'>(Shabu)</span></span>" placeholder="Methamphetamine" title="Drug Test: Methamphetamine" value="Negative" />
                             </div>
                             <div class="col-span-1">
-                                <input type="text" id="labRes_drug_marijuana" data-label="<span class='block overflow-hidden text-ellipsis whitespace-nowrap'>Tetrahydrocannabinol <span class='font-light text-xs'>(Marijuana)</span></span>" placeholder="Tetrahydrocannabinol" title="Drug Test: Tetrahydrocannabinol" />
+                                <input type="text" id="labRes_drug_marijuana" data-label="<span class='block overflow-hidden text-ellipsis whitespace-nowrap'>Tetrahydrocannabinol <span class='font-light text-xs'>(Marijuana)</span></span>" placeholder="Tetrahydrocannabinol" title="Drug Test: Tetrahydrocannabinol" value="Negative" />
                             </div>
                         </div>
                     </div>
@@ -112,7 +112,7 @@ if (isset($_POST['generatelaboratoryResult'])) {
                                 <input type="text" id="labRes_para_consistency" data-label="Consistency" placeholder="Consistency" title="Parasitology: Consistency" />
                             </div>
                             <div class="col-span-1">
-                                <input type="text" id="labRes_para_result" data-label="Result" placeholder="Result" title="Parasitology: Result" />
+                                <input type="text" id="labRes_para_result" data-label="Result" placeholder="Result" title="Parasitology: Result" value="No intestinal parasite seen." />
                             </div>
                         </div>
                     </div>
@@ -149,57 +149,57 @@ if (isset($_POST['generatelaboratoryResult'])) {
                         <input type="text" id="labRes_hema_basophils" data-label="Basophils" placeholder="Basophils" title="Hematology: Basophils" />
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_hema_stab" data-label="Stab" placeholder="Stab" title="Hematology: Stab" />
+                        <input type="text" id="labRes_hema_rbc" data-label="Red Blood Cell" placeholder="Red Blood Cell" title="Hematology: Red Blood Cell" />
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-x-6 gap-y-8 p-4 md:p-5">
                     <div class="col-span-1 sm:col-span-2 md:col-span-4 lg:col-span-6">
                         <h4 class="border-b border-gray-300 font-normal text-xs tracking-wider uppercase mt-4">
-                            <span class="bg-gray-300 inline-block px-3 pt-2 pb-1 rounded-t-md">Urinalisys</span>
+                            <span class="bg-gray-300 inline-block px-3 pt-2 pb-1 rounded-t-md">Urinalysis</span>
                         </h4>
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_urin_color" data-label="Color" placeholder="Color" title="Urinalisys: Color" />
+                        <input type="text" id="labRes_urin_color" data-label="Color" placeholder="Color" title="Urinalysis: Color" />
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_urin_transparency" data-label="Transparency" placeholder="Transparency" title="Urinalisys: Transparency" />
+                        <input type="text" id="labRes_urin_transparency" data-label="Transparency" placeholder="Transparency" title="Urinalysis: Transparency" />
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_urin_reaction" data-label="Reaction" placeholder="Reaction" title="Urinalisys: Reaction" />
+                        <input type="text" id="labRes_urin_reaction" data-label="Reaction" placeholder="Reaction" title="Urinalysis: Reaction" />
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_urin_gravity" data-label="Specific Gravity" placeholder="Specific Gravity" title="Urinalisys: Specific Gravity" />
+                        <input type="text" id="labRes_urin_gravity" data-label="Specific Gravity" placeholder="Specific Gravity" title="Urinalysis: Specific Gravity" />
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_urin_protein" data-label="Protein" placeholder="Protein" title="Urinalisys: Protein" />
+                        <input type="text" id="labRes_urin_protein" data-label="Protein" placeholder="Protein" title="Urinalysis: Protein" />
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_urin_glucose" data-label="Glucose" placeholder="Glucose" title="Urinalisys: Glucose" />
+                        <input type="text" id="labRes_urin_glucose" data-label="Glucose" placeholder="Glucose" title="Urinalysis: Glucose" />
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_urin_wbc" data-label="Wbc" placeholder="Wbc" title="Urinalisys: Wbc" />
+                        <input type="text" id="labRes_urin_wbc" data-label="Wbc" placeholder="Wbc" title="Urinalysis: Wbc" />
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_urin_rbc" data-label="Rbc" placeholder="Rbc" title="Urinalisys: Rbc" />
+                        <input type="text" id="labRes_urin_rbc" data-label="Rbc" placeholder="Rbc" title="Urinalysis: Rbc" />
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_urin_mucous" data-label="Mucous Threads" placeholder="Mucous Threads" title="Urinalisys: Mucous Threads" />
+                        <input type="text" id="labRes_urin_mucous" data-label="Mucous Threads" placeholder="Mucous Threads" title="Urinalysis: Mucous Threads" />
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_urin_epithelial" data-label="Epithelial Cells" placeholder="Epithelial Cells" title="Urinalisys: Epithelial Cells" />
+                        <input type="text" id="labRes_urin_epithelial" data-label="Epithelial Cells" placeholder="Epithelial Cells" title="Urinalysis: Epithelial Cells" />
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_urin_amorphous" data-label="Amorphous Urates" placeholder="Amorphous Urates" title="Urinalisys: Amorphous Urates" />
+                        <input type="text" id="labRes_urin_amorphous" data-label="Amorphous Urates" placeholder="Amorphous Urates" title="Urinalysis: Amorphous Urates" />
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_urin_bacteria" data-label="Bacteria" placeholder="Bacteria" title="Urinalisys: Bacteria" />
+                        <input type="text" id="labRes_urin_bacteria" data-label="Bacteria" placeholder="Bacteria" title="Urinalysis: Bacteria" />
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_urin_cast" data-label="Cast" placeholder="Cast" title="Urinalisys: Cast" />
+                        <input type="text" id="labRes_urin_cast" data-label="Cast" placeholder="Cast" title="Urinalysis: Cast" />
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_urin_crystals" data-label="Crystals" placeholder="Crystals" title="Urinalisys: Crystals" />
+                        <input type="text" id="labRes_urin_crystals" data-label="Crystals" placeholder="Crystals" title="Urinalysis: Crystals" />
                     </div>
                 </div>
 

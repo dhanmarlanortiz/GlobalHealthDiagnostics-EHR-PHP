@@ -197,13 +197,12 @@ $pdf->ln();
 $pdf->row('White Blood Cell:', $labResults['labRes_hema_whiteblood'], '5,000-10,000/cu.mm.');
 $pdf->row('Basophils:', $labResults['labRes_hema_basophils'], '0-2%');
 $pdf->ln();
-$pdf->row('', '', '');
-$pdf->row('Slab:', $labResults['labRes_hema_stab'], '');
+$pdf->row('Red Blood Cell:', $labResults['labRes_hema_rbc'], '3.80 - 5.80 x 10^12/L');
 $pdf->Cell(0, 1,'', 'T', $toBegin);
 $pdf->ln(5);
 
 $pdf->thFontStyle();
-$pdf->MultiCell(190, $lineHeight, ' URINALISYS: ', 0);
+$pdf->MultiCell(190, $lineHeight, ' URINALYSIS: ', 0);
 $pdf->row('Color:', $labResults['labRes_urin_color']);
 $pdf->row('WBC:', $labResults['labRes_urin_wbc']);
 $pdf->ln();
@@ -217,7 +216,7 @@ $pdf->row('Specific gravity:', $labResults['labRes_urin_gravity']);
 $pdf->row('Epithelial Cells:', $labResults['labRes_urin_epithelial']);
 $pdf->ln();
 $pdf->row('Protein:', $labResults['labRes_urin_protein']);
-$pdf->row('Amorphous URATES:', $labResults['labRes_urin_amorphous']);
+$pdf->row('Amorphous Urates:', $labResults['labRes_urin_amorphous']);
 $pdf->ln();
 $pdf->row('Glucose:', $labResults['labRes_urin_glucose']);
 $pdf->row('Bacteria:', $labResults['labRes_urin_bacteria']);
@@ -241,13 +240,13 @@ $pdf->ln();
 $pdf->row('Result:', $labResults['labRes_para_result']);
 $pdf->row('', '', '');
 $pdf->Cell(0, 1,'', 'T', $toBegin);
-$pdf->ln(5);
+$pdf->ln(57);
 
+$pdf->Image('../images/angel-baquiran.png', 11.5, 230, 40);
+$pdf->Image('../images/nova-angela-buyagan.png', 75, 230, 50);
+$pdf->Image('../images/noel-c-santos.png', 140, 230, 60);
 
-$pdf->Image('../images/angel-baquiran.png', 10, 240, 40);
-
-$pdf->Image('../images/nova-angela-buyagan.png', 75, 240, 50);
-$pdf->Image('../images/noel-c-santos.png', 140, 240, 60);
+$pdf->row('Computer-generated report.', '', '');
 
 $pdf->Output();
 $conn->close();

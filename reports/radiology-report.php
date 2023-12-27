@@ -5,6 +5,75 @@
 include("../connection.php");
 require('../fpdf/fpdf.php');
 
+class PDF extends FPDF {
+
+    function Header() {
+        $this->Image('../images/ghd-logo-with-text.png', 10, 10, 60);
+        $this->SetFont('Arial','', 8);
+        $this->SetTextColor(83,99,113);
+        $this->ln(1);
+        $this->Cell(0,4.5,'3/F LMB Bldg., 158 San Antonio Ave., San Antonio Valley I,', 0, 1, 'R');
+        $this->Cell(0,4.5,'Paranaque City, Metro Manila', 0, 1, 'R');
+        $this->Cell(0,4.5,'Tel/Fax No. 8825-9964', 0, 1, 'R');
+        $this->Ln(10);
+    }
+
+    // Page footer
+    function Footer() {
+        $this->SetY(-15);
+        $this->SetFont('Arial','I',8);
+        $this->Cell(0,10,'Page '.$this->PageNo().'/{nb}',0,0,'C');
+    }
+
+    function thFontStyle() {
+        $this->SetFont('Arial','B', 8);
+        $this->SetTextColor(83,99,113);
+        $this->SetFillColor(249,250,251);
+    }
+
+    function tdFontStyle() {
+        $this->SetFont('Arial','', 8);
+        $this->SetTextColor(17, 24, 39);
+    }
+
+    function row($title, $value, $default = null) {
+        $border = 0;
+        $lineHeight = 5;
+        $toRight = 0;
+        $space = " ";
+
+        $this->SetFont('Arial','', 8);
+        $this->SetTextColor(83,99,113);
+        $this->Cell(30, $lineHeight, $space.$title.$space , $border, $toRight, 'L', false);
+
+        $this->SetFont('Arial','B', 8);
+        $this->SetTextColor(17, 24, 39);
+        $this->Cell(25, $lineHeight, $space.$value.$space, $border, $toRight);
+
+        $this->SetFont('Arial','', 8);
+        $this->SetTextColor(83,99,113);
+        $this->Cell(35, $lineHeight, $space.$default.$space, $border, $toRight);
+        $this->Cell(10, $lineHeight, $space, $border, $toRight);
+    }
+
+    function rowCol4($title, $value) {
+        $border = 0;
+        $lineHeight = 5;
+        $toRight = 0;
+        $space = " ";
+
+        $this->SetFont('Arial','', 8);
+        $this->SetTextColor(83,99,113);
+        $this->Cell(55, $lineHeight, $space.$title.$space , $border, $toRight, 'L', false);
+
+        $this->SetFont('Arial','B', 8);
+        $this->SetTextColor(17, 24, 39);
+        $this->Cell(35, $lineHeight, $space.$value.$space, $border, $toRight);
+        $this->Cell(10, $lineHeight, $space, $border, $toRight);
+    }
+}
+
+
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
 
@@ -85,19 +154,34 @@ if (isset($_GET['id'])) {
     /* Med Exam - END */
 
     $pdf = new FPDF();
+    $pdf->AliasNbPages();
     $pdf->AddPage();
+
+    $pdf->Image('../images/ghd-logo-with-text.png', 10, 10, 60);
+    $pdf->SetFont('Arial','', 8);
+    $pdf->SetTextColor(83,99,113);
+    $pdf->ln(1);
+    $pdf->Cell(0,4.5,'3/F LMB Bldg., 158 San Antonio Ave., San Antonio Valley I,', 0, 1, 'R');
+    $pdf->Cell(0,4.5,'Paranaque City, Metro Manila', 0, 1, 'R');
+    $pdf->Cell(0,4.5,'Tel/Fax No. 8825-9964', 0, 1, 'R');
+    $pdf->Ln(10);
+
+    $pdf->SetFont('Arial','B', 10);
+    $pdf->SetTextColor(17, 24, 39);
+    $pdf->SetDrawColor(241, 245, 249);
+    $pdf->Cell(0,4.5,'RADIOLOGY REPORT', 0, 1, 'L');
     
-    list($imageWidth, $imageHeight) = getimagesize('../images/radiology-report.jpg');
+    // list($imageWidth, $imageHeight) = getimagesize('../images/radiology-report.jpg');
 
-    $aspectRatio = $imageWidth / $imageHeight;
-    $newWidth = $pdf->GetPageWidth();
-    $newHeight = $newWidth / $aspectRatio;
+    // $aspectRatio = $imageWidth / $imageHeight;
+    // $newWidth = $pdf->GetPageWidth();
+    // $newHeight = $newWidth / $aspectRatio;
 
-    $pdf->Image('../images/radiology-report.jpg', 0, 0, $newWidth, $newHeight);
+    // $pdf->Image('../images/radiology-report.jpg', 0, 0, $newWidth, $newHeight);
 
     $pdf->SetFont('Arial', '', 12);
     
-    $pdf->Ln(38);
+    $pdf->Ln(10);
 
     $pdf->SetFont('Arial', '', 8);
     $pdf->Cell(95, 5, 'Case Number', 0);

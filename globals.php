@@ -463,23 +463,23 @@ function fetchOrgDetailsById($conn, $id) {
     }
 }
 
-function medExamRadioAndInput($mainClass, $label, $checkBoxId, $inputLabel=null, $inputId=null) {
+function medExamRadioAndInput($mainClass, $label, $checkBoxId, $inputLabel=null, $inputId=null, $checkBoxVal='', $inputVal=null, $attribute=null, $inputType='text') {
     echo '<div class="'.$mainClass.'">
             <label for="" class="block text-sm font-medium leading-6 text-gray-900">'.$label.'</label>
             <div class="flex flex-wrap gap-x-5 gap-y-1.5 border border-l border-r-0 border-t-0 border-b-0 pl-4 items-center sm:flex-nowrap sm:pl-0 sm:border-0">
-                <div class="flex items-center py-3">
-                    <input id="'.$checkBoxId.'" type="radio" value="yes" name="'.$checkBoxId.'" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300">
+                <div class="checkbox-item-1 flex items-center py-3">
+                    <input id="'.$checkBoxId.'" type="radio" value="Yes" name="'.$checkBoxId.'" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300" '. ($checkBoxVal=="Yes" ? "checked": "") .'>
                     <label for="'.$checkBoxId.'" class="ms-2 text-xs font-medium text-gray-500">Yes</label>
                 </div>
-                <div class="flex items-center py-3">
-                    <input id="'.$checkBoxId.'" type="radio" value="no" name="'.$checkBoxId.'" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300">
+                <div class="checkbox-item-2 flex items-center py-3">
+                    <input id="'.$checkBoxId.'" type="radio" value="No" name="'.$checkBoxId.'" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300" '. ($checkBoxVal=="No" ? "checked": "") .'>
                     <label for="'.$checkBoxId.'" class="ms-2 text-xs font-medium text-gray-500">No</label>
                 </div>';
 
     if($inputLabel !== null) {
-    echo        '<div class="sm:flex sm:items-baseline sm:gap-2 sm:pl-4 w-full">
+    echo        '<div class="input-wrapper sm:flex sm:items-baseline sm:gap-2 sm:pl-4 w-full">
                     <label for="'.$inputId.'" class="block text-xs font-medium whitespace-nowrap text-gray-500 mb-2 sm:mb-0">'.$inputLabel.'</label>
-                    <input type="text" id="'.$inputId.'" class="block w-full rounded py-1.5 px-2 text-gray-500 border-gray-300 placeholder:text-gray-400 focus:border-green-700 focus:ring-0 focus:bg-green-50 sm:text-xs sm:leading-6" name="'.$inputId.'" html-transform="false">
+                    <input type="'.$inputType.'" value="'.$inputVal.'" id="'.$inputId.'" class="block w-full rounded py-1.5 px-2 border-gray-300 placeholder:text-gray-400 focus:border-green-700 focus:ring-0 focus:bg-green-50 sm:text-xs sm:leading-6" name="'.$inputId.'" '.$attribute.' html-transform="false">
                 </div>';
     }
 
@@ -488,24 +488,34 @@ function medExamRadioAndInput($mainClass, $label, $checkBoxId, $inputLabel=null,
     ';
 }
 
-function medExamRadioMulti($mainClass, $mainId, $label, $options, $inputLabel=null, $inputId=null) {
-    echo '<div class="'.$mainClass.'">
+function medExamRadioMulti($mainClass, $mainId, $label, $options, $inputLabel=null, $inputId=null, $checked=null, $inputVal=null) {
+    echo '<div class="medExamRadioMulti '.$mainClass.'">
             <label for="" class="flex items-center text-sm font-medium leading-6 text-gray-900">'.$label.'</label>';
 
-            if(!empty($options)) {
+            if(!empty($options)) {                
                 echo '<div class="flex flex-wrap gap-x-5 gap-y-1.5 border border-l border-r-0 border-t-0 border-b-0 pl-4 items-center sm:pl-0 sm:border-0">';
+
                 foreach ($options as $o => $opt) {
-                    echo '<div class="flex items-center py-3">
-                            <input id="'.$mainId.$o.'" type="radio" value="'.$opt.'" name="'.$mainId.'" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300" html-transform="false">
-                            <label for="'.$mainId.$o.'" class="ms-2 text-xs font-medium text-gray-500">'.$opt.'</label>
+                    echo '<div class="flex items-center py-3">';
+
+                    if($opt == $checked) {
+                        echo '<input checked id="'.$mainId.$o.'" type="radio" value="'.$opt.'" name="'.$mainId.'" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300" html-transform="false">';
+                    } else {
+                        echo '<input id="'.$mainId.$o.'" type="radio" value="'.$opt.'" name="'.$mainId.'" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300" html-transform="false">';
+                    }
+                    echo    '<label for="'.$mainId.$o.'" class="ms-2 text-xs font-medium text-gray-500">'.$opt.'</label>
                         </div>';
                 }
                 if($inputLabel !== null) {
+                    // $o++;
+                    // echo '<div class="flex items-center">
+                    //         <input id="'.$mainId.$o.'" type="radio" value="'.$opt.'" name="'.$mainId.'" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300" html-transform="false">
+                    //         <label for="'.$mainId.$o.'" class="ms-2 mr-2 text-xs font-medium text-gray-500">'.$inputLabel.'</label>                                            
+                    //         <input type="text" id="'.$inputId.'" value="'.$inputVal.'" class="block w-full rounded py-1.5 px-2 border-gray-300 placeholder:text-gray-400 focus:border-green-700 focus:ring-0 focus:bg-green-50 sm:text-xs sm:leading-6" name="'.$inputId.'" html-transform="false" maxLength="60">
+                    //     </div>';
                     echo '<div class="flex items-center">
-                            <input id="'.$mainId.$o.'" type="radio" value="'.$opt.'" name="'.$mainId.'" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300" html-transform="false">
-                            <label for="'.$mainId.$o.'" class="ms-2 mr-2 text-xs font-medium text-gray-500">'.$inputLabel.'</label>                                            
-                            <input type="text" id="'.$inputId.'" class="block w-full rounded py-1.5 px-2 text-gray-500 border-gray-300 placeholder:text-gray-400 focus:border-green-700 focus:ring-0 focus:bg-green-50 sm:text-xs sm:leading-6" name="'.$inputId.'" html-transform="false">
-                        </div>';
+                        <input type="text" id="'.$inputId.'" value="'.$inputVal.'" class="block w-full rounded py-1.5 px-2 border-gray-300 placeholder:text-gray-400 focus:border-green-700 focus:ring-0 focus:bg-green-50 sm:text-xs sm:leading-6" name="'.$inputId.'" html-transform="false" maxLength="60">
+                    </div>';
                 }
                 echo '</div>';
             }
