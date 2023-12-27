@@ -79,17 +79,15 @@ class CSVImporter
     $lastName = $line[2];
     $age = $line[3];
     $sex = $line[4];
-    $employeeNumber = $line[5];
-    $department = $line[6];
-    $membership = $line[7];
-    $level = $line[8];
-    $dateRegistered = $line[9];
-    $examination = $line[10];
+    $civilStatus = $line[5];
+    $homeAddress = $line[6];
+    $employeeNumber = $line[7];
+    $remarks = $line[8];
 
     // Check if dateRegistered is null, and set it to the current date
-    if ($dateRegistered === null) {
+    // if ($dateRegistered === null) {
         $dateRegistered = date("Y-m-d");
-    }
+    // }
 
     $prevQuery = "SELECT id FROM APE WHERE 
                     firstName = ? AND 
@@ -111,15 +109,14 @@ class CSVImporter
         $updateQuery = "UPDATE APE SET
                 age = ?,
                 sex = ?,
+                civilStatus = ?,
+                homeAddress = ?,
                 employeeNumber = ?,
-                department = ?,
-                membership = ?,
-                level = ?,
-                examination = ?
+                remarks = ?,
                 WHERE id = ?";
 
         $updateStmt = $this->conn->prepare($updateQuery);
-        $updateStmt->bind_param("sssssssi", $age, $sex, $employeeNumber, $department, $membership, $level, $examination, $PrevId);
+        $updateStmt->bind_param("ssssssi", $age, $sex, $civilStatus, $homeAddress, $employeeNumber, $remarks, $PrevId);
         $result = $updateStmt->execute();
         $updateStmt->close();
     } else {
@@ -130,21 +127,20 @@ class CSVImporter
             lastName,
             age,
             sex,
+            civilStatus,
+            homeAddress,
             employeeNumber,
-            department,
-            membership,
-            level,
+            remarks,
             dateRegistered,
-            examination,
             organizationId,
             userId
         ) VALUES (
-            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
         )";
         
         $headCount = getHeadCountAPE($o, date("Y", strtotime($dateRegistered)));
         $insertStmt = $this->conn->prepare($insertQuery);
-        $insertStmt->bind_param("issssssssssssi", $headCount, $firstName, $middleName, $lastName, $age, $sex, $employeeNumber, $department, $membership, $level, $dateRegistered, $examination, $o, $_SESSION['userId']);
+        $insertStmt->bind_param("issssssssssii", $headCount, $firstName, $middleName, $lastName, $age, $sex, $civilStatus, $homeAddress, $employeeNumber, $remarks, $dateRegistered, $o, $_SESSION['userId']);
         $result = $insertStmt->execute();
         $insertStmt->close();
     }
