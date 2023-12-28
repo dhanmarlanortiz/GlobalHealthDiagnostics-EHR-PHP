@@ -178,7 +178,7 @@ if (isset($_GET['id'])) {
     // $newHeight = $newWidth / $aspectRatio;
 
     // $pdf->Image('../images/radiology-report.jpg', 0, 0, $newWidth, $newHeight);
-
+    
     $pdf->SetFont('Arial', '', 12);
     
     $pdf->Ln(10);
@@ -236,6 +236,8 @@ if (isset($_GET['id'])) {
     $pdf->SetFont('Arial', 'B', 10);
     $pdf->MultiCell(0, 5, $rr_impression);
     $pdf->Ln(12);
+
+    $pdf->Image('../images/ernie-caliboso.png', 120, 150, 70);
 
     $pdf->Output('I');
     $stmt->close();
