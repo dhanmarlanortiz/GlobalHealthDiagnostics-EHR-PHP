@@ -22,7 +22,7 @@ function processTableData($conn, $tableName, $data, $primaryKey, $id) {
     }
 
     if($conn->query($sql) === FALSE) {
-        create_flash_message('update-error', $conn->error , FLASH_ERROR);
+        // create_flash_message('update-error', $conn->error , FLASH_ERROR);
     }
     
 }
