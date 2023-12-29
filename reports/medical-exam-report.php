@@ -149,6 +149,15 @@ $pdf->SetTextColor(17, 24, 39);
 $pdf->SetDrawColor(241, 245, 249);
 $pdf->Cell(0,4.5,'MEDICAL EXAMINATION REPORT', 0, 1, 'L');
 
+$rating = strtolower($medExamReports['medExamReport_recommendation_ratings']);
+if($rating == 'fit') {
+    $pdf->Image('../images/badge-fit.jpg', 165, 30, 35);
+} else if($rating == 'unfit') {
+    $pdf->Image('../images/badge-unfit.jpg', 165, 30, 35);
+} else if($rating == 'pending') {
+    $pdf->Image('../images/badge-pending.jpg', 165, 30, 35);
+}
+
 $pdf->ln(5);
 
 // Name
