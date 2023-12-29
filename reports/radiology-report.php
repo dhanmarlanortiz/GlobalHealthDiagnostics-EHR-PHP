@@ -235,9 +235,33 @@ if (isset($_GET['id'])) {
     
     $pdf->SetFont('Arial', 'B', 10);
     $pdf->MultiCell(0, 5, $rr_impression);
-    $pdf->Ln(12);
+    $pdf->Ln(20);
 
-    $pdf->Image('../images/ernie-caliboso.png', 120, 150, 70);
+
+
+    $pdf->SetFont('Arial','B', 9);
+    $pdf->SetTextColor(17, 24, 39);
+    $pdf->SetDrawColor(83,99,113);
+    $pdf->Image('../images/alvin-d-rosario-art.png', 35, 150, 8);
+    $pdf->Image('../images/ernie-caliboso.png', 150, 146, 20);
+    $pdf->Cell(10, 8, '' , '', 0, 'L');
+    $pdf->Cell(40, 8, 'ALVIN D. ROSARIO ART' , 'B', 0, 'C');
+    $pdf->Cell(70, 8, '' , '', 0, 'L');
+    $pdf->Cell(60, 8, 'ERNIE CALIBOSO, M.D. F.P.C.R.F.U.S.P.' , 'B', 0, 'C');
+    $pdf->ln();
+    $pdf->SetFont('Arial','', 8);
+    $pdf->Cell(10, 8, '' , '', 0, 'L');
+    $pdf->Cell(40, 8, 'X-RAY TECHNOLOGIST' , '', 0, 'C');
+    $pdf->Cell(70, 8, '' , '', 0, 'L');
+    $pdf->Cell(60, 8, 'RADIOLOGIST' , '', 0, 'C');
+    $pdf->ln(5);
+    $pdf->Cell(10, 8, '' , '', 0, 'L');
+    $pdf->Cell(40, 8, 'License No.: 0002508' , '', 0, 'C');
+
+
+
+
+    
 
     $pdf->Output('I');
     $stmt->close();
