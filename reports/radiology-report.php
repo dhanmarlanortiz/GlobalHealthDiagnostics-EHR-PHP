@@ -237,8 +237,6 @@ if (isset($_GET['id'])) {
     $pdf->MultiCell(0, 5, $rr_impression);
     $pdf->Ln(20);
 
-
-
     $pdf->SetFont('Arial','B', 9);
     $pdf->SetTextColor(17, 24, 39);
     $pdf->SetDrawColor(83,99,113);
@@ -257,11 +255,9 @@ if (isset($_GET['id'])) {
     $pdf->ln(5);
     $pdf->Cell(10, 8, '' , '', 0, 'L');
     $pdf->Cell(40, 8, 'License No.: 0002508' , '', 0, 'C');
-
-
-
-
-    
+    $pdf->Ln(20);
+    $pdf->SetTextColor(83,99,113);
+    $pdf->Cell(40, 8,'Computer-generated report.', '', 0, 'L');
 
     $pdf->Output('I');
     $stmt->close();
