@@ -57,24 +57,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
     } else if(isset( $_POST['delete'] )) {
-        $deleteQuery =  "DELETE FROM Organization WHERE id = $id";
+        try {
+            $deleteQuery =  "DELETE FROM Organization WHERE id = $id";
 
-        if ($conn->query($deleteQuery) === TRUE) {
-            create_flash_message('delete-success', $flashMessage['delete-success'] , FLASH_SUCCESS);
+            if ($conn->query($deleteQuery) === TRUE) {
+                create_flash_message('delete-success', $flashMessage['delete-success'] , FLASH_SUCCESS);
+                
+            } else {
+                create_flash_message('delete-failed', $flashMessage['delete-failed'], FLASH_ERROR);
             
+                if($conn->errno == 1451) {
+                    create_flash_message('delete-failed', $flashMessage['delete-failed-linked'] , FLASH_ERROR);
+                }
+            }
+
             $url = base_url(false) . "/organizations.php";
             header("Location: " . $url ."");
-            
+                
             exit();
-        } else {
-            create_flash_message('delete-failed', $flashMessage['delete-failed'], FLASH_ERROR);
-        
-            if($conn->errno == 1451) {
-                create_flash_message('delete-failed', $flashMessage['delete-failed-linked'] , FLASH_ERROR);
-            }
+        } catch (mysqli_sql_exception $e) {
+            create_flash_message('delete-failed', $flashMessage['delete-failed-linked'] , FLASH_ERROR);
+            // create_flash_message('delete-failed', "An error occurred: " . $e->getMessage() , FLASH_ERROR);
+
+            $url = base_url(false) . "/organizations.php";
+            header("Location: " . $url ."");
+                
+            exit();
         }
     }
-
 }
 
 $headerText = (null !== getOrganization($id)) ? getOrganization($id)['name'] : "Not found";
@@ -143,6 +153,9 @@ $conn->close();
             <?php flash('update-failed'); ?>
             <?php flash('create-success'); ?>
             <?php flash('create-failed'); ?>
+            <?php flash('delete-failed'); ?>
+            <?php flash('delete-success'); ?>
+            <?php flash('delete-failed-linked'); ?>
         </div>
     </main>
 
