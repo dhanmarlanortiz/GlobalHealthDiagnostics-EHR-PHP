@@ -179,7 +179,15 @@ if ($orgDetailsResult !== false && $orgDetailsResult->num_rows > 0) {
             <div class="p-1">
                 <a href="<?php base_url()?>/organizations.php" class="btn btn-default btn-sm text-xs rounded normal-case h-9 w-full sm:w-auto mb-2 sm:mb-0">Back</a>
                 <a href="<?php echo base_url(false) . "/employeesImport-APE.php?o=" . $o . "&y=" . $y; ?>" class="<?php echo $classBtnAlternate; ?> w-full sm:w-auto mb-2 sm:mb-0">Import Data</a>
-                <a href="<?php echo base_url(false) . "/employeeCreate-APE.php?o=" . $o . "&y=" . $y; ?>" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">APE Registration</a>
+                <a href="<?php echo base_url(false) . "/employeeCreate-APE.php?o=" . $o . "&y=" . $y; ?>" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto mb-2 sm:mb-0">APE Registration</a>
+                
+                <?php
+                $employeeClearDataAPE = ['o' => $o,'y' => $y];
+                $encodeEmployeeClearDataAPE = base64_encode(json_encode( $employeeClearDataAPE ));
+                ?>
+                <form id="employeeClear-APE" method="POST" action="<?php echo htmlspecialchars(base_url(false) . "/employeeClear-APE.php?q='$encodeEmployeeClearDataAPE'");?>" class="prompt-confirm inline-block w-full sm:w-auto">
+                    <button type="submit" class="<?php echo $classBtnDanger; ?> w-full sm:w-auto">Delete All Records</button>
+                <form>
             </div>
         </div>
     </div>
