@@ -147,9 +147,9 @@ createMainHeader("User Details", array("Home", "Users", "User Details"));
         </div>
         <div class="flex items-center justify-end flex-col sm:flex-row gap-x-1 bg-white mt-0 px-6 py-4 border-t-2 border-green-700">
             <a href="<?php echo base_url() . '/users.php'; ?>" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Cancel</a>
-            <button type="button" class="<?php echo $classBtnSecondary; ?> w-full sm:w-auto">Reset Password</button>
-            <button type="submit" name="saveChanges" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">Save Changes</button>
-            <input type="submit" name="deleteUser" class="<?php echo $classBtnDanger; ?> w-full sm:w-auto" value="Delete User" />
+            <!-- <button type="button" class="<?php echo $classBtnSecondary; ?> w-full sm:w-auto">Reset Password</button> -->
+            <button type="submit" name="saveChanges" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto mb-2 sm:mb-0">Save Changes</button>
+            <input type="submit" name="deleteUser" class="<?php echo $classBtnDanger; ?> w-full sm:w-auto mb-2 sm:mb-0" value="Delete User" />
         </div>
 
         <?php flash('update-success'); ?>
