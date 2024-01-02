@@ -214,11 +214,11 @@ createMainHeader($organizationName, array("Home", "Organizations", $organization
                         Annual Physical Examination
                     </a>
                 </li>
-                <li class="mr-2">
+                <!-- <li class="mr-2">
                     <a href="#" class="inline-block p-2 md:p-4 border-b-2 border-transparent rounded-t-lg text-left text-xs md:text-sm hover:text-gray-600 hover:border-gray-300">
                         Pre-employment Medical Assessment
                     </a>
-                </li>
+                </li> -->
             </ul>
         </div>
         <div class="bg-white p-2 md:p-4">

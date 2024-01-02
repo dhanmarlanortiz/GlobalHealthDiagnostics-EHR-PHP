@@ -62,7 +62,7 @@ $result = $conn->query($sql);
                 "</table>
             </div>";
         } else {
-            echo "Results not found.";;
+            echo "<span class='text-sm'>Results not found.</span>";
         }
         $conn->close();
         ?>
