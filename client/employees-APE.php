@@ -79,7 +79,7 @@ createMainHeader($_SESSION['organizationName'], array("Annual Physical Examinati
                             "<td class='text-center'>" . $emp["controlNumber"] . "</td>" .
                             "<td class='text-center'>" . $emp["age"] . "</td>" .
                             "<td>" . $emp["sex"] . "</td>" .
-                            "<td>" . date("M d, 2023", strtotime($emp["dateRegistered"])) . "</td>" .
+                            "<td>" . date("M d, Y", strtotime($emp["dateRegistered"])) . "</td>" .
                             "<td>" . $emp["remarks"] . "</td>" .
                             "<td class='text-center'>
                                 <a class='" . $classTblBtnPrimary . "' href='" . base_url(false) . "/employee-APE.php?id=" . $emp['id'] . "'>
