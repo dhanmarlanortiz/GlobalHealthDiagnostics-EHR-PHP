@@ -176,7 +176,7 @@ function getHeadCountAPE($organizationId, $year) {
     require("connection.php");
 
     $headCount = 1;
-    $headCountQuery = "SELECT MAX(headCount) FROM APE WHERE organizationId = $organizationId AND (dateRegistered BETWEEN '" . $year . "-01-01' AND '" . $year . "-12-31')";
+    $headCountQuery = "SELECT MAX(headCount) FROM APE WHERE organizationId = $organizationId AND YEAR(dateRegistered) = $year";
     $headCountResult = $conn->query($headCountQuery);
 
     if ($headCountResult !== false && $headCountResult->num_rows > 0) {
@@ -240,7 +240,7 @@ function getControlNumberAPE($id, $organizationId) {
     require("connection.php");
 
     $ctr = 1;
-    $ctrQuery = "SELECT MAX(controlNumber) FROM APE WHERE organizationId = $organizationId AND (dateRegistered BETWEEN '" . date('Y') . "-01-01' AND '" . date('Y') . "-12-31')";
+    $ctrQuery = "SELECT MAX(controlNumber) FROM APE WHERE organizationId = $organizationId AND YEAR(dateRegistered) = date('Y')";
     $ctrResult = $conn->query($ctrQuery);
 
     if ($ctrResult !== false && $ctrResult->num_rows > 0) {

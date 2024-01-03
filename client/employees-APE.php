@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $y = clean( $_POST['y'] );
 }
 
-$empQuery = "SELECT * FROM APE WHERE organizationId = '$o' AND (dateRegistered BETWEEN '$y-01-01' AND '$y-12-31')";
+$empQuery = "SELECT * FROM APE WHERE organizationId = '$o' AND YEAR(dateRegistered) = '$y'";
 $empResult = $conn->query($empQuery);
 
 $orgQuery = "SELECT * FROM Organization WHERE id = $_SESSION[organizationId]";

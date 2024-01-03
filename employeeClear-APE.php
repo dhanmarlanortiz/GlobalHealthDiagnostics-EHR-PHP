@@ -17,7 +17,7 @@ $y =  $q['y'];
 
 function removeResultsApe($o, $y, $conn) {
     try {
-        $sql = "SELECT fileName FROM ResultsAPE JOIN APE ON ResultsAPE.APEFK = APE.id WHERE APE.organizationId = '$o' AND APE.dateRegistered BETWEEN '{$y}-01-01' AND '{$y}-12-31'";
+        $sql = "SELECT fileName FROM ResultsAPE JOIN APE ON ResultsAPE.APEFK = APE.id WHERE APE.organizationId = '$o' AND YEAR(APE.dateRegistered) = '{$y}'";
         $result = $conn->query($sql);
         
         $uploadDir = 'uploads/';
@@ -45,7 +45,7 @@ function removeResultsApe($o, $y, $conn) {
 
 function removeLaboratoryResult($o, $y, $conn) {
     try {
-        $sql = "DELETE lab FROM LaboratoryResult AS lab JOIN APE AS a ON lab.labRes_APE_FK = a.id WHERE a.organizationId = '$o' AND a.dateRegistered BETWEEN '{$y}-01-01' AND '{$y}-12-31'";
+        $sql = "DELETE lab FROM LaboratoryResult AS lab JOIN APE AS a ON lab.labRes_APE_FK = a.id WHERE a.organizationId = '$o' AND YEAR(a.dateRegistered) = '{$y}'";
         
         if ($conn->query($sql) === FALSE) {
             return $conn->error;
@@ -57,7 +57,7 @@ function removeLaboratoryResult($o, $y, $conn) {
 
 function removeMedExamReportFamily($o, $y, $conn) {
     try {
-        $sql = "DELETE mf FROM medExamReport_family AS mf JOIN APE AS a ON a.id = mf.medExamReport_family_ape_fk WHERE a.organizationId = '$o' AND a.dateRegistered BETWEEN '{$y}-01-01' AND '{$y}-12-31'";
+        $sql = "DELETE mf FROM medExamReport_family AS mf JOIN APE AS a ON a.id = mf.medExamReport_family_ape_fk WHERE a.organizationId = '$o' AND YEAR(a.dateRegistered) = '{$y}'";
         
         if ($conn->query($sql) === FALSE) {
             return $conn->error;
@@ -69,7 +69,7 @@ function removeMedExamReportFamily($o, $y, $conn) {
 
 function removeMedExamReportHistory($o, $y, $conn) {
     try {
-        $sql = "DELETE mh FROM medExamReport_history AS mh JOIN APE AS a ON a.id = mh.medExamReport_history_ape_fk WHERE a.organizationId = '$o' AND a.dateRegistered BETWEEN '{$y}-01-01' AND '{$y}-12-31'";
+        $sql = "DELETE mh FROM medExamReport_history AS mh JOIN APE AS a ON a.id = mh.medExamReport_history_ape_fk WHERE a.organizationId = '$o' AND YEAR(a.dateRegistered) = '{$y}'";
         
         if ($conn->query($sql) === FALSE) {
             return $conn->error;
@@ -81,7 +81,7 @@ function removeMedExamReportHistory($o, $y, $conn) {
 
 function removeMedExamReportPersonalSocial($o, $y, $conn) {
     try {
-        $sql = "DELETE mps FROM medExamReport_personalSocial AS mps JOIN APE AS a ON a.id = mps.medExamReport_personalSocial_ape_fk WHERE a.organizationId = '$o' AND a.dateRegistered BETWEEN '{$y}-01-01' AND '{$y}-12-31'";
+        $sql = "DELETE mps FROM medExamReport_personalSocial AS mps JOIN APE AS a ON a.id = mps.medExamReport_personalSocial_ape_fk WHERE a.organizationId = '$o' AND YEAR(a.dateRegistered) = '{$y}'";
         
         if ($conn->query($sql) === FALSE) {
             return $conn->error;
@@ -93,7 +93,7 @@ function removeMedExamReportPersonalSocial($o, $y, $conn) {
 
 function removeMedExamReportPhysical($o, $y, $conn) {
     try {
-        $sql = "DELETE mp FROM medExamReport_physical AS mp JOIN APE AS a ON a.id = mp.medExamReport_physical_ape_fk WHERE a.organizationId = '$o' AND a.dateRegistered BETWEEN '{$y}-01-01' AND '{$y}-12-31'";
+        $sql = "DELETE mp FROM medExamReport_physical AS mp JOIN APE AS a ON a.id = mp.medExamReport_physical_ape_fk WHERE a.organizationId = '$o' AND YEAR(a.dateRegistered) = '{$y}'";
         
         if ($conn->query($sql) === FALSE) {
             return $conn->error;
@@ -105,7 +105,7 @@ function removeMedExamReportPhysical($o, $y, $conn) {
 
 function removeMedExamReportRecommendation($o, $y, $conn) {
     try {
-        $sql = "DELETE mr FROM medExamReport_recommendation AS mr JOIN APE AS a ON a.id = mr.medExamReport_recommendation_ape_fk WHERE a.organizationId = '$o' AND a.dateRegistered BETWEEN '{$y}-01-01' AND '{$y}-12-31'";
+        $sql = "DELETE mr FROM medExamReport_recommendation AS mr JOIN APE AS a ON a.id = mr.medExamReport_recommendation_ape_fk WHERE a.organizationId = '$o' AND YEAR(a.dateRegistered) = '{$y}'";
         
         if ($conn->query($sql) === FALSE) {
             return $conn->error;
@@ -117,7 +117,7 @@ function removeMedExamReportRecommendation($o, $y, $conn) {
 
 function removeMedExamReportSystem($o, $y, $conn) {
     try {
-        $sql = "DELETE ms FROM medExamReport_system AS ms JOIN APE AS a ON a.id = ms.medExamReport_system_ape_fk WHERE a.organizationId = '$o' AND a.dateRegistered BETWEEN '{$y}-01-01' AND '{$y}-12-31'";
+        $sql = "DELETE ms FROM medExamReport_system AS ms JOIN APE AS a ON a.id = ms.medExamReport_system_ape_fk WHERE a.organizationId = '$o' AND YEAR(a.dateRegistered) = '{$y}'";
         
         if ($conn->query($sql) === FALSE) {
             return $conn->error;
@@ -129,7 +129,7 @@ function removeMedExamReportSystem($o, $y, $conn) {
 
 function removeMedExamReportXrayEcgLab($o, $y, $conn) {
     try {
-        $sql = "DELETE mx FROM medExamReport_xrayEcgLab AS mx JOIN APE AS a ON a.id = mx.medExamReport_xrayEcgLab_ape_fk WHERE a.organizationId = '$o' AND a.dateRegistered BETWEEN '{$y}-01-01' AND '{$y}-12-31'";
+        $sql = "DELETE mx FROM medExamReport_xrayEcgLab AS mx JOIN APE AS a ON a.id = mx.medExamReport_xrayEcgLab_ape_fk WHERE a.organizationId = '$o' AND YEAR(a.dateRegistered) = '{$y}'";
         
         if ($conn->query($sql) === FALSE) {
             return $conn->error;
@@ -141,7 +141,7 @@ function removeMedExamReportXrayEcgLab($o, $y, $conn) {
 
 function removeRadiologyReport($o, $y, $conn) {
     try {
-        $sql = "DELETE r FROM RadiologyReport AS r JOIN APE AS a ON a.id = r.APEFK WHERE a.organizationId = '$o' AND a.dateRegistered BETWEEN '{$y}-01-01' AND '{$y}-12-31'";
+        $sql = "DELETE r FROM RadiologyReport AS r JOIN APE AS a ON a.id = r.APEFK WHERE a.organizationId = '$o' AND YEAR(a.dateRegistered) = '{$y}'";
         
         if ($conn->query($sql) === FALSE) {
             return $conn->error;
@@ -154,7 +154,7 @@ function removeRadiologyReport($o, $y, $conn) {
 function removeAPE($o, $y, $conn) {
 
     try {
-        $sql = "DELETE FROM APE WHERE organizationId = '$o' AND dateRegistered BETWEEN '{$y}-01-01' AND '{$y}-12-31'";
+        $sql = "DELETE FROM APE WHERE organizationId = '$o' AND YEAR(dateRegistered) = '{$y}'";
         
         if ($conn->query($sql) === FALSE) {
             create_flash_message('delete-failed', "<strong>Failed!</strong> An error occured while deleting the record.", FLASH_ERROR);

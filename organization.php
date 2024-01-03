@@ -62,24 +62,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($conn->query($deleteQuery) === TRUE) {
                 create_flash_message('delete-success', $flashMessage['delete-success'] , FLASH_SUCCESS);
-                
+                $url = base_url(false) . "/organizations.php";
             } else {
                 create_flash_message('delete-failed', $flashMessage['delete-failed'], FLASH_ERROR);
             
                 if($conn->errno == 1451) {
                     create_flash_message('delete-failed', $flashMessage['delete-failed-linked'] , FLASH_ERROR);
                 }
+
+                $url = base_url(false) . "/organization.php?id=" . $id;
             }
 
-            $url = base_url(false) . "/organizations.php";
+            
             header("Location: " . $url ."");
-                
             exit();
         } catch (mysqli_sql_exception $e) {
             create_flash_message('delete-failed', $flashMessage['delete-failed-linked'] , FLASH_ERROR);
             // create_flash_message('delete-failed', "An error occurred: " . $e->getMessage() , FLASH_ERROR);
 
-            $url = base_url(false) . "/organizations.php";
+            $url = base_url(false) . "/organization.php?id=" . $id;
             header("Location: " . $url ."");
                 
             exit();
@@ -146,7 +147,7 @@ $conn->close();
             <div class="flex items-center justify-end flex-col sm:flex-row gap-x-1 bg-white mt-0 px-6 py-4 border-t-2 border-green-700">
                 <a href="<?php echo base_url() . '/organizations.php'; ?>" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Cancel</a>
                 <button type="submit" name="saveChanges" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">Save Changes</button>
-                <input type="submit" name="delete" class="<?php echo $classBtnDanger; ?> w-full sm:w-auto" value="Delete Organization" />
+                <button type="submit" name="delete" class="<?php echo $classBtnDanger; ?> w-full sm:w-auto">Delete Organization</button>
             </div>
 
             <?php flash('update-success'); ?>

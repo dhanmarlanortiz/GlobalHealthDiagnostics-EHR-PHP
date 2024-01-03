@@ -46,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     /* GET HEAD COUNT - START */
     $headCount = 1;
-    $headCountQuery = "SELECT MAX(headCount) FROM APE WHERE organizationId = $organizationId AND (dateRegistered BETWEEN '" . date('Y') . "-01-01' AND '" . date('Y') . "-12-31')";
+    $headCountQuery = "SELECT MAX(headCount) FROM APE WHERE organizationId = $organizationId AND YEAR(dateRegistered) = date('Y')";
     $headCountResult = $conn->query($headCountQuery);
 
     if ($headCountResult !== false && $headCountResult->num_rows > 0) {
