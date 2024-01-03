@@ -179,7 +179,7 @@ $conn->close();
         if(Object.keys(post).length !== 0) {
             $('input').each( function(key) {
                 let id = $(this).attr('id');
-                $(this).attr('value', post[id]);
+                $(this).attr('value', htmlEntityDecode(post[id]));
                 $(this).attr('name', id);
             });
         }

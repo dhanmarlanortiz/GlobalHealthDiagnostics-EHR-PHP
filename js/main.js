@@ -13,6 +13,12 @@ function darkenColor(rgbColor, percent) {
     return newColor;
 }
 
+function htmlEntityDecode(input) {
+    const textarea = document.createElement('textarea');
+    textarea.innerHTML = input;
+    return textarea.value;
+}
+
 $(window).on("load", function() {
     $("body").removeClass("is-loading")
 });

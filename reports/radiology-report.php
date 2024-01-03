@@ -217,7 +217,7 @@ if (isset($_GET['id'])) {
     $pdf->Ln();
     
     $pdf->SetFont('Arial', 'B', 10);
-    $pdf->Cell(95, 8, $org_name, 0);
+    $pdf->Cell(95, 8, html_entity_decode($org_name), 0);
     $pdf->Cell(95, 8, $me_name, 0);
     $pdf->Ln(12);
 
@@ -226,15 +226,15 @@ if (isset($_GET['id'])) {
     $pdf->Ln();
     
     $pdf->SetFont('Arial', 'B', 10);
-    $pdf->MultiCell(0, 5, $rr_chestPA);
+    $pdf->MultiCell(0, 5, html_entity_decode($rr_chestPA));
     $pdf->Ln();
 
     $pdf->SetFont('Arial', '', 8);
-    $pdf->Cell(190, 8, "Impression", 0);
+    $pdf->Cell(190, 8, "Impression", 0);    
     $pdf->Ln();
     
     $pdf->SetFont('Arial', 'B', 10);
-    $pdf->MultiCell(0, 5, $rr_impression);
+    $pdf->MultiCell(0, 5, html_entity_decode($rr_impression));
     $pdf->Ln(20);
 
     $pdf->SetFont('Arial','B', 9);
