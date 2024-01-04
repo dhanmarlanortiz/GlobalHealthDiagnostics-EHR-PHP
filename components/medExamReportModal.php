@@ -80,7 +80,7 @@ if (isset($_POST['generateMedExamReport'])) {
 </style>
 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id=" . $_GET['id'] ) ;?>" class="prompt-confirm medExamReportForm">
     <dialog id="medExamReportModal" class="modal">
-        <div class="modal-box rounded-none max-w-3xl lg:max-w-5xl p-0">
+        <div class="modal-box rounded-none max-w-3xl lg:max-w-5xl p-0 bg-white">
 
             <div class="flex items-center justify-between p-4 border-b-2 border-green-700">
                 <h3 class="font-medium text-green-700 text-sm">Generate Medical Examination Report</h3>

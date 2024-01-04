@@ -1,7 +1,7 @@
 <dialog id="prompConfirmModal" class="modal">
-    <div class="modal-box">
+    <div class="modal-box bg-white">
         <h3 class="prompt-header font-bold text-lg">Confirm</h3>
-        <p class="py-4">Are you sure want to continue?</p>
+        <p class="py-4 text-gray-900">Are you sure want to continue?</p>
         <div class="modal-action">
         <form method="dialog">
             <button class="prompt-button-no btn">No</button>

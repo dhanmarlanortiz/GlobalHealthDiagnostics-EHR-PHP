@@ -531,7 +531,7 @@ function medExamInput($mainClass, $type, $inputLabel, $inputId, $value=null, $at
 
 function medExamHeader($mainClass, $headerTitle, $sectionId) {
     echo '<div class="'.$mainClass.'" id="'.$sectionId.'">
-            <h4 class="border-b border-gray-300 font-normal text-xs tracking-wider uppercase mt-4">
+            <h4 class="border-b border-gray-300 text-gray-900 font-normal text-xs tracking-wider uppercase mt-4">
                 <span class="bg-gray-300 inline-block px-3 pt-2 pb-1 rounded-t-md">'.$headerTitle.'</span>
             </h4>
         </div>';

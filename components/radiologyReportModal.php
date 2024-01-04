@@ -29,7 +29,7 @@ if (isset($_POST['rr-generateRadiologyReport'])) {
 
 <form id="radiologyReportForm" method="post" enctype="multipart/form-data" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id=" . $_GET['id'] ) ;?>" class="prompt-confirm">
     <dialog id="radiologyReportModal" class="modal">
-        <div class="modal-box rounded-none max-w-2xl p-0">
+        <div class="modal-box bg-white rounded-none max-w-2xl p-0">
                 <div class="flex items-center justify-between p-4 border-b-2 border-green-700">
                     <h3 class="font-medium text-green-700 text-sm">Generate Radiology Report</h3>
                     <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 focus:outline-none rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" onClick="radiologyReportModal.close();">

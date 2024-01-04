@@ -52,7 +52,7 @@ if (isset($_POST['generatelaboratoryResult'])) {
 ?>
 <form id="laboratoryResultForm" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id=" . $_GET['id'] ) ;?>" class="prompt-confirm">
     <dialog id="laboratoryResultModal" class="modal">
-        <div class="modal-box rounded-none max-w-7xl p-0">
+        <div class="modal-box rounded-none max-w-7xl p-0 bg-white">
                 <div class="flex items-center justify-between p-4 border-b-2 border-green-700">
                     <h3 class="font-medium text-green-700 text-sm">Generate Laboratory Result</h3>
                     <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 focus:outline-none rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" onClick="laboratoryResultModal.close();">
@@ -80,14 +80,14 @@ if (isset($_POST['generatelaboratoryResult'])) {
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-6 gap-y-8 p-4 md:p-5">
                     <div class="col-span-1 sm:col-span-2 md:col-span-1">
-                        <h4 class="border-b border-gray-300 font-medium text-xs tracking-wider uppercase mt-4 mb-8">
+                        <h4 class="border-b border-gray-300 text-gray-900 font-medium text-xs tracking-wider uppercase mt-4 mb-8">
                             <span class="bg-gray-300 inline-block px-3 pt-2 pb-1 rounded-t-md">Hepatitis</span>
                         </h4>
                         <input type="text" id="labRes_hepa_b" data-label="<span class='block overflow-hidden text-ellipsis whitespace-nowrap'>Hepatitis B Screening</span>" placeholder="Hepatitis B Screening" title="Hepatitis: Hepatitis B Screening" value="Non-Reactive" />
                     </div>
 
                     <div class="col-span-1 sm:col-span-2">
-                        <h4 class="border-b border-gray-300 font-medium text-xs tracking-wider uppercase mt-4 mb-8">
+                        <h4 class="border-b border-gray-300 text-gray-900 font-medium text-xs tracking-wider uppercase mt-4 mb-8">
                             <span class="bg-gray-300 inline-block px-3 pt-2 pb-1 rounded-t-md">Drug Test</span>
                         </h4>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-8">
@@ -101,7 +101,7 @@ if (isset($_POST['generatelaboratoryResult'])) {
                     </div>
 
                     <div class="col-span-1 sm:col-span-2 md:col-span-3">
-                        <h4 class="border-b border-gray-300 font-medium text-xs tracking-wider uppercase mt-4 mb-8">
+                        <h4 class="border-b border-gray-300 text-gray-900 font-medium text-xs tracking-wider uppercase mt-4 mb-8">
                             <span class="bg-gray-300 inline-block px-3 pt-2 pb-1 rounded-t-md">Parasitology</span>
                         </h4>
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-8">
@@ -120,7 +120,7 @@ if (isset($_POST['generatelaboratoryResult'])) {
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-6 gap-y-8 p-4 md:p-5">
                     <div class="col-span-1 sm:col-span-2 md:col-span-3 lg:col-span-6">
-                        <h4 class="border-b border-gray-300 font-normal text-xs tracking-wider uppercase mt-4">
+                        <h4 class="border-b border-gray-300 text-gray-900 font-normal text-xs tracking-wider uppercase mt-4">
                             <span class="bg-gray-300 inline-block px-3 pt-2 pb-1 rounded-t-md">Hematology</span>
                         </h4>
                     </div>
@@ -155,7 +155,7 @@ if (isset($_POST['generatelaboratoryResult'])) {
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-x-6 gap-y-8 p-4 md:p-5">
                     <div class="col-span-1 sm:col-span-2 md:col-span-4 lg:col-span-6">
-                        <h4 class="border-b border-gray-300 font-normal text-xs tracking-wider uppercase mt-4">
+                        <h4 class="border-b border-gray-300 text-gray-900 font-normal text-xs tracking-wider uppercase mt-4">
                             <span class="bg-gray-300 inline-block px-3 pt-2 pb-1 rounded-t-md">Urinalysis</span>
                         </h4>
                     </div>
