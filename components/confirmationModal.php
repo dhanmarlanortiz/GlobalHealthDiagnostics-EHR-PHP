@@ -57,6 +57,11 @@
             e.preventDefault();
         }
 
+        $("#prompConfirmModal .prompt-button-no").click(function(){
+            prompConfirmModal.close();
+            return false;
+        });
+
         $("#prompConfirmModal .prompt-button-yes").click(function(){
             formSubmitReady = true;
             $(".clicked[type='submit']").trigger("click");
