@@ -240,7 +240,7 @@ function getControlNumberAPE($id, $organizationId) {
     require("connection.php");
 
     $ctr = 1;
-    $ctrQuery = "SELECT MAX(controlNumber) FROM APE WHERE organizationId = $organizationId AND YEAR(dateRegistered) = date('Y')";
+    $ctrQuery = "SELECT MAX(controlNumber) FROM APE WHERE organizationId = $organizationId AND YEAR(dateRegistered) = '". date('Y') ."'";
     $ctrResult = $conn->query($ctrQuery);
 
     if ($ctrResult !== false && $ctrResult->num_rows > 0) {
