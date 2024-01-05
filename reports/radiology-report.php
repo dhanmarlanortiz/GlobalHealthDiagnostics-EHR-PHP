@@ -243,7 +243,7 @@ if (isset($_GET['id'])) {
     $pdf->Image('../images/alvin-d-rosario-art.png', 35, 150, 8);
     $pdf->Image('../images/ernie-caliboso.png', 150, 146, 20);
     $pdf->Cell(10, 8, '' , '', 0, 'L');
-    $pdf->Cell(40, 8, 'ALVIN D. ROSARIO ART' , 'B', 0, 'C');
+    $pdf->Cell(40, 8, 'ALVIN D. ROSARIO RXT' , 'B', 0, 'C');
     $pdf->Cell(70, 8, '' , '', 0, 'L');
     $pdf->Cell(60, 8, 'ERNIE CALIBOSO, M.D. F.P.C.R.F.U.S.P.' , 'B', 0, 'C');
     $pdf->ln();
