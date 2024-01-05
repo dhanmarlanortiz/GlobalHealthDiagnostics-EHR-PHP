@@ -103,46 +103,54 @@ class CSVImporter
 
     $PrevId = 0;
     if ($prevResult->num_rows > 0) {
-        $prevData = $prevResult->fetch_assoc();
-        $PrevId = $prevData['id'];
+        try {
+            $prevData = $prevResult->fetch_assoc();
+            $PrevId = $prevData['id'];
 
-        $updateQuery = "UPDATE APE SET
-                age = ?,
-                sex = ?,
-                civilStatus = ?,
-                homeAddress = ?,
-                employeeNumber = ?,
-                remarks = ?,
-                WHERE id = ?";
+            $updateQuery = "UPDATE APE SET
+                    age = ?,
+                    sex = ?,
+                    civilStatus = ?,
+                    homeAddress = ?,
+                    employeeNumber = ?,
+                    remarks = ?
+                    WHERE id = ?";
 
-        $updateStmt = $this->conn->prepare($updateQuery);
-        $updateStmt->bind_param("ssssssi", $age, $sex, $civilStatus, $homeAddress, $employeeNumber, $remarks, $PrevId);
-        $result = $updateStmt->execute();
-        $updateStmt->close();
+            $updateStmt = $this->conn->prepare($updateQuery);
+            $updateStmt->bind_param("ssssssi", $age, $sex, $civilStatus, $homeAddress, $employeeNumber, $remarks, $PrevId);
+            $result = $updateStmt->execute();
+            $updateStmt->close();
+        } catch (mysqli_sql_exception $e) {
+            create_flash_message('import-failed', '<strong>Import Failed!</strong> Please review and try again.', FLASH_ERROR);
+        }
     } else {
-        $insertQuery = "INSERT INTO APE (
-            headCount,
-            firstName,
-            middleName,
-            lastName,
-            age,
-            sex,
-            civilStatus,
-            homeAddress,
-            employeeNumber,
-            remarks,
-            dateRegistered,
-            organizationId,
-            userId
-        ) VALUES (
-            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
-        )";
-        
-        $headCount = getHeadCountAPE($o, date("Y", strtotime($dateRegistered)));
-        $insertStmt = $this->conn->prepare($insertQuery);
-        $insertStmt->bind_param("issssssssssii", $headCount, $firstName, $middleName, $lastName, $age, $sex, $civilStatus, $homeAddress, $employeeNumber, $remarks, $dateRegistered, $o, $_SESSION['userId']);
-        $result = $insertStmt->execute();
-        $insertStmt->close();
+        try {
+            $insertQuery = "INSERT INTO APE (
+                headCount,
+                firstName,
+                middleName,
+                lastName,
+                age,
+                sex,
+                civilStatus,
+                homeAddress,
+                employeeNumber,
+                remarks,
+                dateRegistered,
+                organizationId,
+                userId
+            ) VALUES (
+                ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+            )";
+            
+            $headCount = getHeadCountAPE($o, date("Y", strtotime($dateRegistered)));
+            $insertStmt = $this->conn->prepare($insertQuery);
+            $insertStmt->bind_param("issssssssssii", $headCount, $firstName, $middleName, $lastName, $age, $sex, $civilStatus, $homeAddress, $employeeNumber, $remarks, $dateRegistered, $o, $_SESSION['userId']);
+            $result = $insertStmt->execute();
+            $insertStmt->close();
+        } catch (mysqli_sql_exception $e) {
+            create_flash_message('import-failed', '<strong>Import Failed!</strong> Please review and try again.', FLASH_ERROR);
+        }
     }
 
     // Return true if the query is successful, otherwise false
