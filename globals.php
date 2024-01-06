@@ -236,11 +236,12 @@ function getResultsAPE($APEFK) {
     return $resultsArray;
 }
 
-function getControlNumberAPE($id, $organizationId) {
+function getControlNumberAPE($id, $organizationId, $dateRegistered) {
     require("connection.php");
 
+    $y = date("Y", strtotime($dateRegistered));
     $ctr = 1;
-    $ctrQuery = "SELECT MAX(controlNumber) FROM APE WHERE organizationId = $organizationId AND YEAR(dateRegistered) = '". date('Y') ."'";
+    $ctrQuery = "SELECT MAX(controlNumber) FROM APE WHERE organizationId = '$organizationId' AND YEAR(dateRegistered) = '$y'";
     $ctrResult = $conn->query($ctrQuery);
 
     if ($ctrResult !== false && $ctrResult->num_rows > 0) {

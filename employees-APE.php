@@ -117,7 +117,6 @@ if ($orgDetailsResult !== false && $orgDetailsResult->num_rows > 0) {
                             <th style='max-width: 74px; text-align: center;'>Control Number</th>
                             <th style='max-width: 20px; text-align: center;'>Age</th>
                             <th style='max-width: 40px;'>Gender</th>
-                            <th style='max-width: 40px;'>Gender</th>
                             <th>Remarks</th>
                             <th style='max-width: 54px;'></th>
                         </tr>
@@ -142,7 +141,6 @@ if ($orgDetailsResult !== false && $orgDetailsResult->num_rows > 0) {
                                 // "<td>" . $emp["department"] . "</td>" .
                                 // "<td>" . $emp["level"] . "</td>" .
                                 // "<td>" . $emp["examination"] . "</td>" .
-                                "<td>" . date("M d, 2023", strtotime($emp["dateRegistered"])) . "</td>" .
                                 // "<td>" . $dateCompleted . "</td>" .
                                 "<td>" . $emp["remarks"] . "</td>" .
                                 "<td class='text-center'>

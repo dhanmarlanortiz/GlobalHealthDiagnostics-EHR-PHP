@@ -117,7 +117,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (isset($_POST['generateControlNumber'])) {
-        getControlNumberAPE($id, $organizationId);
+        getControlNumberAPE($id, $organizationId, $dateRegistered);
 
         header('Location: ' . $_SERVER['REQUEST_URI']);
         exit();

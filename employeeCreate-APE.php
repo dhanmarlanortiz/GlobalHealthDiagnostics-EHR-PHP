@@ -65,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         create_flash_message('create-success', $flashMessage['create-success'], FLASH_SUCCESS);
         $id = $conn->insert_id;
 
-        getControlNumberAPE($id, $o);
+        getControlNumberAPE($id, $o, $dateRegistered);
         
         // $url = base_url(false) . "/registeredEmployees.php?o=" . $organizationId . "&y=" . date('Y', strtotime($dateRegistered));
         $url = base_url(false) . "/employee-APE.php?id=" . $id;
