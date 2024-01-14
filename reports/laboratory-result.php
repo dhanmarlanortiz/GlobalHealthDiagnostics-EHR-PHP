@@ -182,10 +182,10 @@ $pdf->MultiCell(190, $lineHeight, ' HEMATOLOGY: ', 0);
 $pdf->row('', '', 'Normal Values:');
 $pdf->row('', '', 'Normal Values:');
 $pdf->ln();
-$pdf->row('Hemoglobin:', $labResults['labRes_hema_hemoglobin'], 'Female: 12-16 gsm/L');
+$pdf->row('Hemoglobin:', $labResults['labRes_hema_hemoglobin'], 'Female: 12-16 g/dL');
 $pdf->row('Segmenters:', $labResults['labRes_hema_segmenters'], '50-70%');
 $pdf->ln();
-$pdf->row('', '', 'Male: 14-18 gsm/L');
+$pdf->row('', '', 'Male: 14-18 g/dL');
 $pdf->row('Lymphocytes:', $labResults['labRes_hema_lymphocytes'], '20-40%');
 $pdf->ln();
 $pdf->row('Hematocrit:', $labResults['labRes_hema_hematocrit'], 'Female: 37-47 vol%');
@@ -198,7 +198,7 @@ $pdf->row('White Blood Cell:', $labResults['labRes_hema_whiteblood'], '5,000-10,
 $pdf->row('Basophils:', $labResults['labRes_hema_basophils'], '0-2%');
 $pdf->ln();
 $pdf->row('Red Blood Cell:', $labResults['labRes_hema_rbc'], '3.80 - 5.80 x 10^12/L');
-$pdf->Cell(0, 1,'', 'T', $toBegin);
+$pdf->Cell(0, 1,'', '', $toBegin);
 $pdf->ln(5);
 
 $pdf->thFontStyle();
@@ -242,8 +242,8 @@ $pdf->row('', '', '');
 $pdf->Cell(0, 1,'', 'T', $toBegin);
 $pdf->ln(57);
 
-$pdf->Image('../images/angel-baquiran.png', 11.5, 230, 40);
-$pdf->Image('../images/nova-angela-buyagan.png', 75, 230, 50);
+$pdf->Image('../images/nova-angela-buyagan.png', 11.5, 230, 50);
+$pdf->Image('../images/angel-baquiran.png', 75, 230, 40);
 $pdf->Image('../images/noel-c-santos.png', 140, 230, 60);
 
 $pdf->row('Computer-generated report.', '', '');
