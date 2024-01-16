@@ -54,42 +54,10 @@ if ($orgDetailsResult !== false && $orgDetailsResult->num_rows > 0) {
                     </ul>
                 </div>
             </div>
-            <!-- <div>
-                <a href="<?php base_url(); ?>/employeeCreate-APE.php" class="btn btn-primary">Register</a>
-            </div> -->
         </div>
     </div>
 </header>
 <main class='<?php echo $classMainContainer; ?>'>
-    
-    <!-- <div class="bg-white p-6 rounded shadow-sm">
-        <form id="searchYear-APE" method="GET" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" class="flex flex-col sm:flex-row sm:items-center max-w-2xl">
-            <label for="o" class="block text-sm font-medium leading-6 text-gray-900 mb-2 sm:mr-4 sm:mb-0">Organization</label>
-            <select name="o" id="o" class="mb-5 sm:mb-0 sm:w-30 block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" required>
-                <?php 
-                if ($orgResult !== false && $orgResult->num_rows > 0) {
-                    echo "<option value='' selected disabled>Select</option>";
-                    while($org = $orgResult->fetch_assoc()) {
-                        echo "<option value='" . $org['id'] . "' " . 
-                                ( 
-                                    (isset($_GET['o'])) 
-                                    ? (($_GET['o'] == $org['id']) ? 'selected' : '') 
-                                    : '' 
-                                )  
-                            . " >" . $org['name'] . "</option>";
-                    }
-                } else {
-                    echo "<option value='' selected disabled>No record</option>";
-                }
-                ?>
-            </select>
-            <input type="hidden" name="o" value="<?php echo $o; ?>">
-            <label for="d" class="block text-sm font-medium leading-6 text-gray-900 mb-2 sm:mb-0 sm:mr-4 sm:ml-6 sm:text-right">Year</label>
-            <input type="number" id="y" name="y" min="1900" max="2099" step="1" value="<?php echo $y; ?>" class="mb-5 sm:mb-0 sm:w-30 block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-400 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6" required />
-        </form>
-        
-    </div> -->
-
     <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200">
         <ul class="flex -mb-px">
             <li class="mr-2">
@@ -97,11 +65,6 @@ if ($orgDetailsResult !== false && $orgDetailsResult->num_rows > 0) {
                     Annual Physical Examination
                 </a>
             </li>
-            <!-- <li class="mr-2">
-                <a href="#" class="inline-block p-2 md:p-4 border-b-2 border-transparent rounded-t-lg text-left text-xs md:text-sm hover:text-gray-600 hover:border-gray-300">
-                    Pre-employment Medical Assessment
-                </a>
-            </li> -->
         </ul>
     </div>
     <div class="bg-white p-2 md:p-4">
@@ -137,11 +100,6 @@ if ($orgDetailsResult !== false && $orgDetailsResult->num_rows > 0) {
                                 "<td class='text-center'>" . $emp["controlNumber"] . "</td>" .
                                 "<td class='text-center'>" . $emp["age"] . "</td>" .
                                 "<td class=''>" . $emp["sex"] . "</td>" .
-                                // "<td>" . $emp["membership"] . "</td>" .
-                                // "<td>" . $emp["department"] . "</td>" .
-                                // "<td>" . $emp["level"] . "</td>" .
-                                // "<td>" . $emp["examination"] . "</td>" .
-                                // "<td>" . $dateCompleted . "</td>" .
                                 "<td>" . $emp["remarks"] . "</td>" .
                                 "<td class='text-center'>
                                     <a class='" . $classTblBtnPrimary . "' href='" . base_url(false) . "/employee-APE.php?id=" . $emp['id'] . "'>
