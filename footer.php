@@ -37,9 +37,20 @@
         <script src="<?php base_url() ?>/js/main.js"></script>
 
         <script>
-            let dTable = new DataTable('table', {
-                pageLength: 25
-            }); 
+            // var queryParams = new URLSearchParams(window.location.search);
+            // var customDataTable = queryParams.get('cdt');
+            
+            // if (!queryParams.has('cdt')) {
+            //     let dTable = new DataTable('table', {
+            //         pageLength: 25
+            //     }); 
+            // }
+            
+            if(!$('table').hasClass('custom-datatable')) {
+                let dTable = new DataTable('table', {
+                    pageLength: 25
+                }); 
+            }
         </script>
 </body>
 </html>

@@ -16,21 +16,11 @@ function test_input($data) {
 
 $o = $y = 0;
 
-$empJSON = "";
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
     $o = test_input( isset($_GET['o']) ? $_GET['o'] : 0 );
     $y = test_input( isset($_GET['y']) ? $_GET['y'] : date("Y") );
     $empQuery = "SELECT * FROM APE WHERE organizationId = '$o' AND YEAR(dateRegistered) = '$y'";
     $empResult = $conn->query($empQuery);
-
-    
-    $empResultArray = array();
-    while ($row = mysqli_fetch_assoc($empResult)) {
-        $empResultArray[] = $row;
-    }
-    
-    // mysqli_free_result($empResult);
-    $empJSON = json_encode($empResultArray);
 }
 
 $orgQuery = "SELECT * FROM Organization";
@@ -39,14 +29,14 @@ $orgResult = $conn->query($orgQuery);
 $organizationName = "";
 $orgDetailsQuery = "SELECT * FROM Organization WHERE id = '$o'";
 $orgDetailsResult = $conn->query($orgDetailsQuery);
-
 if ($orgDetailsResult !== false && $orgDetailsResult->num_rows > 0) {
     while($orgDetails = $orgDetailsResult->fetch_assoc()) {
         $organizationName = $orgDetails['name'];
     }
 }
-// echo $empJSON;
+
 ?>
+
 <header class="bg-white shadow-sm">
     <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center overflow-hidden">
@@ -77,57 +67,57 @@ if ($orgDetailsResult !== false && $orgDetailsResult->num_rows > 0) {
             </li>
         </ul>
     </div>
-
     <div class="bg-white p-2 md:p-4">
-        <div class='p-1 overflow-auto'>
-            <table id="employee-ape-table-json" class="display custom-datatable">
-                <thead>
-                    <tr>
-                        <th style='max-width: 54px;'>Head Count</th>
-                        <th>Full Name</th>
-                        <th style='max-width: 74px;'>Control Number</th>
-                        <th style='max-width: 20px;'>Age</th>
-                        <th style='max-width: 40px;'>Gender</th>
-                        <th style='max-width: 250px;'>Remarks</th>
-                        <th style='max-width: 54px;'></th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
+        <?php
+        if ($empResult !== false && $empResult->num_rows > 0) {
+            echo    
+            "<div class='p-1 overflow-auto'>
+                <table class='display compact'>
+                    <thead>
+                        <tr>
+                            <th style='max-width: 54px; text-align: center;'>Head Count</th>
+                            <th>Full Name</th>
+                            <th style='max-width: 74px; text-align: center;'>Control Number</th>
+                            <th style='max-width: 20px; text-align: center;'>Age</th>
+                            <th style='max-width: 40px;'>Gender</th>
+                            <th>Remarks</th>
+                            <th style='max-width: 54px;'></th>
+                        </tr>
+                    </thead>
+                    <tbody>";
+                        while($emp = $empResult->fetch_assoc()) {
+
+                            $dateCompleted = isset($emp["dateCompleted"]) ? date("M d, 2023", strtotime($emp["dateCompleted"])) : "";
+
+                        echo 
+                            "<tr>" .
+                                "<td class='text-center'>" . $emp["headCount"] . "</td>" .
+                                "<td>
+                                    <a href='" . base_url(false) . "/employee-APE.php?id=" . $emp['id'] . "' class='whitespace-nowrap uppercase text-green-700'>" . 
+                                        $emp["lastName"] . ", " . $emp["firstName"] . ", " . $emp["middleName"] .  
+                                    "</a>
+                                </td>" .
+                                "<td class='text-center'>" . $emp["controlNumber"] . "</td>" .
+                                "<td class='text-center'>" . $emp["age"] . "</td>" .
+                                "<td class=''>" . $emp["sex"] . "</td>" .
+                                "<td>" . $emp["remarks"] . "</td>" .
+                                "<td class='text-center'>
+                                    <a class='" . $classTblBtnPrimary . "' href='" . base_url(false) . "/employee-APE.php?id=" . $emp['id'] . "'>
+                                        View
+                                    </a>
+                                </td>".
+                            "</tr>";
+                        }
+                    echo
+                    "</body>" .
+                "</table>
+            </div>";
+        } else {
+            echo "<span class='text-sm'>Results not found.</span>";
+        }
+        $conn->close();
+        ?>
     </div>
-
-    <script>
-        $(document).ready(function() {
-            var empJSON = <?php echo $empJSON; ?>;
-    
-            $('#employee-ape-table-json').DataTable({
-                "data": empJSON,
-                "columns": [
-                    {"data": "headCount"},
-                    {
-                        "data": null,
-                        "render": function (data, type, row) {
-                            return row.lastName + ', ' + row.firstName + ', ' + row.middleName;
-                        }
-                    },
-                    {"data": "controlNumber"},
-                    {"data": "age"},
-                    {"data": "sex"},
-                    {"data": "remarks"},
-                    {
-                        "data": null,
-                        "render": function (data, type, row) {
-                            return '<a class="<?php echo $classTblBtnPrimary; ?>" href="<?php echo base_url(false); ?>/employee-APE.php?id=' + row.id + '">View</a>';
-                        }
-                    },
-                ],
-                "stateSave": true,
-                pageLength: 50
-            });
-        });
-    </script>
-
     <div class="bg-white p-2 md:px-4 md:pb-4 border-t-2 border-green-700">
         <div class="flex sm:justify-between flex-col sm:flex-row">
             <div class="dataTables_year p-1">
@@ -153,7 +143,7 @@ if ($orgDetailsResult !== false && $orgDetailsResult->num_rows > 0) {
                 $encodeEmployeeClearDataAPE = base64_encode(json_encode( $employeeClearDataAPE ));
                 ?>
                 <form id="employeeClear-APE" method="POST" action="<?php echo htmlspecialchars(base_url(false) . "/employeeClear-APE.php?q='$encodeEmployeeClearDataAPE'");?>" class="prompt-confirm inline-block w-full sm:w-auto">
-                    <button type="submit" class="<?php echo $classBtnDanger; ?> w-full sm:w-auto hidden" disabled>Delete All Records</button>
+                    <button type="submit" class="<?php echo $classBtnDanger; ?> w-full sm:w-auto hidden">Delete All Records</button>
                 <form>
             </div>
         </div>
@@ -164,6 +154,7 @@ if ($orgDetailsResult !== false && $orgDetailsResult->num_rows > 0) {
         flash('delete-failed');
     ?>
 </main>
+
 
 <?php
   include('footer.php');
