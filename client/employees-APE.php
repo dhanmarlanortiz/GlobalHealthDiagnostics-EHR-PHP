@@ -24,6 +24,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $empQuery = "SELECT * FROM APE WHERE organizationId = '$o' AND YEAR(dateRegistered) = '$y'";
 $empResult = $conn->query($empQuery);
 
+$empResultArray = array();
+while ($row = mysqli_fetch_assoc($empResult)) {
+    $empResultArray[] = $row;
+}
+
+$empJSON = json_encode($empResultArray);
+
 $orgQuery = "SELECT * FROM Organization WHERE id = $_SESSION[organizationId]";
 $orgResult = $conn->query($orgQuery);
 
@@ -34,6 +41,8 @@ if ($orgResult !== false && $orgResult->num_rows > 0) {
 }
 
 createMainHeader($_SESSION['organizationName'], array("Annual Physical Examination"));
+
+print_r($empResult->fetch_assoc());
 ?>
 
 <main class='<?php echo $classMainContainer; ?>'>
@@ -51,53 +60,59 @@ createMainHeader($_SESSION['organizationName'], array("Annual Physical Examinati
             </li> -->
         </ul>
     </div>
+    
     <div class="bg-white p-2 md:p-4">
-        <?php
-        if ($empResult !== false && $empResult->num_rows > 0) {
-            echo    
-            "<div class='p-1 overflow-auto'>
-                <table class='display compact'>
-                    <thead>
-                        <tr>
-                            <th>Head Count</th>
-                            <th>Full Name</th>
-                            <th>Control Number</th>
-                            <th>Age</th>
-                            <th>Gender</th>
-                            <th>Date Registered</th>
-                            <th>Remarks</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>";
-                        while($emp = $empResult->fetch_assoc()) {
-                            $dateCompleted = isset($emp["dateCompleted"]) ? date("M d, 2023", strtotime($emp["dateCompleted"])) : "";
-                        echo 
-                        "<tr>" .
-                            "<td class='text-center'>" . $emp["headCount"] . "</td>" .
-                            "<td>" . $emp["lastName"] . ", " . $emp["firstName"] . ", " . $emp["middleName"] .  "</td>" .
-                            "<td class='text-center'>" . $emp["controlNumber"] . "</td>" .
-                            "<td class='text-center'>" . $emp["age"] . "</td>" .
-                            "<td>" . $emp["sex"] . "</td>" .
-                            "<td>" . date("M d, Y", strtotime($emp["dateRegistered"])) . "</td>" .
-                            "<td>" . $emp["remarks"] . "</td>" .
-                            "<td class='text-center'>
-                                <a class='" . $classTblBtnPrimary . "' href='" . base_url(false) . "/employee-APE.php?id=" . $emp['id'] . "'>
-                                    View
-                                </a>
-                            </td>".
-                        "</tr>";
-                        }
-                    echo
-                    "</body>" .
-                "</table>
-            </div>";
-        } else {
-            echo "<span class='text-sm'>Results not found.</span>";
-        }
-        $conn->close();
-        ?>
+        <div class='p-1 overflow-auto'>
+            <table id="employee-ape-table-json" class="display custom-datatable">
+                <thead>
+                    <tr>
+                        <th style='max-width: 54px;'>Head Count</th>
+                        <th>Full Name</th>
+                        <th style='max-width: 74px;'>Control Number</th>
+                        <th style='max-width: 20px;'>Age</th>
+                        <th style='max-width: 40px;'>Gender</th>
+                        <th style='max-width: 250px;'>Remarks</th>
+                        <th style='max-width: 54px;'></th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
     </div>
+
+
+    <script>
+        $(document).ready(function() {
+            var empJSON = <?php echo $empJSON; ?>;
+    
+            $('#employee-ape-table-json').DataTable({
+                "data": empJSON,
+                "columns": [
+                    {"data": "headCount"},
+                    {
+                        "data": null,
+                        "render": function (data, type, row) {
+                            return row.lastName + ', ' + row.firstName + ', ' + row.middleName;
+                        }
+                    },
+                    {"data": "controlNumber"},
+                    {"data": "age"},
+                    {"data": "sex"},
+                    {"data": "remarks"},
+                    {
+                        "data": null,
+                        "render": function (data, type, row) {
+                            return '<a class="<?php echo $classTblBtnPrimary; ?>" href="<?php echo base_url(false); ?>/employee-APE.php?id=' + row.id + '">View</a>';
+                        }
+                    },
+                ],
+                "stateSave": true,
+                pageLength: 50
+            });
+        });
+    </script>
+
+    
     <div class="bg-white p-2 md:px-4 md:pb-4 border-t-2 border-green-700">
         <div class="flex sm:justify-between flex-col sm:flex-row">
             <div class="dataTables_year p-1">
