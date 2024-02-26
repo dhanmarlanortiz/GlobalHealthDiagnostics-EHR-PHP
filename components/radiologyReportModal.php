@@ -1,6 +1,5 @@
 <?php
-if (isset($_POST['rr-generateRadiologyReport'])) {
-    
+if (isset($_POST['rr-generateRadiologyReport'])) {    
     $rrgenQuery = "INSERT INTO RadiologyReport(caseNumber, dateCreated, APEFK, organizationFK, MedicalExamination_FK, chestPA, impression, doctorFK, userFK) 
                  VALUES('".clean($_POST['rr-caseNumber'])."', 
                         '".clean($_POST['rr-dateCreated'])."', 
@@ -12,7 +11,29 @@ if (isset($_POST['rr-generateRadiologyReport'])) {
                         '".clean($_POST['rr-doctorFK'])."', 
                         '".clean($_POST['rr-userFK'])."')";
 
-                        if ($conn->query($rrgenQuery) === TRUE) {
+    if ($conn->query($rrgenQuery) === TRUE) {
+        create_flash_message('create-success', $flashMessage['create-success'], FLASH_SUCCESS);
+    } else {
+        create_flash_message('create-failed', $flashMessage['create-failed'], FLASH_ERROR);
+    }
+    
+    $url = base_url(false) . "/employee-APE.php?id=" . $id;
+    header("Location: " . $url ."");
+    exit();
+} else if(isset($_POST['rr-updateRadiologyReport'])) {
+    $rrgenQuery =  "UPDATE RadiologyReport
+                    SET caseNumber = '".clean($_POST['rr-caseNumber'])."',
+                        dateCreated = '".clean($_POST['rr-dateCreated'])."',
+                        APEFK = '".clean($_POST['rr-APEFK'])."',
+                        organizationFK = '".clean($_POST['rr-organizationFK'])."',
+                        MedicalExamination_FK = '".clean($_POST['rr-MedicalExamination_FK'])."', 
+                        chestPA = '".clean($_POST['rr-chestPA'])."', 
+                        impression = '".clean($_POST['rr-impression'])."', 
+                        doctorFK = '".clean($_POST['rr-doctorFK'])."', 
+                        userFK = '".clean($_POST['rr-userFK'])."'
+                    WHERE APEFK = $id";
+
+    if ($conn->query($rrgenQuery) === TRUE) {
         create_flash_message('create-success', $flashMessage['create-success'], FLASH_SUCCESS);
     } else {
         create_flash_message('create-failed', $flashMessage['create-failed'], FLASH_ERROR);
@@ -22,8 +43,6 @@ if (isset($_POST['rr-generateRadiologyReport'])) {
     header("Location: " . $url ."");
     exit();
 }
-
-
 ?>
 
 
@@ -42,7 +61,7 @@ if (isset($_POST['rr-generateRadiologyReport'])) {
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-8 p-4 md:p-5">
                     <div class="col-span-1">
-                        <input type="number" id="rr-caseNumber" data-label="Case Number" required />
+                        <input type="number" id="rr-caseNumber" data-label="Case Number" value="<?php echo (isset($radiologyReport['caseNumber']) ? $radiologyReport['caseNumber'] : '');  ?>" required />
                     </div>
                     <div class="col-span-1">
                         <input type="date" id="rr-dateCreated" data-label="Date" value="<?php echo date('Y-m-d'); ?>" required />
@@ -50,13 +69,13 @@ if (isset($_POST['rr-generateRadiologyReport'])) {
                     <div class="col-span-2">
                         <label for="rrm-chestPA" class="block text-sm font-medium leading-6 text-gray-900">Chest PA</label>
                         <div class="mt-2">
-                            <textarea name="rr-chestPA" id="rrm-chestPA" rows="3" class="block w-full rounded py-1.5 px-2 text-gray-900 border-gray-300 placeholder:text-gray-400 focus:border-green-700 focus:ring-0 focus:bg-green-50 sm:text-sm sm:leading-6" required>Both lung fields are clear.&#10;Heart is not enlarged.&#10;The rest of visualized structures are unremarkable.</textarea>
+                            <textarea name="rr-chestPA" id="rrm-chestPA" rows="3" class="block w-full rounded py-1.5 px-2 text-gray-900 border-gray-300 placeholder:text-gray-400 focus:border-green-700 focus:ring-0 focus:bg-green-50 sm:text-sm sm:leading-6" required><?php echo (isset($radiologyReport['chestPA']) ? $radiologyReport['chestPA'] : 'Both lung fields are clear.&#10;Heart is not enlarged.&#10;The rest of visualized structures are unremarkable.'); ?></textarea>
                         </div>
                     </div>
                     <div class="col-span-2">
                         <label for="rr-impression" class="block text-sm font-medium leading-6 text-gray-900">Impression</label>
                         <div class="mt-2">
-                            <textarea name="rr-impression" id="rrm-impression" rows="1" class="block w-full rounded py-1.5 px-2 text-gray-900 border-gray-300 placeholder:text-gray-400 focus:border-green-700 focus:ring-0 focus:bg-green-50 sm:text-sm sm:leading-6" required>ESSENTIALLY NORMAL CHEST</textarea>
+                            <textarea name="rr-impression" id="rrm-impression" rows="1" class="block w-full rounded py-1.5 px-2 text-gray-900 border-gray-300 placeholder:text-gray-400 focus:border-green-700 focus:ring-0 focus:bg-green-50 sm:text-sm sm:leading-6" required><?php echo (isset($radiologyReport['impression']) ? $radiologyReport['impression'] : 'ESSENTIALLY NORMAL CHEST'); ?></textarea>
                         </div>
                     </div>
                 </div>
@@ -67,7 +86,14 @@ if (isset($_POST['rr-generateRadiologyReport'])) {
                     <input type="hidden" name="rr-doctorFK" value="1" />
                     <input type="hidden" name="rr-userFK" value="<?php echo $_SESSION['userId']; ?>" />
                     <button type="button" class="btn <?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0" onClick="radiologyReportModal.close();">Cancel</button>
-                    <input type="submit" name="rr-generateRadiologyReport" value="Generate" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto mb-2 sm:mb-0">
+                    
+
+                    <?php if(!empty($radiologyReport)) { ?>
+                        <input type="submit" name="rr-updateRadiologyReport" value="Save Changes" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto mb-2 sm:mb-0">
+                    <?php } else { ?>
+                        <input type="submit" name="rr-generateRadiologyReport" value="Generate" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto mb-2 sm:mb-0">
+                    <?php } ?>
+                    
                 </div>
         </div>
     </dialog>
