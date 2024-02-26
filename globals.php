@@ -546,3 +546,6 @@ function sectionClose() {
     echo "</section>";
 }
 
+function displayValue($value, $default = '') {
+    echo (isset($value) ? $value : $default);
+}

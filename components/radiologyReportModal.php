@@ -24,19 +24,15 @@ if (isset($_POST['rr-generateRadiologyReport'])) {
     $rrgenQuery =  "UPDATE RadiologyReport
                     SET caseNumber = '".clean($_POST['rr-caseNumber'])."',
                         dateCreated = '".clean($_POST['rr-dateCreated'])."',
-                        APEFK = '".clean($_POST['rr-APEFK'])."',
-                        organizationFK = '".clean($_POST['rr-organizationFK'])."',
-                        MedicalExamination_FK = '".clean($_POST['rr-MedicalExamination_FK'])."', 
                         chestPA = '".clean($_POST['rr-chestPA'])."', 
                         impression = '".clean($_POST['rr-impression'])."', 
-                        doctorFK = '".clean($_POST['rr-doctorFK'])."', 
                         userFK = '".clean($_POST['rr-userFK'])."'
                     WHERE APEFK = $id";
 
     if ($conn->query($rrgenQuery) === TRUE) {
-        create_flash_message('create-success', $flashMessage['create-success'], FLASH_SUCCESS);
+        create_flash_message('update-success', $flashMessage['update-success'], FLASH_SUCCESS);
     } else {
-        create_flash_message('create-failed', $flashMessage['create-failed'], FLASH_ERROR);
+        create_flash_message('update-failed', $flashMessage['update-failed'], FLASH_ERROR);
     }
     
     $url = base_url(false) . "/employee-APE.php?id=" . $id;

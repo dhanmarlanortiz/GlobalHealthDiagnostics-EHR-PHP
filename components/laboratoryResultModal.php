@@ -2,7 +2,7 @@
 // error_reporting(E_ALL);
 // ini_set('display_errors', 1);
 
-if (isset($_POST['generatelaboratoryResult'])) {
+if (isset($_POST['generateLaboratoryResult'])) {
 
     $labResGenQuery =   "INSERT INTO LaboratoryResult(
                         labRes_APE_FK, labRes_user_FK, labRes_date, labRes_hepa_b, labRes_drug_shabu, labRes_drug_marijuana, labRes_hema_hemoglobin, labRes_hema_hematocrit, labRes_hema_whiteblood, labRes_hema_segmenters, labRes_hema_lymphocytes, labRes_hema_monocytes, labRes_hema_eosinophils, labRes_hema_basophils, labRes_hema_rbc, labRes_urin_color, labRes_urin_transparency, labRes_urin_reaction, labRes_urin_gravity, labRes_urin_protein, labRes_urin_glucose, labRes_urin_wbc, labRes_urin_rbc, labRes_urin_mucous, labRes_urin_epithelial, labRes_urin_amorphous, labRes_urin_bacteria, labRes_urin_cast, labRes_urin_crystals, labRes_para_color, labRes_para_consistency, labRes_para_result)
@@ -48,6 +48,51 @@ if (isset($_POST['generatelaboratoryResult'])) {
     $url = base_url(false) . "/employee-APE.php?id=" . $id;
     header("Location: " . $url ."");
     exit();
+} else if (isset($_POST['updateLaboratoryResult'])) {
+
+    $labResGenQuery =  "UPDATE LaboratoryResult
+                    SET labRes_user_FK = '" . clean( $_POST['labRes_user_FK'] ) . "',
+                        labRes_date = '" . clean( $_POST['labRes_date'] ) . "',
+                        labRes_hepa_b = '" . clean( $_POST['labRes_hepa_b'] ) . "',
+                        labRes_drug_shabu = '" . clean( $_POST['labRes_drug_shabu'] ) . "',
+                        labRes_drug_marijuana = '" . clean( $_POST['labRes_drug_marijuana'] ) . "',
+                        labRes_hema_hemoglobin = '" . clean( $_POST['labRes_hema_hemoglobin'] ) . "',
+                        labRes_hema_hematocrit = '" . clean( $_POST['labRes_hema_hematocrit'] ) . "',
+                        labRes_hema_whiteblood = '" . clean( $_POST['labRes_hema_whiteblood'] ) . "',
+                        labRes_hema_segmenters = '" . clean( $_POST['labRes_hema_segmenters'] ) . "',
+                        labRes_hema_lymphocytes = '" . clean( $_POST['labRes_hema_lymphocytes'] ) . "',
+                        labRes_hema_monocytes = '" . clean( $_POST['labRes_hema_monocytes'] ) . "',
+                        labRes_hema_eosinophils = '" . clean( $_POST['labRes_hema_eosinophils'] ) . "',
+                        labRes_hema_basophils = '" . clean( $_POST['labRes_hema_basophils'] ) . "',
+                        labRes_hema_rbc = '" . clean( $_POST['labRes_hema_rbc'] ) . "',
+                        labRes_urin_color = '" . clean( $_POST['labRes_urin_color'] ) . "',
+                        labRes_urin_transparency = '" . clean( $_POST['labRes_urin_transparency'] ) . "',
+                        labRes_urin_reaction = '" . clean( $_POST['labRes_urin_reaction'] ) . "',
+                        labRes_urin_gravity = '" . clean( $_POST['labRes_urin_gravity'] ) . "',
+                        labRes_urin_protein = '" . clean( $_POST['labRes_urin_protein'] ) . "',
+                        labRes_urin_glucose = '" . clean( $_POST['labRes_urin_glucose'] ) . "',
+                        labRes_urin_wbc = '" . clean( $_POST['labRes_urin_wbc'] ) . "',
+                        labRes_urin_rbc = '" . clean( $_POST['labRes_urin_rbc'] ) . "',
+                        labRes_urin_mucous = '" . clean( $_POST['labRes_urin_mucous'] ) . "',
+                        labRes_urin_epithelial = '" . clean( $_POST['labRes_urin_epithelial'] ) . "',
+                        labRes_urin_amorphous = '" . clean( $_POST['labRes_urin_amorphous'] ) . "',
+                        labRes_urin_bacteria = '" . clean( $_POST['labRes_urin_bacteria'] ) . "',
+                        labRes_urin_cast = '" . clean( $_POST['labRes_urin_cast'] ) . "',
+                        labRes_urin_crystals = '" . clean( $_POST['labRes_urin_crystals'] ) . "',
+                        labRes_para_color = '" . clean( $_POST['labRes_para_color'] ) . "',
+                        labRes_para_consistency = '" . clean( $_POST['labRes_para_consistency'] ) . "',
+                        labRes_para_result = '" . clean( $_POST['labRes_para_result'] ) . "'
+                    WHERE labRes_APE_FK = $id";
+
+    if ($conn->query($labResGenQuery) === TRUE) {
+        create_flash_message('update-success', $flashMessage['update-success'], FLASH_SUCCESS);
+    } else {
+        create_flash_message('update-failed', $flashMessage['update-failed'], FLASH_ERROR);
+    }
+
+    $url = base_url(false) . "/employee-APE.php?id=" . $id;
+    header("Location: " . $url ."");
+    exit();
 }
 ?>
 <form id="laboratoryResultForm" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id=" . $_GET['id'] ) ;?>" class="prompt-confirm">
@@ -83,7 +128,7 @@ if (isset($_POST['generatelaboratoryResult'])) {
                         <h4 class="border-b border-gray-300 text-gray-900 font-medium text-xs tracking-wider uppercase mt-4 mb-8">
                             <span class="bg-gray-300 inline-block px-3 pt-2 pb-1 rounded-t-md">Hepatitis</span>
                         </h4>
-                        <input type="text" id="labRes_hepa_b" data-label="<span class='block overflow-hidden text-ellipsis whitespace-nowrap'>Hepatitis B Screening</span>" placeholder="Hepatitis B Screening" title="Hepatitis: Hepatitis B Screening" value="Non-Reactive" />
+                        <input type="text" id="labRes_hepa_b" data-label="<span class='block overflow-hidden text-ellipsis whitespace-nowrap'>Hepatitis B Screening</span>" placeholder="Hepatitis B Screening" title="Hepatitis: Hepatitis B Screening" value="<?php displayValue($laboratoryResult['labRes_hepa_b'], 'Non-Reactive')?>" />
                     </div>
 
                     <div class="col-span-1 sm:col-span-2">
@@ -92,27 +137,27 @@ if (isset($_POST['generatelaboratoryResult'])) {
                         </h4>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-8">
                             <div class="col-span-1">
-                                <input type="text" id="labRes_drug_shabu" data-label="<span class='block overflow-hidden text-ellipsis whitespace-nowrap'>Methamphetamine <span class='font-light text-xs'>(Shabu)</span></span>" placeholder="Methamphetamine" title="Drug Test: Methamphetamine" value="Negative" />
+                                <input type="text" id="labRes_drug_shabu" data-label="<span class='block overflow-hidden text-ellipsis whitespace-nowrap'>Methamphetamine <span class='font-light text-xs'>(Shabu)</span></span>" placeholder="Methamphetamine" title="Drug Test: Methamphetamine" value="<?php displayValue($laboratoryResult['labRes_drug_shabu'], 'Negative')?>" />
                             </div>
                             <div class="col-span-1">
-                                <input type="text" id="labRes_drug_marijuana" data-label="<span class='block overflow-hidden text-ellipsis whitespace-nowrap'>Tetrahydrocannabinol <span class='font-light text-xs'>(Marijuana)</span></span>" placeholder="Tetrahydrocannabinol" title="Drug Test: Tetrahydrocannabinol" value="Negative" />
+                                <input type="text" id="labRes_drug_marijuana" data-label="<span class='block overflow-hidden text-ellipsis whitespace-nowrap'>Tetrahydrocannabinol <span class='font-light text-xs'>(Marijuana)</span></span>" placeholder="Tetrahydrocannabinol" title="Drug Test: Tetrahydrocannabinol" value="<?php displayValue($laboratoryResult['labRes_drug_marijuana'], 'Negative')?>" />
                             </div>
                         </div>
                     </div>
-
+                    
                     <div class="col-span-1 sm:col-span-2 md:col-span-3">
                         <h4 class="border-b border-gray-300 text-gray-900 font-medium text-xs tracking-wider uppercase mt-4 mb-8">
                             <span class="bg-gray-300 inline-block px-3 pt-2 pb-1 rounded-t-md">Parasitology</span>
                         </h4>
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-8">
                             <div class="col-span-1">
-                                <input type="text" id="labRes_para_color" data-label="Color" placeholder="Color" title="Parasitology: Color" />
+                                <input type="text" value="<?php displayValue($laboratoryResult['labRes_para_color'])?>" id="labRes_para_color" data-label="Color" placeholder="Color" title="Parasitology: Color" />
                             </div>
                             <div class="col-span-1">
-                                <input type="text" id="labRes_para_consistency" data-label="Consistency" placeholder="Consistency" title="Parasitology: Consistency" />
+                                <input type="text" value="<?php displayValue($laboratoryResult['labRes_para_consistency'])?>" id="labRes_para_consistency" data-label="Consistency" placeholder="Consistency" title="Parasitology: Consistency" />
                             </div>
                             <div class="col-span-1">
-                                <input type="text" id="labRes_para_result" data-label="Result" placeholder="Result" title="Parasitology: Result" value="No intestinal parasite seen." />
+                                <input type="text" value="<?php displayValue($laboratoryResult['labRes_para_result'])?>" id="labRes_para_result" data-label="Result" placeholder="Result" title="Parasitology: Result" value="No intestinal parasite seen." />
                             </div>
                         </div>
                     </div>
@@ -125,31 +170,31 @@ if (isset($_POST['generatelaboratoryResult'])) {
                         </h4>
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_hema_hemoglobin" data-label="Hemoglobin" placeholder="Hemoglobin" title="Hematology: Hemoglobin" />
+                        <input type="text" value="<?php displayValue($laboratoryResult['labRes_hema_hemoglobin'])?>" id="labRes_hema_hemoglobin" data-label="Hemoglobin" placeholder="Hemoglobin" title="Hematology: Hemoglobin" />
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_hema_hematocrit" data-label="Hematocrit" placeholder="Hematocrit" title="Hematology: Hematocrit" />
+                        <input type="text" value="<?php displayValue($laboratoryResult['labRes_hema_hematocrit'])?>" id="labRes_hema_hematocrit" data-label="Hematocrit" placeholder="Hematocrit" title="Hematology: Hematocrit" />
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_hema_whiteblood" data-label="White Blood Cell" placeholder="White Blood Cell" title="Hematology: White Blood Cell" />
+                        <input type="text" value="<?php displayValue($laboratoryResult['labRes_hema_whiteblood'])?>" id="labRes_hema_whiteblood" data-label="White Blood Cell" placeholder="White Blood Cell" title="Hematology: White Blood Cell" />
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_hema_segmenters" data-label="Segmenters" placeholder="Segmenters" title="Hematology: Segmenters" />
+                        <input type="text" value="<?php displayValue($laboratoryResult['labRes_hema_segmenters'])?>" id="labRes_hema_segmenters" data-label="Segmenters" placeholder="Segmenters" title="Hematology: Segmenters" />
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_hema_lymphocytes" data-label="Lymphocytes" placeholder="Lymphocytes" title="Hematology: Lymphocytes" />
+                        <input type="text" value="<?php displayValue($laboratoryResult['labRes_hema_lymphocytes'])?>" id="labRes_hema_lymphocytes" data-label="Lymphocytes" placeholder="Lymphocytes" title="Hematology: Lymphocytes" />
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_hema_monocytes" data-label="Monocytes" placeholder="Monocytes" title="Hematology: Monocytes" />
+                        <input type="text" value="<?php displayValue($laboratoryResult['labRes_hema_monocytes'])?>" id="labRes_hema_monocytes" data-label="Monocytes" placeholder="Monocytes" title="Hematology: Monocytes" />
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_hema_eosinophils" data-label="Eosinophils" placeholder="Eosinophils" title="Hematology: Eosinophils" />
+                        <input type="text" value="<?php displayValue($laboratoryResult['labRes_hema_eosinophils'])?>" id="labRes_hema_eosinophils" data-label="Eosinophils" placeholder="Eosinophils" title="Hematology: Eosinophils" />
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_hema_basophils" data-label="Basophils" placeholder="Basophils" title="Hematology: Basophils" />
+                        <input type="text" value="<?php displayValue($laboratoryResult['labRes_hema_basophils'])?>" id="labRes_hema_basophils" data-label="Basophils" placeholder="Basophils" title="Hematology: Basophils" />
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_hema_rbc" data-label="Red Blood Cell" placeholder="Red Blood Cell" title="Hematology: Red Blood Cell" />
+                        <input type="text" value="<?php displayValue($laboratoryResult['labRes_hema_rbc'])?>" id="labRes_hema_rbc" data-label="Red Blood Cell" placeholder="Red Blood Cell" title="Hematology: Red Blood Cell" />
                     </div>
                 </div>
 
@@ -160,46 +205,46 @@ if (isset($_POST['generatelaboratoryResult'])) {
                         </h4>
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_urin_color" data-label="Color" placeholder="Color" title="Urinalysis: Color" />
+                        <input type="text" value="<?php displayValue($laboratoryResult['labRes_urin_color'])?>" id="labRes_urin_color" data-label="Color" placeholder="Color" title="Urinalysis: Color" />
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_urin_transparency" data-label="Transparency" placeholder="Transparency" title="Urinalysis: Transparency" />
+                        <input type="text" value="<?php displayValue($laboratoryResult['labRes_urin_transparency'])?>" id="labRes_urin_transparency" data-label="Transparency" placeholder="Transparency" title="Urinalysis: Transparency" />
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_urin_reaction" data-label="Reaction" placeholder="Reaction" title="Urinalysis: Reaction" />
+                        <input type="text" value="<?php displayValue($laboratoryResult['labRes_urin_reaction'])?>" id="labRes_urin_reaction" data-label="Reaction" placeholder="Reaction" title="Urinalysis: Reaction" />
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_urin_gravity" data-label="Specific Gravity" placeholder="Specific Gravity" title="Urinalysis: Specific Gravity" />
+                        <input type="text" value="<?php displayValue($laboratoryResult['labRes_urin_gravity'])?>" id="labRes_urin_gravity" data-label="Specific Gravity" placeholder="Specific Gravity" title="Urinalysis: Specific Gravity" />
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_urin_protein" data-label="Protein" placeholder="Protein" title="Urinalysis: Protein" />
+                        <input type="text" value="<?php displayValue($laboratoryResult['labRes_urin_protein'])?>" id="labRes_urin_protein" data-label="Protein" placeholder="Protein" title="Urinalysis: Protein" />
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_urin_glucose" data-label="Glucose" placeholder="Glucose" title="Urinalysis: Glucose" />
+                        <input type="text" value="<?php displayValue($laboratoryResult['labRes_urin_glucose'])?>" id="labRes_urin_glucose" data-label="Glucose" placeholder="Glucose" title="Urinalysis: Glucose" />
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_urin_wbc" data-label="Wbc" placeholder="Wbc" title="Urinalysis: Wbc" />
+                        <input type="text" value="<?php displayValue($laboratoryResult['labRes_urin_wbc'])?>" id="labRes_urin_wbc" data-label="Wbc" placeholder="Wbc" title="Urinalysis: Wbc" />
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_urin_rbc" data-label="Rbc" placeholder="Rbc" title="Urinalysis: Rbc" />
+                        <input type="text" value="<?php displayValue($laboratoryResult['labRes_urin_rbc'])?>" id="labRes_urin_rbc" data-label="Rbc" placeholder="Rbc" title="Urinalysis: Rbc" />
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_urin_mucous" data-label="Mucous Threads" placeholder="Mucous Threads" title="Urinalysis: Mucous Threads" />
+                        <input type="text" value="<?php displayValue($laboratoryResult['labRes_urin_mucous'])?>" id="labRes_urin_mucous" data-label="Mucous Threads" placeholder="Mucous Threads" title="Urinalysis: Mucous Threads" />
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_urin_epithelial" data-label="Epithelial Cells" placeholder="Epithelial Cells" title="Urinalysis: Epithelial Cells" />
+                        <input type="text" value="<?php displayValue($laboratoryResult['labRes_urin_epithelial'])?>" id="labRes_urin_epithelial" data-label="Epithelial Cells" placeholder="Epithelial Cells" title="Urinalysis: Epithelial Cells" />
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_urin_amorphous" data-label="Amorphous Urates" placeholder="Amorphous Urates" title="Urinalysis: Amorphous Urates" />
+                        <input type="text" value="<?php displayValue($laboratoryResult['labRes_urin_amorphous'])?>" id="labRes_urin_amorphous" data-label="Amorphous Urates" placeholder="Amorphous Urates" title="Urinalysis: Amorphous Urates" />
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_urin_bacteria" data-label="Bacteria" placeholder="Bacteria" title="Urinalysis: Bacteria" />
+                        <input type="text" value="<?php displayValue($laboratoryResult['labRes_urin_bacteria'])?>" id="labRes_urin_bacteria" data-label="Bacteria" placeholder="Bacteria" title="Urinalysis: Bacteria" />
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_urin_cast" data-label="Cast" placeholder="Cast" title="Urinalysis: Cast" />
+                        <input type="text" value="<?php displayValue($laboratoryResult['labRes_urin_cast'])?>" id="labRes_urin_cast" data-label="Cast" placeholder="Cast" title="Urinalysis: Cast" />
                     </div>
                     <div class="col-span-1">
-                        <input type="text" id="labRes_urin_crystals" data-label="Crystals" placeholder="Crystals" title="Urinalysis: Crystals" />
+                        <input type="text" value="<?php displayValue($laboratoryResult['labRes_urin_crystals'])?>" id="labRes_urin_crystals" data-label="Crystals" placeholder="Crystals" title="Urinalysis: Crystals" />
                     </div>
                 </div>
 
@@ -208,7 +253,12 @@ if (isset($_POST['generatelaboratoryResult'])) {
                     <input type="hidden" name="labRes_user_FK" value="<?php echo $_SESSION['userId']; ?>" />
          
                     <button type="button" class="btn <?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0" onClick="laboratoryResultModal.close();">Cancel</button>
-                    <input type="submit" name="generatelaboratoryResult" value="Generate" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto mb-2 sm:mb-0">
+
+                    <?php if(!empty($laboratoryResult)) { ?>
+                        <input type="submit" name="updateLaboratoryResult" value="Save Changes" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto mb-2 sm:mb-0">
+                    <?php } else { ?>
+                        <input type="submit" name="generateLaboratoryResult" value="Generate" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto mb-2 sm:mb-0">
+                    <?php } ?>
                 </div>
         </div>
     </dialog>
