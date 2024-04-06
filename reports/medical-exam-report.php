@@ -1,47 +1,5 @@
 <?php
-// error_reporting(E_ALL);
-// ini_set('display_errors', 1);
-ob_start();
-session_start();
-
-$live = 'app.globalhealth-diagnostics.com';
-$liveURL = "https://app.globalhealth-diagnostics.com";
-$devURL = "http://localhost/globalhealth-php";
-$baseURL = ($_SERVER['HTTP_HOST'] == $live) ? $liveURL : $devURL;
-
-// Check if logged in
-if(!isset($_SESSION["valid"])){
-    header("location:" . $baseURL . "/login.php");
-    exit();
-}
-
-// Check if ID is set
-if (!isset($_GET['id'])) {
-    header("location:" . $baseURL . "/page-not-found.php");
-    exit();
-}
-
-include("../connection.php");
-include("../globals.php");
-require('../fpdf/fpdf.php');
-
-$id = $_GET['id'];
-$apeDetails = fetchApeDetailsById($conn, $id);
-$orgDetails = fetchOrgDetailsById($conn, $apeDetails['organizationId']);
-$medExamReports = getMedExamReport($conn, $id);
-
-// If not admin, check if user org and patient org is the same
-if( $_SESSION['role'] != 1 ) {
-    if( $_SESSION['organizationId'] != $apeDetails['organizationId'] ) {
-        header("location:" . $baseURL . "/page-not-found.php");
-        exit();
-    }
-}
-
-// list($imageWidth, $imageHeight) = getimagesize('../images/radiology-report.jpg');
-// print_pre($medExamReports);
-// die;
-
+include("report-config.php");
 
 class PDF extends FPDF {
 
@@ -132,6 +90,8 @@ class PDF extends FPDF {
 
 }
 
+$medExamReports = getMedExamReport($conn, $id);
+
 // Instanciation of inherited class
 $pdf = new PDF();
 $vw = $pdf->GetPageWidth();
@@ -190,8 +150,6 @@ $pdf->thFontStyle();
 $pdf->Cell(25, $lineHeight,' Home Address: ', $border, $toRight, 'L', true);
 $pdf->tdFontStyle();
 $pdf->MultiCell(0, $lineHeight, $space.$apeDetails['homeAddress'].$space, $border);
-
-
 
 $pdf->Cell(0, 1,'', 'T', $toBegin);
 
@@ -260,7 +218,6 @@ $pdf->row('Hematological:', $medExamReports['medExamReport_system_hematological'
 $pdf->row('Others:', $medExamReports['medExamReport_system_others'] . '     ' . $medExamReports['medExamReport_system_others_note']);
 $pdf->ln(10);
 
-
 $pdf->thFontStyle();
 $pdf->MultiCell(190, $lineHeight, ' V. PHYSICAL EXAMINATION: ', 0);
 
@@ -317,9 +274,6 @@ $pdf->ln();
 processRow($pdf, 'Breast:', 'medExamReport_physical_breast', $medExamReports);
 processRow($pdf, 'Genitalia:', 'medExamReport_physical_genitalia', $medExamReports);
 
-
-
-
 $pdf->ln(10);
 
 $pdf->thFontStyle();
@@ -356,15 +310,11 @@ $pdf->ln(10);
 $pdf->thFontStyle();
 $pdf->MultiCell(190, $lineHeight, ' RECOMMENDATIONS: ', 0);
 
-
 $pdf->row('Ratings: ', $medExamReports['medExamReport_recommendation_ratings_note'] . '     ' . $medExamReports['medExamReport_recommendation_ratings']);
 $pdf->ln();
 $pdf->row('Remarks: ', $medExamReports['medExamReport_recommendation_remarks']);
 $pdf->ln(30);
 // $pdf->row('Examining Physician:', $medExamReports['medExamReport_recommendation_physicianName']);
-
-
-
 
 $pdf->SetFont('Arial','B', 8);
 $pdf->SetTextColor(17, 24, 39);
@@ -386,5 +336,6 @@ $pdf->Cell(5, 8, '' , '', 0, 'L',);
 $pdf->Cell(9, 8, 'Date:' , '', 0, 'L');
 $pdf->SetFont('Arial','B', 8);
 $pdf->Cell(17, 8, $medExamReports['medExamReport_recommendation_date'], '', 0, 'C');
+
 $pdf->Output();
 $conn->close();
