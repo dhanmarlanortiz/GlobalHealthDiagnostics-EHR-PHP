@@ -128,6 +128,9 @@ print_r($empResult->fetch_assoc());
                     };
                 </script>
             </div>
+            <div class="p-1">
+                <a href="<?php echo base_url(false) . "/employeesExport-APE.php?o=" . $o . "&y=" . $y; ?>" class="<?php echo $classBtnSecondary; ?> w-full sm:w-auto mb-2 sm:mb-0" id="export-result-button">Export Results</a>
+            </div>
         </div>
     </div>
 </main>

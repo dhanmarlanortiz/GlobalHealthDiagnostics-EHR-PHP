@@ -2,7 +2,7 @@
 class radioFPDF extends FPDF {
 
     function Header() {
-        $this->Image('../images/ghd-logo-with-text.png', 10, 10, 60);
+        $this->Image(base_url(false) . '/images/ghd-logo-with-text.png', 10, 10, 60);
         $this->SetFont('Arial','', 8);
         $this->SetTextColor(83,99,113);
         $this->ln(1);
@@ -68,7 +68,7 @@ class radioFPDF extends FPDF {
 }
 
 class RadiologyPDF {
-    function generateRadiologyReport($conn, $id, $fpdfOutput = null) {
+    function generateRadiologyReport($conn, $id) {
 
         /* Radiology Report Data - START */
         $rr_sql = "SELECT * FROM RadiologyReport WHERE APEFK = ?";
@@ -150,27 +150,27 @@ class RadiologyPDF {
         $pdf->AliasNbPages();
         $pdf->AddPage();
 
-        $pdf->Image('../images/ghd-logo-with-text.png', 10, 10, 60);
-        $pdf->SetFont('Arial','', 8);
-        $pdf->SetTextColor(83,99,113);
-        $pdf->ln(1);
-        $pdf->Cell(0,4.5,'3/F LMB Bldg., 158 San Antonio Ave., San Antonio Valley I,', 0, 1, 'R');
-        $pdf->Cell(0,4.5,'Paranaque City, Metro Manila', 0, 1, 'R');
-        $pdf->Cell(0,4.5,'Tel/Fax No. 8825-9964', 0, 1, 'R');
-        $pdf->Ln(10);
+        // $pdf->Image(base_url(false) . '/images/ghd-logo-with-text.png', 10, 10, 60);
+        // $pdf->SetFont('Arial','', 8);
+        // $pdf->SetTextColor(83,99,113);
+        // $pdf->ln(1);
+        // $pdf->Cell(0,4.5,'3/F LMB Bldg., 158 San Antonio Ave., San Antonio Valley I,', 0, 1, 'R');
+        // $pdf->Cell(0,4.5,'Paranaque City, Metro Manila', 0, 1, 'R');
+        // $pdf->Cell(0,4.5,'Tel/Fax No. 8825-9964', 0, 1, 'R');
+        // $pdf->Ln(10);
 
         $pdf->SetFont('Arial','B', 10);
         $pdf->SetTextColor(17, 24, 39);
         $pdf->SetDrawColor(241, 245, 249);
         $pdf->Cell(0,4.5,'RADIOLOGY REPORT', 0, 1, 'L');
 
-        // list($imageWidth, $imageHeight) = getimagesize('../images/radiology-report.jpg');
+        // list($imageWidth, $imageHeight) = getimagesize(base_url(false) . 'images/radiology-report.jpg');
 
         // $aspectRatio = $imageWidth / $imageHeight;
         // $newWidth = $pdf->GetPageWidth();
         // $newHeight = $newWidth / $aspectRatio;
 
-        // $pdf->Image('../images/radiology-report.jpg', 0, 0, $newWidth, $newHeight);
+        // $pdf->Image(base_url(false) . 'images/radiology-report.jpg', 0, 0, $newWidth, $newHeight);
 
         $pdf->SetFont('Arial', '', 12);
 
@@ -233,8 +233,8 @@ class RadiologyPDF {
         $pdf->SetFont('Arial','B', 9);
         $pdf->SetTextColor(17, 24, 39);
         $pdf->SetDrawColor(83,99,113);
-        $pdf->Image('../images/alvin-d-rosario-art.png', 35, 150, 8);
-        $pdf->Image('../images/ernie-caliboso.png', 150, 146, 20);
+        $pdf->Image(base_url(false) . '/images/alvin-d-rosario-art.png', 35, 150, 8);
+        $pdf->Image(base_url(false) . '/images/ernie-caliboso.png', 150, 146, 20);
         $pdf->Cell(10, 8, '' , '', 0, 'L');
         $pdf->Cell(40, 8, 'ALVIN D. ROSARIO RXT' , 'B', 0, 'C');
         $pdf->Cell(70, 8, '' , '', 0, 'L');

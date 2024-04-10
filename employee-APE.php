@@ -224,7 +224,6 @@ include("components/laboratoryResultModal.php");
 $medExamReport = getMedExamReport($conn, $id);
 include("components/medExamReportModal.php");
 
-
 $conn->close();
 
 if($_SESSION['role'] == 1) {
@@ -549,10 +548,12 @@ if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
                     <?php if($_SESSION['role'] == 1) { ?>
                         <a href="<?php echo base_url(false) . '/employees-APE.php?o=' . $o . '&y=' . $y; ?>" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Back</a>
                         <button data-modal-target="default-modal" data-modal-toggle="default-modal" class="<?php echo $classBtnAlternate; ?> w-full sm:w-auto mb-2 sm:mb-0" type="button">Upload Result</button>
+                        <a href="<?php echo base_url(false) . '/employeesExport-APE.php?o=' . $o . '&y=' . $y . '&id=' . $id; ?>" class="<?php echo $classBtnSecondary; ?> w-full sm:w-auto mb-2 sm:mb-0" type="button">Export Results</a>
                         <button type="submit" name="updateDetailsForm" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto mb-2 sm:mb-0">Save Changes</button>
                         <input type="submit" name="deleteRecord" value="Delete Record" class="<?php echo $classBtnDanger; ?> w-full sm:w-auto mb-2 sm:mb-0">
                     <?php } else if($_SESSION['role'] == 2) {  ?>
-                        <a href="<?php echo base_url(false) . '/client'; ?>" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Close</a>
+                        <a href="<?php echo base_url(false) . '/client'; ?>" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Back</a>
+                        <a href="<?php echo base_url(false) . '/employeesExport-APE.php?o=' . $o . '&y=' . $y . '&id=' . $id; ?>" class="<?php echo $classBtnSecondary; ?> w-full sm:w-auto mb-2 sm:mb-0" type="button">Export Results</a>
                     <?php } ?>
                 </div>
 

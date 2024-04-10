@@ -114,18 +114,15 @@ table:before {
 }
 
 .dataTables_wrapper {
-  background-color: #fff;
-  /* Set the background color to white */
+  background-color: #fff; /* Set the background color to white */
 }
 
 .dataTables_wrapper .dataTables_scrollHead {
-  background-color: #f5f5f5;
-  /* Set the header background color to light grey */
+  background-color: #f5f5f5; /* Set the header background color to light grey */
 }
 
 .dataTables_wrapper .dataTables_processing {
-  background-color: #fff;
-  /* Set the processing overlay background color to white */
+  background-color: #fff; /* Set the processing overlay background color to white */
 }
 
 @media screen and (max-width: 639px) {
@@ -144,7 +141,8 @@ table:before {
   color: #15803d !important;
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button:focus {
-  box-shadow: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button:active {
   background: #e5e7eb;
@@ -228,7 +226,10 @@ input[readonly],
 select[readonly],
 input[disabled],
 select[disabled] {
-  user-select: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   background: #f5f5f4;
   border-color: #f5f5f4;
 }
@@ -251,7 +252,7 @@ select[disabled]:focus {
   padding: 0;
   background: transparent;
   border: none;
-  color: #4b5563;
+  color: rgb(75, 85, 99);
   font-size: 12px;
 }
 
@@ -309,16 +310,18 @@ body.is-loading {
 }
 
 .page-loader {
-  position: absolute;
+  position: fixed;
   width: 100%;
   height: 100%;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
   text-align: center;
   display: none;
   background-color: rgba(0, 0, 0, 0.3);
-  animation: modal-pop 0.2s ease-out;
+  -webkit-animation: modal-pop 0.2s ease-out;
+          animation: modal-pop 0.2s ease-out;
 }
 .is-loading .page-loader {
   display: block;
@@ -327,7 +330,8 @@ body.is-loading {
   width: 3.5em;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
   position: absolute;
   z-index: 100;
   background: #fff;
@@ -336,13 +340,15 @@ body.is-loading {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
   margin-top: 45px;
   color: #fff;
 }
 
 main {
   opacity: 1;
+  -webkit-transition: 0.2s;
   transition: 0.2s;
 }
 .is-loading main {
@@ -353,5 +359,3 @@ label:has(+ div [required])::after {
   content: " *";
   color: #ef4444;
 }
-
-/*# sourceMappingURL=main.css.map */

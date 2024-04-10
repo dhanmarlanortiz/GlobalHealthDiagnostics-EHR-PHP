@@ -1,6 +1,6 @@
 <?php
 class LaboratoryPDF {
-    function generateLaboratoryReport($conn, $id, $fpdfOutput = null) {
+    function generateLaboratoryReport($conn, $id) {
         $apeDetails = fetchApeDetailsById($conn, $id);
         $orgDetails = fetchOrgDetailsById($conn, $apeDetails['organizationId']);
         $labResults = fetchLabResultByApeId($conn, $id);
@@ -139,9 +139,9 @@ class LaboratoryPDF {
         $pdf->Cell(0, 1,'', 'T', $toBegin);
         $pdf->ln(57);
 
-        $pdf->Image('../images/nova-angela-buyagan.png', 11.5, 230, 50);
-        $pdf->Image('../images/angel-baquiran.png', 75, 230, 40);
-        $pdf->Image('../images/noel-c-santos.png', 140, 230, 60);
+        $pdf->Image(base_url(false) . '/images/nova-angela-buyagan.png', 11.5, 230, 50);
+        $pdf->Image(base_url(false) . '/images/angel-baquiran.png', 75, 230, 40);
+        $pdf->Image(base_url(false) . '/images/noel-c-santos.png', 140, 230, 60);
 
         $pdf->row('Computer-generated report.', '', '');
 
@@ -155,7 +155,7 @@ class LaboratoryPDF {
 class labFPDF extends FPDF {
     
     function Header() {
-        $this->Image('../images/ghd-logo-with-text.png', 10, 10, 60);
+        $this->Image(base_url(false) . '/images/ghd-logo-with-text.png', 10, 10, 60);
         $this->SetFont('Arial','', 8);
         $this->SetTextColor(83,99,113);
         $this->ln(1);

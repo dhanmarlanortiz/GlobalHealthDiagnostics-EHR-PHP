@@ -31,7 +31,8 @@ body {
 
 
 .page-loader {
-    position: absolute;
+    position: fixed;
+    // position: absolute;
     width: 100%;
     height: 100%;
     top: 50%;
@@ -41,7 +42,6 @@ body {
     display: none;
     background-color: rgba(0, 0, 0, 0.3);
     animation: modal-pop 0.2s ease-out;
-
 
     .is-loading & {
         display: block;

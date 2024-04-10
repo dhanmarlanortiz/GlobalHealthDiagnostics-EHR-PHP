@@ -45,7 +45,7 @@ if ($orgDetailsResult !== false && $orgDetailsResult->num_rows > 0) {
         $organizationName = $orgDetails['name'];
     }
 }
-// echo $empJSON;
+
 ?>
 <header class="bg-white shadow-sm">
     <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
@@ -146,6 +146,7 @@ if ($orgDetailsResult !== false && $orgDetailsResult->num_rows > 0) {
             <div class="p-1">
                 <a href="<?php base_url()?>/organizations.php" class="btn btn-default btn-sm text-xs rounded normal-case h-9 w-full sm:w-auto mb-2 sm:mb-0">Back</a>
                 <a href="<?php echo base_url(false) . "/employeesImport-APE.php?o=" . $o . "&y=" . $y; ?>" class="<?php echo $classBtnAlternate; ?> w-full sm:w-auto mb-2 sm:mb-0">Import Data</a>
+                <a href="<?php echo base_url(false) . "/employeesExport-APE.php?o=" . $o . "&y=" . $y; ?>" class="<?php echo $classBtnSecondary; ?> w-full sm:w-auto mb-2 sm:mb-0" id="export-result-button">Export Results</a>
                 <a href="<?php echo base_url(false) . "/employeeCreate-APE.php?o=" . $o . "&y=" . $y; ?>" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto mb-2 sm:mb-0">APE Registration</a>
                 
                 <?php
