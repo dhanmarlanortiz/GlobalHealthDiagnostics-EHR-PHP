@@ -1,11 +1,14 @@
 <?php
 class MedicalExamPDF {
-    function generateMedicalExamReport($conn, $id) {
+    function generateMedicalExamReport($conn, $id, $pdf = null) {
         $apeDetails = fetchApeDetailsById($conn, $id);
         $medExamReports = getMedExamReport($conn, $id);
 
         // Instanciation of inherited class
-        $pdf = new MedFPDF();
+        if(null == $pdf) {
+            $pdf = new MedFPDF();
+        }
+        
         $vw = $pdf->GetPageWidth();
         $border = "T L R";
         $lineHeight = 8;

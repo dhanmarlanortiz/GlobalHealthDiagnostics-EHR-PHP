@@ -40,7 +40,7 @@ body {
     transform: translate(-50%, -50%);
     text-align: center;
     display: none;
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.5);
     animation: modal-pop 0.2s ease-out;
 
     .is-loading & {

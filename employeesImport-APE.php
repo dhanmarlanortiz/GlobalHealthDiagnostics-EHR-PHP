@@ -206,7 +206,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-createMainHeader($organizationName, array("Home", "Organizations", $organizationName, "Annual Physical Examination", "Import Data"));
+createMainHeader($organizationName, array("Home", "Organizations", $organizationName, "Annual Physical Examination", "Import Data"), "Import Data");
 ?>
 <main class='<?php echo $classMainContainer; ?>'>
     <form action="employeesImport-APE.php?o=<?php echo $o . "&y=" . $y; ?>" method="post" enctype="multipart/form-data">
@@ -214,7 +214,7 @@ createMainHeader($organizationName, array("Home", "Organizations", $organization
             <ul class="flex -mb-px">
                 <li class="mr-2">
                     <a href="<?php echo base_url(false) . "/employees-APE.php?o=" . $o . "&y=" . $y; ?>" class="inline-block p-2 md:p-4 text-green-700 border-b-2 border-green-700 rounded-t-lg active text-left text-xs md:text-sm" aria-current="page">
-                        Annual Physical Examination
+                        Import Annual Physical Examination Data
                     </a>
                 </li>
                 <!-- <li class="mr-2">

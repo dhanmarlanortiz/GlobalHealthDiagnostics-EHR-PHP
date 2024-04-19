@@ -23,7 +23,6 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     $empQuery = "SELECT * FROM APE WHERE organizationId = '$o' AND YEAR(dateRegistered) = '$y'";
     $empResult = $conn->query($empQuery);
 
-    
     $empResultArray = array();
     while ($row = mysqli_fetch_assoc($empResult)) {
         $empResultArray[] = $row;
@@ -84,6 +83,7 @@ if ($orgDetailsResult !== false && $orgDetailsResult->num_rows > 0) {
                 <thead>
                     <tr>
                         <th style='max-width: 54px;'>Head Count</th>
+                        <th>Employee&nbsp;No.</th>
                         <th>Full Name</th>
                         <th style='max-width: 74px;'>Control Number</th>
                         <th style='max-width: 20px;'>Age</th>
@@ -105,6 +105,7 @@ if ($orgDetailsResult !== false && $orgDetailsResult->num_rows > 0) {
                 "data": empJSON,
                 "columns": [
                     {"data": "headCount"},
+                    {"data": "employeeNumber"},
                     {
                         "data": null,
                         "render": function (data, type, row) {

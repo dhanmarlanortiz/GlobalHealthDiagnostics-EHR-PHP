@@ -25,7 +25,6 @@ if (!isset($_GET['id'])) {
 include("../connection.php");
 include("../globals.php");
 require('../fpdf/fpdf.php');
-require('../fpdf/fpdf_merge.php');
 
 $id = $_GET['id'];
 $apeDetails = fetchApeDetailsById($conn, $id);

@@ -112,11 +112,18 @@ function createFormHeader($header = 'Form') {
         </div>';
 }
 
-function createMainHeader($headerText = "", $pagination = array()) {
+function createMainHeader($headerText = "", $pagination = array(), $subText = null) {
     echo '
         <header class="bg-white shadow-sm">
             <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                <h1 class="text-3xl font-bold tracking-tight text-gray-900 mb-2">' . $headerText . '</h1>
+                <h1 class="text-3xl font-bold tracking-tight text-gray-900 mb-2">
+                    <span class="pr-3">' . $headerText . '</span>';
+
+                    if(null !== $subText) {
+                        echo '<span class="font-normal text-xl border-l-2 border-green-700 pl-3">' . $subText . '</span>';
+                    }
+
+    echo        '</h1>
                 <div class="text-xs breadcrumbs p-0 text-gray-800 overflow-hidden">
                     <ul>';
                         foreach ($pagination as $key => $value) {
@@ -433,7 +440,7 @@ function getMedExamReport($conn, $ape_fk = null) {
 }
 
 function fetchApeDetailsById($conn, $id) {
-    $sql = "SELECT firstName, middleName, lastName, age, sex, homeAddress, civilStatus, organizationId FROM APE WHERE id = ?";
+    $sql = "SELECT firstName, middleName, lastName, age, sex, homeAddress, civilStatus, organizationId, controlNumber FROM APE WHERE id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('i', $id);
     $stmt->execute();
@@ -459,6 +466,38 @@ function fetchOrgDetailsById($conn, $id) {
         $row = $result->fetch_assoc();
 
         return $row;
+    } else {
+        return;
+    }
+}
+
+function fetchMedExamDetailsById($conn, $medExam_fk) {
+    $me_sql = "SELECT * FROM MedicalExamination WHERE id = ?";
+    $me_stmt = $conn->prepare($me_sql);
+    $me_stmt->bind_param('i', $medExam_fk);
+    $me_stmt->execute();
+    $me_sqlresult = $me_stmt->get_result();
+
+    if ($me_sqlresult->num_rows > 0) {
+        $me_row = $me_sqlresult->fetch_assoc();
+        return $me_row;
+        
+    } else {
+        return;
+    }
+}
+
+function fetchRadReportDetailsByAPEfk($conn, $medExam_fk) {
+    $rr_sql = "SELECT * FROM RadiologyReport WHERE APEFK = ?";
+        $rr_stmt = $conn->prepare($rr_sql);
+        $rr_stmt->bind_param('i', $medExam_fk);
+        $rr_stmt->execute();
+        $rr_sqlresult = $rr_stmt->get_result();
+
+    if ($rr_sqlresult->num_rows > 0) {
+        $rr_row = $rr_sqlresult->fetch_assoc();
+        return $rr_row;
+        
     } else {
         return;
     }
