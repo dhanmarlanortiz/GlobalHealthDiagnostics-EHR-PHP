@@ -24,7 +24,7 @@ class MedicalExamPDF {
         $pdf->SetDrawColor(241, 245, 249);
         $pdf->Cell(0,4.5,'MEDICAL EXAMINATION REPORT', 0, 1, 'L');
         
-        $rating = strtolower(($medExamReports['medExamReport_recommendation_ratings'] ?? null));
+        $rating = strtolower(($medExamReports['medExamReport_recommendation_ratings'] ?? ''));
         if($rating == 'fit') {
             $pdf->Image(base_url(false) . '/images/badge-fit.jpg', 165, 30, 35);
         } else if($rating == 'unfit') {

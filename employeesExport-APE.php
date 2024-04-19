@@ -2,9 +2,9 @@
 $start_time = microtime(true);
 ini_set('max_execution_time', '0'); // for infinite time of execution 
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
 
 ob_start();
 session_start();
