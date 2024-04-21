@@ -109,7 +109,8 @@ if ($orgDetailsResult !== false && $orgDetailsResult->num_rows > 0) {
                     {
                         "data": null,
                         "render": function (data, type, row) {
-                            return row.lastName + ', ' + row.firstName + ', ' + row.middleName;
+                            var middleName = (row.middleName != '' ? (', ' . row.middleName) : '');
+                            return row.lastName + ', ' + row.firstName + middleName;
                         }
                     },
                     {"data": "controlNumber"},
