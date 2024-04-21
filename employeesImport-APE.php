@@ -210,20 +210,6 @@ createMainHeader($organizationName, array("Home", "Organizations", $organization
 ?>
 <main class='<?php echo $classMainContainer; ?>'>
     <form action="employeesImport-APE.php?o=<?php echo $o . "&y=" . $y; ?>" method="post" enctype="multipart/form-data">
-    <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200">
-            <ul class="flex -mb-px">
-                <li class="mr-2">
-                    <a href="<?php echo base_url(false) . "/employees-APE.php?o=" . $o . "&y=" . $y; ?>" class="inline-block p-2 md:p-4 text-green-700 border-b-2 border-green-700 rounded-t-lg active text-left text-xs md:text-sm" aria-current="page">
-                        Import Annual Physical Examination Data
-                    </a>
-                </li>
-                <!-- <li class="mr-2">
-                    <a href="#" class="inline-block p-2 md:p-4 border-b-2 border-transparent rounded-t-lg text-left text-xs md:text-sm hover:text-gray-600 hover:border-gray-300">
-                        Pre-employment Medical Assessment
-                    </a>
-                </li> -->
-            </ul>
-        </div>
         <div class="bg-white p-2 md:p-4">
             <div class="flex items-center justify-center w-full">
                 <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50">

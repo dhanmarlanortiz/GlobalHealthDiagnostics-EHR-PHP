@@ -24,7 +24,6 @@ function setActiveNav($pageNames, $screen) {
 }
 ?>
 
-
 <nav class="bg-green-700">
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
         <div class="relative flex h-16 items-center justify-between">
@@ -48,7 +47,7 @@ function setActiveNav($pageNames, $screen) {
                     <div class="flex space-x-4">
                         <a href="<?php base_url(); ?>/home.php" class="<?php setActiveNav(array('home'), 'desktop') ?>">Home</a>
                         <a href="<?php base_url(); ?>/users.php" class="<?php setActiveNav(array('user', 'users', 'createUser'), 'desktop') ?>">Users</a>
-                        <a href="<?php base_url(); ?>/organizations.php" class="<?php setActiveNav(array('organization', 'organizations', 'organizationDetails', 'createOrganization', 'employees-APE', 'employeeCreate-APE', 'employee-APE', 'employeesImport-APE', 'employeeViewResult-APE', 'employeesExport-APE'), 'desktop') ?>">Organizations</a>
+                        <a href="<?php base_url(); ?>/organizations.php" class="<?php setActiveNav(array('organization', 'organizations', 'organizationDetails', 'createOrganization', 'employees-APE', 'employeeCreate-APE', 'employee-APE', 'employeesImport-APE', 'employeeViewResult-APE', 'employeesExport-APE', 'employeesCSV-APE'), 'desktop') ?>">Organizations</a>
                     </div>
                 </div>
             </div>
@@ -62,7 +61,7 @@ function setActiveNav($pageNames, $screen) {
         <div class="space-y-1 px-2 pb-3 pt-2">
             <a href="<?php base_url(); ?>/home.php" class="<?php setActiveNav(array('home'), 'mobile') ?>">Home</a>
             <a href="<?php base_url(); ?>/users.php" class="<?php setActiveNav(array('user', 'users', 'createUser'), 'mobile') ?>">Users</a>
-            <a href="<?php base_url(); ?>/organizations.php" class="<?php setActiveNav(array('organization', 'organizations', 'organizationDetails', 'createOrganization', 'employees-APE', 'employeeCreate-APE', 'employee-APE', 'employeesImport-APE', 'employeeViewResult-APE', 'employeesExport-APE'), 'mobile') ?>">Organizations</a>
+            <a href="<?php base_url(); ?>/organizations.php" class="<?php setActiveNav(array('organization', 'organizations', 'organizationDetails', 'createOrganization', 'employees-APE', 'employeeCreate-APE', 'employee-APE', 'employeesImport-APE', 'employeeViewResult-APE', 'employeesExport-APE', 'employeesCSV-APE'), 'mobile') ?>">Organizations</a>
         </div>
     </div>
 </nav>
@@ -79,5 +78,4 @@ function setActiveNav($pageNames, $screen) {
             mobileMenu.addClass("hidden");
         }
     });
-
 </script>

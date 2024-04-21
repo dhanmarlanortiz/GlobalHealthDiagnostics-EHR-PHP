@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 $orgDetailsResult = fetchOrgDetailsById($conn, $o);
 $organizationName = (null !== $orgDetailsResult) ? $orgDetailsResult["name"] : "Not Found";
 
-createMainHeader($organizationName, array("Home", "Organizations", $organizationName, "Annual Physical Examination", "Export Results"), "Export Results");
+createMainHeader($organizationName, array("Home", "Organizations", $organizationName, "Annual Physical Examination", "Export Results (PDF)"), "Export Results (PDF)");
 
 if($id != 0){
     $apeQuery = "SELECT * FROM APE WHERE organizationId = '$o' AND id = '$id'";
@@ -220,16 +220,6 @@ $zipPath = $folder. $zipFilename;
 ?>
 
 <main class='<?php echo $classMainContainer; ?>'>
-    <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200">
-        <ul class="flex -mb-px">
-            <li class="mr-2">
-                <a href="" class="inline-block p-2 md:p-4 text-green-700 border-b-2 border-green-700 rounded-t-lg active text-left text-xs md:text-sm" aria-current="page">
-                    Export Annual Physical Examination Results
-                </a>
-            </li>
-        </ul>
-    </div>
-
     <div class="bg-white p-2 md:p-4">
         <div class='p-1 overflow-auto'>
             
