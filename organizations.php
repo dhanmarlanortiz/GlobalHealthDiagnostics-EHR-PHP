@@ -47,7 +47,7 @@ $result = $conn->query($sql);
                     <thead>
                         <tr>
                             <th>Organizations Name</th>
-                            <th>Office Address</th>
+                            <th style='max-width: 200px;'>Office Address</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -58,11 +58,16 @@ $result = $conn->query($sql);
                             "<td>" . $org["name"] . "</td>" .
                             "<td>" . $org["address"] . "</td>".
                             "<td class='text-right'>
-                                <a class='" . $classTblBtnSecondary . "  mr-1' href='" . base_url(false) . "/employees-APE.php?o=" . $org['id'] . "&y=" . date('Y') . "' title='View Medical Service Record'>
-                                    View Records
+                                <a class='" . $classTblBtnSecondary . " mb-1 lg:mb-0 lg:mr-1 w-full lg:w-auto' href='" . base_url(false) . "/employees-APE.php?o=" . $org['id'] . "&y=" . date('Y') . "' title='View Medical Service Record'>
+                                    View
                                 </a>
-                                <a class='" . $classTblBtnPrimary . " ' href='" . base_url(false) . "/organization.php?id=" . $org['id'] . "' title='View or edit organization details'>
-                                    Edit Details
+
+                                <a class='" . $classTblBtnAlternate . " mb-1 lg:mb-0 lg:mr-1 w-full lg:w-auto' href='" . base_url(false) . "/employeesCSV-APE.php?o=" . $org['id'] . "&y=" . date('Y') . "' title='Export CSV'>
+                                    Export
+                                </a>
+
+                                <a class='" . $classTblBtnPrimary . " w-full lg:w-auto' href='" . base_url(false) . "/organization.php?id=" . $org['id'] . "' title='View or edit organization details'>
+                                    Edit
                                 </a>
                             </td>".                         
                         "</tr>";

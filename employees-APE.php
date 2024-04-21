@@ -107,7 +107,7 @@ if ($orgDetailsResult !== false && $orgDetailsResult->num_rows > 0) {
                     {
                         "data": null,
                         "render": function (data, type, row) {
-                            var middleName = (row.middleName != '' ? (', ' . row.middleName) : '');
+                            var middleName = (row.middleName != null ? (', ' + row.middleName) : '');
                             return row.lastName + ', ' + row.firstName + middleName;
                         }
                     },
