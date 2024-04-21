@@ -29,6 +29,9 @@ global $classTblBtnAlternate;
 $classInputPrimary = "block w-full rounded py-1.5 px-2 text-gray-900 border-gray-300 placeholder:text-gray-400 focus:border-green-700 focus:ring-0 focus:bg-green-50 sm:text-sm sm:leading-6";
 global $classInputPrimary;
 
+$classBtnSuccess = "btn btn-success btn-sm text-xs text-white hover:bg-green-500 rounded normal-case h-9";
+global $classBtnSuccess;
+
 $classMainContainer = "mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8";
 global $classMainContainer;
 

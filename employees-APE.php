@@ -1,12 +1,14 @@
 <?php 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 ob_start();
 session_start();
+
 
 require_once('connection.php');
 include('header.php');
 preventAccess([['role' => 2, 'redirect' => 'client/index.php']]);
 include('navbar.php');
-
 function test_input($data) {
     $data = trim($data);
     $data = stripslashes($data);
@@ -28,12 +30,8 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $empResultArray[] = $row;
     }
     
-    // mysqli_free_result($empResult);
     $empJSON = json_encode($empResultArray);
 }
-
-$orgQuery = "SELECT * FROM Organization";
-$orgResult = $conn->query($orgQuery);
 
 $organizationName = "";
 $orgDetailsQuery = "SELECT * FROM Organization WHERE id = '$o'";
@@ -148,6 +146,7 @@ if ($orgDetailsResult !== false && $orgDetailsResult->num_rows > 0) {
             <div class="p-1">
                 <a href="<?php base_url()?>/organizations.php" class="btn btn-default btn-sm text-xs rounded normal-case h-9 w-full sm:w-auto mb-2 sm:mb-0">Back</a>
                 <a href="<?php echo base_url(false) . "/employeesImport-APE.php?o=" . $o . "&y=" . $y; ?>" class="<?php echo $classBtnAlternate; ?> w-full sm:w-auto mb-2 sm:mb-0">Import Data</a>
+                <a href="<?php echo base_url(false) . "/employeesCSV-APE.php?o=" . $o . "&y=" . $y; ?>" class="<?php echo $classBtnSuccess; ?> w-full sm:w-auto mb-2 sm:mb-0" id="export-csv-button">Export CSV</a>
                 <a href="<?php echo base_url(false) . "/employeesExport-APE.php?o=" . $o . "&y=" . $y; ?>" class="<?php echo $classBtnSecondary; ?> w-full sm:w-auto mb-2 sm:mb-0" id="export-result-button">Export Results</a>
                 <a href="<?php echo base_url(false) . "/employeeCreate-APE.php?o=" . $o . "&y=" . $y; ?>" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto mb-2 sm:mb-0">APE Registration</a>
                 

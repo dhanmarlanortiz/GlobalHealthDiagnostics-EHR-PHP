@@ -92,7 +92,8 @@ print_r($empResult->fetch_assoc());
                     {
                         "data": null,
                         "render": function (data, type, row) {
-                            return row.lastName + ', ' + row.firstName + ', ' + row.middleName;
+                            var middleName = (row.middleName != '' ? (', ' . row.middleName) : '');
+                            return row.lastName + ', ' + row.firstName + middleName;
                         }
                     },
                     {"data": "controlNumber"},
