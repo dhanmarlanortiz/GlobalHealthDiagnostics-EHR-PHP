@@ -67,7 +67,8 @@ print_r($empResult->fetch_assoc());
                 <thead>
                     <tr>
                         <th style='max-width: 54px;'>Head Count</th>
-                        <th>Full Name</th>
+                        <th class='whitespace-nowrap'>Employee No.</th>
+                        <th class='whitespace-nowrap'>Full Name</th>
                         <th style='max-width: 74px;'>Control Number</th>
                         <th style='max-width: 20px;'>Age</th>
                         <th style='max-width: 40px;'>Gender</th>
@@ -93,8 +94,9 @@ print_r($empResult->fetch_assoc());
                     {
                         "data": null,
                         "render": function (data, type, row) {
-                            var middleName = (row.middleName != null ? (', ' + row.middleName) : '');
-                            return row.lastName + ', ' + row.firstName + middleName;
+                            var mName = (row.middleName.length > 0 ? (', ' + row.middleName) : '');
+                            var fName = (row.firstName.length > 0 ? (', ' + row.firstName) : '');
+                            return row.lastName + fName + mName;
                         }
                     },
                     {"data": "controlNumber"},

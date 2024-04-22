@@ -15,7 +15,7 @@
 	<meta name="color-scheme" content="light only">
 
 	<title>Global Health Diagnostics</title>
-	<link rel="shortcut icon" href="images/ghd-logo.png" type="image/x-icon">
+	<link rel="shortcut icon" href="<?php base_url(); ?>/images/ghd-logo.png" type="image/x-icon">
 
 	<?php 
 	$serverName = $_SERVER['SERVER_NAME']; // or $_SERVER['HTTP_HOST']

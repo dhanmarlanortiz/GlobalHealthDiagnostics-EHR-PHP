@@ -81,8 +81,8 @@ if ($orgDetailsResult !== false && $orgDetailsResult->num_rows > 0) {
                 <thead>
                     <tr>
                         <th style='max-width: 54px;'>Head Count</th>
-                        <th>Employee&nbsp;No.</th>
-                        <th>Full Name</th>
+                        <th class='whitespace-nowrap'>Employee No.</th>
+                        <th class='whitespace-nowrap'>Full Name</th>
                         <th style='max-width: 74px;'>Control Number</th>
                         <th style='max-width: 20px;'>Age</th>
                         <th style='max-width: 40px;'>Gender</th>
@@ -107,8 +107,9 @@ if ($orgDetailsResult !== false && $orgDetailsResult->num_rows > 0) {
                     {
                         "data": null,
                         "render": function (data, type, row) {
-                            var middleName = (row.middleName != null ? (', ' + row.middleName) : '');
-                            return row.lastName + ', ' + row.firstName + middleName;
+                            var mName = (row.middleName.length > 0 ? (', ' + row.middleName) : '');
+                            var fName = (row.firstName.length > 0 ? (', ' + row.firstName) : '');
+                            return row.lastName + fName + mName;
                         }
                     },
                     {"data": "controlNumber"},
