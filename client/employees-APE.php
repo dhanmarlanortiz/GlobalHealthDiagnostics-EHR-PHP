@@ -89,6 +89,7 @@ print_r($empResult->fetch_assoc());
                 "data": empJSON,
                 "columns": [
                     {"data": "headCount"},
+                    {"data": "employeeNumber"},
                     {
                         "data": null,
                         "render": function (data, type, row) {
