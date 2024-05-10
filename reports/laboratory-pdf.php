@@ -142,9 +142,9 @@ class LaboratoryPDF {
             $pdf->Cell(0, 1,'', 'T', $toBegin);
             $pdf->ln(57);
 
-            $pdf->Image(base_url(false) . '/images/nova-angela-buyagan.png', 11.5, 230, 50);
-            $pdf->Image(base_url(false) . '/images/angel-baquiran.png', 75, 230, 40);
-            $pdf->Image(base_url(false) . '/images/noel-c-santos.png', 140, 230, 60);
+            $pdf->Image(base_url(false) . '/images/nova-angela-buyagan-min.png', 11.5, 230, 50);
+            $pdf->Image(base_url(false) . '/images/angel-baquiran-min.png', 75, 230, 37);
+            $pdf->Image(base_url(false) . '/images/noel-c-santos-min.png', 120, 225, 65);
 
             $pdf->row('Computer-generated report.', '', '');
 
