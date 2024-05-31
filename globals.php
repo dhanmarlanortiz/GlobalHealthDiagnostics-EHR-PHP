@@ -591,7 +591,20 @@ function sectionClose() {
 
 function getLocation($conn, $id = null) {
     if(null !== $id) {
+        $sql = "SELECT * FROM Location WHERE loc_id = '$id'";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
     
+        $results = $stmt->get_result();
+        $resultsArray = array();
+    
+        if ($results !== false && $results->num_rows > 0) {
+            $resultsArray = $results->fetch_assoc();
+        }
+    
+        $stmt->close();
+        return $resultsArray;
+        
     } else {
         $sql = "SELECT * FROM Location";
         $stmt = $conn->prepare($sql);

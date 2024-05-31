@@ -200,9 +200,7 @@ $conn->close();
                 $(this).attr('name', id);
             });
         }
-
     });
-
 </script>
 
 

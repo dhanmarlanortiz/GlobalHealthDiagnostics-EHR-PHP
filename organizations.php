@@ -28,7 +28,7 @@ $result = $conn->query($sql);
     </div>
 </header>
 <main class='<?php echo $classMainContainer; ?>'>
-    <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200">
+    <!-- <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200">
         <ul class="flex -mb-px">
             <li class="mr-2">
                 <a href="" class="inline-block p-2 md:p-4 text-green-700 border-b-2 border-green-700 rounded-t-lg active text-left text-xs md:text-sm" aria-current="page">
@@ -36,7 +36,7 @@ $result = $conn->query($sql);
                 </a>
             </li>
         </ul>
-    </div>
+    </div> -->
 
     <div class="bg-white p-2 md:p-4">
         <?php
