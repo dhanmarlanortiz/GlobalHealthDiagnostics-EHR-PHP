@@ -43,9 +43,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = test_input($_POST["email"]);
     $phone = test_input($_POST["phone"]);
     $address = test_input($_POST["address"]);
+    $location_fk = test_input($_POST["location_fk"]);
   
-    $sql = "INSERT INTO Organization (name, email, phone, address)
-    VALUES ('$name', '$email', '$phone', '$address')";
+    $sql = "INSERT INTO Organization (name, email, phone, address, location_fk)
+    VALUES ('$name', '$email', '$phone', '$address', $location_fk)";
   
     if ($conn->query($sql) === TRUE) {
         create_flash_message('create-success', '<strong>Success!</strong> New Organization has been created.', FLASH_SUCCESS);
@@ -65,6 +66,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
+
+$clinics = getLocation($conn);
 
 $conn->close();
 ?>
@@ -106,6 +109,18 @@ $conn->close();
                     <div class="sm:col-span-2">
                         <input id="address" type="text" data-label="Office Address" required />
                     </div>                
+                    <div class="sm:col-span-2">
+                        <select name="location_fk" id="location_fk" data-label="Clinic Address" required>
+                            <option value='' selected disabled>Select</option>
+                            <?php
+                                if (!empty($clinics)) {
+                                    foreach ($clinics as $clinic) {
+                                        echo "<option value='" . $clinic['loc_id'] . "'>" . $clinic['loc_address'] . "</option>";
+                                    }
+                                }
+                            ?>
+                        </select>
+                    </div> 
                 </div>
             </div>
         </div>

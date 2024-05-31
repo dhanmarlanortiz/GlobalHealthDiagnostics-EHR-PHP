@@ -587,3 +587,27 @@ function sectionOpen($sectionClass=null, $sectionId=null) {
 function sectionClose() {
     echo "</section>";
 }
+
+
+function getLocation($conn, $id = null) {
+    if(null !== $id) {
+    
+    } else {
+        $sql = "SELECT * FROM Location";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+    
+        $results = $stmt->get_result();
+        $resultsArray = array();
+    
+        if ($results !== false && $results->num_rows > 0) {
+            while ($result = $results->fetch_assoc()) {
+                array_push($resultsArray, $result);
+            }
+        }
+    
+        $stmt->close();
+    
+        return $resultsArray;
+    }
+}

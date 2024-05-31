@@ -7,6 +7,8 @@ include('header.php');
 preventAccess([['role' => 2, 'redirect' => 'client/index.php']]);
 include('navbar.php');
 
+$clinics = getLocation($conn);
+
 function test_input($data) {
     $data = trim($data);
     $data = stripslashes($data);
@@ -27,6 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = test_input( $_POST['email'] );
     $phone = test_input( $_POST['phone'] );
     $address = test_input( $_POST['address'] );
+    $location_fk = test_input( $_POST['location_fk'] );
 
     if(isset( $_POST['saveChanges'] )) {
 
@@ -34,7 +37,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             name = '$name',
                             email = '$email',
                             phone = '$phone',
-                            address = '$address'
+                            address = '$address',
+                            location_fk = '$location_fk'
                             WHERE id = $id";
 
         if ($conn->query($orgUpdateQuery) === TRUE) {
@@ -140,6 +144,18 @@ $conn->close();
                         </div>
                         <div class="sm:col-span-2">
                             <input type="text" id="address" data-label="Office Address" />
+                        </div> 
+                        <div class="sm:col-span-2">
+                            <select name="location_fk" id="location_fk" data-label="Clinic Address" required>
+                                <option value='' selected disabled>Select</option>
+                                <?php
+                                    if (!empty($clinics)) {
+                                        foreach ($clinics as $clinic) {
+                                            echo "<option value='" . $clinic['loc_id'] . "' " . (($_POST['location_fk'] == $clinic['loc_id']) ? 'selected' : '') . ">" . $clinic['loc_address'] . "</option>";
+                                        }
+                                    }
+                                ?>
+                            </select>
                         </div> 
                     </div>
                 </div>
