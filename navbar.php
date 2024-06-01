@@ -47,7 +47,7 @@ function setActiveNav($pageNames, $screen) {
                     <div class="flex space-x-4">
                         <a href="<?php base_url(); ?>/home.php" class="<?php setActiveNav(array('home'), 'desktop') ?>">Home</a>
                         <a href="<?php base_url(); ?>/users.php" class="<?php setActiveNav(array('user', 'users', 'createUser'), 'desktop') ?>">Users</a>
-                        <a href="<?php base_url(); ?>/locations.php" class="<?php setActiveNav(array('location', 'locations', 'locationDetails', 'createLocation'), 'desktop') ?>">Locations</a>
+                        <a href="<?php base_url(); ?>/locations.php" class="<?php setActiveNav(array('location', 'locations', 'locationDetails', 'locationCreate'), 'desktop') ?>">Clinics</a>
                         <a href="<?php base_url(); ?>/organizations.php" class="<?php setActiveNav(array('organization', 'organizations', 'organizationDetails', 'createOrganization', 'employees-APE', 'employeeCreate-APE', 'employee-APE', 'employeesImport-APE', 'employeeViewResult-APE', 'employeesExport-APE', 'employeesCSV-APE'), 'desktop') ?>">Organizations</a>
                     </div>
                 </div>
@@ -62,7 +62,7 @@ function setActiveNav($pageNames, $screen) {
         <div class="space-y-1 px-2 pb-3 pt-2">
             <a href="<?php base_url(); ?>/home.php" class="<?php setActiveNav(array('home'), 'mobile') ?>">Home</a>
             <a href="<?php base_url(); ?>/users.php" class="<?php setActiveNav(array('user', 'users', 'createUser'), 'mobile') ?>">Users</a>
-            <a href="<?php base_url(); ?>/locations.php" class="<?php setActiveNav(array('location', 'locations', 'locationDetails', 'createLocation'), 'mobile') ?>">Locations</a>
+            <a href="<?php base_url(); ?>/locations.php" class="<?php setActiveNav(array('location', 'locations', 'locationDetails', 'locationCreate'), 'mobile') ?>">Clinics</a>
             <a href="<?php base_url(); ?>/organizations.php" class="<?php setActiveNav(array('organization', 'organizations', 'organizationDetails', 'createOrganization', 'employees-APE', 'employeeCreate-APE', 'employee-APE', 'employeesImport-APE', 'employeeViewResult-APE', 'employeesExport-APE', 'employeesCSV-APE'), 'mobile') ?>">Organizations</a>
         </div>
     </div>

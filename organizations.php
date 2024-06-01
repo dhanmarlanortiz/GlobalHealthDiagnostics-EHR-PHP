@@ -87,7 +87,7 @@ $result = $conn->query($sql);
         <div class="flex sm:justify-between flex-col sm:flex-row">
             <div></div>
             <div class="p-1">
-                <a href="<?php base_url(); ?>/createOrganization.php" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">Create Organization</a>
+                <a href="<?php base_url(); ?>/createOrganization.php" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">Create</a>
             </div>
         </div>
     </div>

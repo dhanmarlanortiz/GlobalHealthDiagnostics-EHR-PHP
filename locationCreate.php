@@ -14,45 +14,21 @@ $styleButtonLink = "text-sm font-semibold leading-6 text-gray-900";
 $styleTextError = "mt-2 text-red-400 text-xs";
 
 // define variables and set to empty values
-$name = $email = $phone = $address = "";
-
-function test_input($data) {
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-    return $data;
-}
-
-// $id = 0;
-// if ($_SERVER["REQUEST_METHOD"] == "GET") {
-//     $id = $_GET['id'];
-//     $getQuery = "SELECT * FROM APE WHERE id = $id";
-//     $apeDetailsResult = $conn->query($apeDetailsQuery);
-
-//     if ($apeDetailsResult !== false && $apeDetailsResult->num_rows > 0) {
-//         while($apeDetails = $apeDetailsResult->fetch_assoc()) {
-//             $_POST = $apeDetails;
-//         }
-//     }
-// }
-
-
+$name = $address = "";
 $errVal = $errKey = "";
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $name = test_input($_POST["name"]);
-    $email = test_input($_POST["email"]);
-    $phone = test_input($_POST["phone"]);
-    $address = test_input($_POST["address"]);
-    $location_fk = test_input($_POST["location_fk"]);
-  
-    $sql = "INSERT INTO Organization (name, email, phone, address, location_fk)
-    VALUES ('$name', '$email', '$phone', '$address', $location_fk)";
-  
+    $name = clean($_POST["loc_name"]);
+    $address = clean($_POST["loc_address"]);
+
+    $sql = "INSERT INTO Location (loc_name, loc_address)
+    VALUES ('$name', '$address')";
+
     if ($conn->query($sql) === TRUE) {
-        create_flash_message('create-success', '<strong>Success!</strong> New Organization has been created.', FLASH_SUCCESS);
+        create_flash_message('create-success', '<strong>Success!</strong> New record has been created.', FLASH_SUCCESS);
 
         $id = $conn->insert_id;
-        $url = base_url(false) . "/organization.php?id=" . $id;
+        $url = base_url(false) . "/location.php?id=" . $id;
         header("Location: " . $url ."");
         
         exit();
@@ -70,21 +46,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-$clinics = getLocation($conn);
-
 $conn->close();
+
 ?>
+
 
 <header class="bg-white shadow-sm">
     <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center">
             <div>
-                <h1 class="text-3xl font-bold tracking-tight text-gray-900 mb-2">Create Organization</h1>
+                <h1 class="text-3xl font-bold tracking-tight text-gray-900 mb-2">Create Clinic</h1>
                 <div class="text-xs breadcrumbs p-0 text-gray-800">
                     <ul>
                         <li>Home</li> 
-                        <li>Organizations</li> 
-                        <li>Create Organization</li> 
+                        <li>Clinics</li> 
+                        <li>Create Clinic</li> 
                     </ul>
                 </div>
             </div>
@@ -93,42 +69,25 @@ $conn->close();
         </div>
     </div>
 </header>
+
 <main class='mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8'>
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" class="prompt-confirm mx-auto rounded-b-box rounded-b-box max-w-3xl">
         <?php createFormHeader('Information'); ?>
         <div class="flex items-center justify-end gap-x-6 bg-white px-6 py-10 border-b">
             <div class="space-y-12 w-full">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-8">
-                    <div class="sm:col-span-2 <?php echo ($errKey == 'name') ? 'input-error' : ''; ?>">
-                        <input id="name" type="text" data-label="Organization Name" required />
-                        <?php echo ($errKey == 'name') ? '<div class="input-error--message"><p>' . $errVal . ' already exists.</p></div>' : ''; ?>
-                    </div>
-                    <div class="sm:col-span-1">
-                        <input id="email" type="email" data-label="Email Address" required />
-                    </div>
-                    <div class="sm:col-span-1">
-                        <input id="phone" type="number" data-label="Telephone Number" required />
+                    <div class="sm:col-span-2 <?php echo ($errKey == 'loc_name') ? 'input-error' : ''; ?>">
+                        <input id="loc_name" type="text" data-label="Name" maxlength="50" required />
+                        <?php echo ($errKey == 'loc_name') ? '<div class="input-error--message"><p>' . $errVal . ' already exists.</p></div>' : ''; ?>
                     </div>
                     <div class="sm:col-span-2">
-                        <input id="address" type="text" data-label="Office Address" required />
+                        <input id="loc_address" type="text" data-label="Address" maxlength="200" required />
                     </div>                
-                    <div class="sm:col-span-2">
-                        <select name="location_fk" id="location_fk" data-label="Clinic Address" required>
-                            <option value='' selected disabled>Select</option>
-                            <?php
-                                if (!empty($clinics)) {
-                                    foreach ($clinics as $clinic) {
-                                        echo "<option value='" . $clinic['loc_id'] . "'>" . $clinic['loc_address'] . "</option>";
-                                    }
-                                }
-                            ?>
-                        </select>
-                    </div> 
                 </div>
             </div>
         </div>
         <div class="flex items-center justify-end flex-col sm:flex-row gap-x-1 bg-white mt-0 px-6 py-4 border-t-2 border-green-700">
-            <a href="<?php base_url(); ?>/organizations.php" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Cancel</a>
+            <a href="<?php base_url(); ?>/locations.php" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Cancel</a>
             <button type="submit" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">Create</button>
         </div>
 

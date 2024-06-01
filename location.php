@@ -9,6 +9,7 @@ include('navbar.php');
 
 $id = 0;
 $headerText = "Location";
+$errVal = $errKey = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
     $id = isset($_GET['id']) ? $_GET['id'] : 0;
@@ -23,14 +24,74 @@ if(empty($_POST)){
     exit();
 }
 
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id = clean( $_POST['loc_id'] );
-    
+    $name = clean( $_POST['loc_name'] );
+    $address = clean( $_POST['loc_address'] );
+
+    $location = getLocation($conn, $id);
     $headerText = $location['loc_name'];
 
-    $url = base_url(false) . "/location.php?id=" . $id;
-    header("Location: " . $url ."");
-    exit();
+    // $url = base_url(false) . "/location.php?id=" . $id;
+    // header("Location: " . $url ."");
+    // exit();
+    if(isset( $_POST['saveChanges'] )) {
+        $orgUpdateQuery =  "UPDATE Location SET 
+                            loc_name = '$name',
+                            loc_address = '$address'                            
+                            WHERE loc_id = $id";
+
+        if ($conn->query($orgUpdateQuery) === TRUE) {
+            create_flash_message('update-success', '<strong>Success!</strong> Record has been updated.', FLASH_SUCCESS);
+            
+            $url = base_url(false) . "/location.php?id=" . $id;
+            header("Location: " . $url ."");
+            
+            exit();
+        } else {
+            create_flash_message('update-failed', '<strong>Failed!</strong> Please review and try again.', FLASH_ERROR);
+            
+            // duplicate entry error
+            if($conn->errno == 1062) {
+                $errMsg = explode("'", $conn->error);
+                $errVal = $errMsg[1];
+                $errKey = $errMsg[3];
+
+                create_flash_message('update-failed', '<strong>Failed!</strong> &quot;' . $errVal . '&quot; already exist.', FLASH_ERROR);
+            }
+        }
+    } else if(isset( $_POST['delete'] )) {
+        try {
+            $deleteQuery =  "DELETE FROM Location WHERE loc_id = $id";
+
+            if ($conn->query($deleteQuery) === TRUE) {
+                create_flash_message('delete-success', $flashMessage['delete-success'] , FLASH_SUCCESS);
+                $url = base_url(false) . "/locations.php";
+            } else {
+                create_flash_message('delete-failed', $flashMessage['delete-failed'], FLASH_ERROR);
+            
+                if($conn->errno == 1451) {
+                    create_flash_message('delete-failed', $flashMessage['delete-failed-linked'] , FLASH_ERROR);
+                }
+
+                $url = base_url(false) . "/location.php?id=" . $id;
+            }
+            header("Location: " . $url ."");
+            exit();
+
+        } catch (mysqli_sql_exception $e) {
+            create_flash_message('delete-failed', $flashMessage['delete-failed-linked'] , FLASH_ERROR);
+            // create_flash_message('delete-failed', "An error occurred: " . $e->getMessage() , FLASH_ERROR);
+
+            $url = base_url(false) . "/organization.php?id=" . $id;
+            header("Location: " . $url ."");
+                
+            exit();
+        }
+    }
+
+
 }
 
 $conn->close();
@@ -52,7 +113,7 @@ $conn->close();
                     <div class="text-xs breadcrumbs p-0 text-gray-800">
                         <ul>
                             <li>Home</li> 
-                            <li>Locations</li> 
+                            <li>Clinics</li> 
                             <li><?php echo $headerText; ?></li> 
                             <li>Details</li> 
                         </ul>
@@ -67,7 +128,7 @@ $conn->close();
             <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200">
                 <ul class="flex -mb-px">
                     <li class="w-full bg-white inline-block p-6 text-green-700 border-b-2 border-green-700 active text-left text-sm">
-                        Location Details
+                        Clinic Details
                     </li>
                 </ul>
             </div>

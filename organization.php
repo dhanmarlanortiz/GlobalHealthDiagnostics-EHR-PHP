@@ -53,11 +53,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             
             // duplicate entry error
             if($conn->errno == 1062) {
-                create_flash_message('update-failed', '<strong>Failed!</strong> An error occurred.', FLASH_ERROR);
-
                 $errMsg = explode("'", $conn->error);
                 $errVal = $errMsg[1];
                 $errKey = $errMsg[3];
+
+                create_flash_message('update-failed', '<strong>Failed!</strong> &quot;' . $errVal . '&quot; already exist.', FLASH_ERROR);
             }
         }
     } else if(isset( $_POST['delete'] )) {

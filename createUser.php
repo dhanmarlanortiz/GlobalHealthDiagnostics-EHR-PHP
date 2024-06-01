@@ -65,7 +65,7 @@ createMainHeader("Create User", array("Home", "Users", "Create User"));
 
 <main class='<?php echo $classMainContainer; ?>'>
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" id="userCreateForm" class="prompt-confirm max-w-3xl mx-auto">
-        <?php createFormHeader(); ?>
+        <?php createFormHeader('Information'); ?>
         <div class="flex items-center justify-end gap-x-6 bg-white px-6 py-10 border-b">
             <div class="space-y-12 w-full">
                 <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">

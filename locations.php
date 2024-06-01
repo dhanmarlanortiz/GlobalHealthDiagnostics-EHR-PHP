@@ -14,11 +14,11 @@ $locations = getLocation($conn);
     <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center">
             <div>
-                <h1 class="text-3xl font-bold tracking-tight text-gray-900 mb-2">Locations</h1>
+                <h1 class="text-3xl font-bold tracking-tight text-gray-900 mb-2">Clinics</h1>
                 <div class="text-xs breadcrumbs p-0 text-gray-800">
                     <ul>
                         <li>Home</li> 
-                        <li>Locations</li> 
+                        <li>Clinics</li> 
                     </ul>
                 </div>
             </div>
@@ -34,7 +34,6 @@ $locations = getLocation($conn);
                     <tr>
                         <th>Name</th>
                         <th>Address</th>
-                        <th>Type</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -46,7 +45,6 @@ $locations = getLocation($conn);
                             "<tr>" .
                                 "<td>" . $location["loc_name"] . "</td>" .
                                 "<td>" . $location["loc_address"] . "</td>".
-                                "<td>" . $location["loc_type"] . "</td>".
                                 "<td class='text-right'>
                                     <a class='" . $classTblBtnPrimary . " mb-1 lg:mb-0 lg:mr-1 w-full lg:w-auto' href='" . base_url(false) . "/location.php?id=" . $location['loc_id'] . "' title='View location details'>
                                         Details
@@ -66,7 +64,7 @@ $locations = getLocation($conn);
         <div class="flex sm:justify-between flex-col sm:flex-row">
             <div></div>
             <div class="p-1">
-                <a href="<?php base_url(); ?>/createLocation.php" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">Create Location</a>
+                <a href="<?php base_url(); ?>/locationCreate.php" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">Create</a>
             </div>
         </div>
     </div>
