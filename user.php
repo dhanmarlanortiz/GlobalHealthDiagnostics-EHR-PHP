@@ -9,20 +9,25 @@ preventAccess([['role' => 2, 'redirect' => 'client/index.php']]);
 include('navbar.php');
 
 $id = 0;
+$headerText = "User Details";
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
     $id = isset($_GET['id']) ? $_GET['id'] : 0;
-    $_POST = getUser($id);
+    $user = getUser($id);
+    $_POST = $user;
+    $headerText = $user['username'];
 }
 
 $errVal = $errKey = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    
     $id = clean( $_POST['id'] );
     $username = clean( $_POST['username'] );
     $email = clean( $_POST['email'] );
     $role = clean( $_POST['role'] );
     $isActive = clean( $_POST['isActive'] );
     $organizationId = clean( $_POST['organizationId'] );
+
+    $user = getUser($id);
+    $headerText = $user['username'];
 
     if(isset( $_POST['saveChanges'] )) {
 
@@ -92,7 +97,7 @@ if ($result !== false && $result->num_rows > 0) {
 
 $conn->close();
 
-createMainHeader("User Details", array("Home", "Users", "User Details"));
+createMainHeader($headerText, array("Home", "Users", $headerText));
 ?>
 
 <main class='<?php echo $classMainContainer; ?>'>
@@ -149,7 +154,7 @@ createMainHeader("User Details", array("Home", "Users", "User Details"));
             <a href="<?php echo base_url() . '/users.php'; ?>" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Cancel</a>
             <!-- <button type="button" class="<?php echo $classBtnSecondary; ?> w-full sm:w-auto">Reset Password</button> -->
             <button type="submit" name="saveChanges" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto mb-2 sm:mb-0">Save Changes</button>
-            <input type="submit" name="deleteUser" class="<?php echo $classBtnDanger; ?> w-full sm:w-auto mb-2 sm:mb-0" value="Delete User" />
+            <input type="submit" name="deleteUser" class="<?php echo $classBtnDanger; ?> w-full sm:w-auto mb-2 sm:mb-0" value="Delete Record" />
         </div>
 
         <?php flash('update-success'); ?>
