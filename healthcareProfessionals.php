@@ -7,8 +7,8 @@ include('header.php');
 preventAccess([['role' => 2, 'redirect' => 'client/index.php']]);
 include('navbar.php');
 
-$locations = getLocation($conn);
-createMainHeader("Clinics", array("Home", "Clinics"));
+$professionals = getProfessional($conn);
+createMainHeader("Healthcare Professionals", array("Home", "Healthcare Professionals"));
 ?>
 
 <main class='<?php echo $classMainContainer; ?>'>
@@ -17,21 +17,23 @@ createMainHeader("Clinics", array("Home", "Clinics"));
             <table class='display'> 
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Address</th>
+                        <th>Full Name</th>
+                        <th>Role</th>
+                        <th>License Number</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
-                    if (!empty($locations)) {
-                        foreach ($locations as $location) {
+                    if (!empty($professionals)) {
+                        foreach ($professionals as $prof) {
                         echo 
                             "<tr>" .
-                                "<td>" . $location["loc_name"] . "</td>" .
-                                "<td>" . $location["loc_address"] . "</td>".
+                                "<td>" . $prof["prof_name"] . "</td>" .
+                                "<td>" . $prof["prof_role"] . "</td>" .
+                                "<td>" . $prof["prof_license"] . "</td>" .
                                 "<td class='text-right'>
-                                    <a class='" . $classTblBtnPrimary . " mb-1 lg:mb-0 lg:mr-1 w-full lg:w-auto' href='" . base_url(false) . "/location.php?id=" . $location['loc_id'] . "' title='View location details'>
+                                    <a class='" . $classTblBtnPrimary . " mb-1 lg:mb-0 lg:mr-1 w-full lg:w-auto' href='" . base_url(false) . "/healthcareProfessional.php?id=" . $prof['prof_id'] . "' title='View information'>
                                         Details
                                     </a>
                                 </td>".                         
@@ -49,7 +51,7 @@ createMainHeader("Clinics", array("Home", "Clinics"));
         <div class="flex sm:justify-between flex-col sm:flex-row">
             <div></div>
             <div class="p-1">
-                <a href="<?php base_url(); ?>/locationCreate.php" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">Create</a>
+                <a href="<?php base_url(); ?>/healthcareProfessionalCreate.php" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">Create</a>
             </div>
         </div>
     </div>

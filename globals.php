@@ -624,3 +624,39 @@ function getLocation($conn, $id = null) {
         return $resultsArray;
     }
 }
+
+function getProfessional($conn, $id = null) {
+    if(null !== $id) {
+        $sql = "SELECT * FROM Location WHERE loc_id = '$id'";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+    
+        $results = $stmt->get_result();
+        $resultsArray = array();
+    
+        if ($results !== false && $results->num_rows > 0) {
+            $resultsArray = $results->fetch_assoc();
+        }
+    
+        $stmt->close();
+        return $resultsArray;
+        
+    } else {
+        $sql = "SELECT * FROM HealthcareProfessionals";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+    
+        $results = $stmt->get_result();
+        $resultsArray = array();
+    
+        if ($results !== false && $results->num_rows > 0) {
+            while ($result = $results->fetch_assoc()) {
+                array_push($resultsArray, $result);
+            }
+        }
+    
+        $stmt->close();
+    
+        return $resultsArray;
+    }
+}
