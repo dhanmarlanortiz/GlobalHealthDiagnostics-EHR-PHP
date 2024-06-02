@@ -46,29 +46,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
+createMainHeader("Create Clinic", array("Home", "Clinics", "Create Clinic"));
+
 $conn->close();
 
 ?>
-
-
-<header class="bg-white shadow-sm">
-    <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center">
-            <div>
-                <h1 class="text-3xl font-bold tracking-tight text-gray-900 mb-2">Create Clinic</h1>
-                <div class="text-xs breadcrumbs p-0 text-gray-800">
-                    <ul>
-                        <li>Home</li> 
-                        <li>Clinics</li> 
-                        <li>Create Clinic</li> 
-                    </ul>
-                </div>
-            </div>
-            <div>
-            </div>
-        </div>
-    </div>
-</header>
 
 <main class='mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8'>
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" class="prompt-confirm mx-auto rounded-b-box rounded-b-box max-w-3xl">

@@ -36,18 +36,54 @@ class FileUploader {
                         return;
                     }
                 } else {
-                    create_flash_message('upload-success', '<strong>Failed!</strong> Invalid file type. Allowed types are: ' . implode(', ', $allowedTypes), FLASH_ERROR);
+                    create_flash_message('upload-error', '<strong>Failed!</strong> Invalid file type. Allowed types are: ' . implode(', ', $allowedTypes), FLASH_ERROR);
 
                     return;
                 }
             } else {
-                create_flash_message('upload-success', '<strong>Failed!</strong> File size exceeds the limit.', FLASH_ERROR);
+                create_flash_message('upload-error', '<strong>Failed!</strong> File size exceeds the limit.', FLASH_ERROR);
 
                 return;
             }
         }
-        create_flash_message('upload-success', '<strong>Failed!</strong> No file uploaded.', FLASH_ERROR);
+        create_flash_message('upload-error', '<strong>Failed!</strong> No file uploaded.', FLASH_ERROR);
 
+        return;
+    }
+
+    public function uploadSignature($fileInputName) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES[$fileInputName])) {
+            $allowedTypes = array('PNG', 'png');
+            $id = $_POST['prof_id'];
+            $fileName = $_FILES[$fileInputName]['name'];
+            $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
+            $uploadFile = $this->uploadDir . "healthcare-professional-" . $id . "-signature." . $fileExtension;
+
+            if ($_FILES[$fileInputName]['size'] <= 5000000) {
+                $fileExtension = strtolower(pathinfo($uploadFile, PATHINFO_EXTENSION));
+
+                // if (in_array($fileExtension, $allowedTypes)) {
+                if ($fileExtension == 'png') {
+                    if (move_uploaded_file($_FILES[$fileInputName]['tmp_name'], $uploadFile)) {
+                        create_flash_message('upload-success', '<strong>Success!</strong> File has been successfully uploaded.', FLASH_SUCCESS);
+                        return;
+                    } else {
+                        create_flash_message('upload-error', '<strong>Failed!</strong> Error uploading the file.', FLASH_ERROR);
+                        return;
+                    }
+                } else {
+                    create_flash_message('upload-error', '<strong>Failed!</strong> Invalid file type. Allowed type is .png only.', FLASH_ERROR);
+                    // create_flash_message('upload-error', '<strong>Failed!</strong> Invalid file type. Allowed types are: ' . implode(', ', $allowedTypes), FLASH_ERROR);
+                    return;
+                }
+            } else {
+                create_flash_message('upload-error', '<strong>Failed!</strong> File size exceeds the limit.', FLASH_ERROR);
+                return;
+            }
+            
+        }
+    
+        create_flash_message('upload-error', '<strong>Failed!</strong> No file uploaded.', FLASH_ERROR);
         return;
     }
     

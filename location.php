@@ -24,7 +24,6 @@ if(empty($_POST)){
     exit();
 }
 
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id = clean( $_POST['loc_id'] );
     $name = clean( $_POST['loc_name'] );
@@ -32,17 +31,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $location = getLocation($conn, $id);
     $headerText = $location['loc_name'];
-
-    // $url = base_url(false) . "/location.php?id=" . $id;
-    // header("Location: " . $url ."");
-    // exit();
+    
     if(isset( $_POST['saveChanges'] )) {
-        $orgUpdateQuery =  "UPDATE Location SET 
+        $updateQuery =  "UPDATE Location SET 
                             loc_name = '$name',
                             loc_address = '$address'                            
                             WHERE loc_id = $id";
 
-        if ($conn->query($orgUpdateQuery) === TRUE) {
+        if ($conn->query($updateQuery) === TRUE) {
             create_flash_message('update-success', '<strong>Success!</strong> Record has been updated.', FLASH_SUCCESS);
             
             $url = base_url(false) . "/location.php?id=" . $id;
@@ -90,8 +86,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         }
     }
-
-
 }
 
 $conn->close();

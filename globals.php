@@ -627,7 +627,7 @@ function getLocation($conn, $id = null) {
 
 function getProfessional($conn, $id = null) {
     if(null !== $id) {
-        $sql = "SELECT * FROM Location WHERE loc_id = '$id'";
+        $sql = "SELECT * FROM HealthcareProfessionals WHERE prof_id = '$id'";
         $stmt = $conn->prepare($sql);
         $stmt->execute();
     
