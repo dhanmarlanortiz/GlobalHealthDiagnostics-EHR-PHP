@@ -54,10 +54,12 @@ createMainHeader("Create Healthcare Professionals", array("Home", "Create Health
                         <input id="prof_name" type="text" data-label="Full name" maxlength="50" required />
                     </div>                
                     <div class="sm:col-span-1">
-                        <input id="prof_role" type="text" data-label="Role" maxlength="50" required />
+                        <select id="prof_role" data-label="Role">
+                            <option value="" disabled selected>Select</option>
+                        </select>
                     </div>
                     <div class="sm:col-span-1">
-                        <input id="prof_license" type="text" data-label="License number" maxlength="20" required />
+                        <input id="prof_license" type="text" data-label="License number" maxlength="20" />
                     </div>
                 </div>
             </div>
@@ -72,6 +74,8 @@ createMainHeader("Create Healthcare Professionals", array("Home", "Create Health
     </form>
 </main>
 
+
+<script src="js/healthcare-professional.js"></script>
 <script>
     $(document).ready( function() {
         var post = <?php echo json_encode($_POST) ?>;
@@ -100,6 +104,11 @@ createMainHeader("Create Healthcare Professionals", array("Home", "Create Health
         }
 
     });
+
+    const selectRoles = document.getElementById("prof_role");
+    const selectedRole = "<?php echo isset($_POST['prof_role']) ? $_POST['prof_role'] : ''; ?>";
+    document.addEventListener("DOMContentLoaded", setProfessionalsSelect(selectRoles, selectedRole));
+
 </script>
 
 <?php 

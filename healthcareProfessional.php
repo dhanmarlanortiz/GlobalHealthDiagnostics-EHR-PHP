@@ -142,10 +142,10 @@ createMainHeader($headerText, array("Home", "Healthcare Professionals", $headerT
                             <input id="prof_name" type="text" data-label="Full name" maxlength="50" required />
                         </div>                
                         <div class="sm:col-span-1">
-                            <input id="prof_role" type="text" data-label="Role" maxlength="50" required />
+                            <select id="prof_role" data-label="Role"></select>
                         </div>
                         <div class="sm:col-span-1">
-                            <input id="prof_license" type="text" data-label="License number" maxlength="20" required />
+                            <input id="prof_license" type="text" data-label="License number" maxlength="20" />
                         </div>                     
                         
                         <div class="sm:col-span-1">
@@ -197,8 +197,6 @@ createMainHeader($headerText, array("Home", "Healthcare Professionals", $headerT
             <div class="flex items-center justify-end flex-col sm:flex-row gap-x-1 bg-white mt-0 px-6 py-4 border-t-2 border-green-700">
                 <a href="<?php echo base_url() . '/healthcareProfessionals.php'; ?>" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Cancel</a>
                 <button type="submit" name="saveChanges" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto mb-2 sm:mb-0">Save Changes</button>
-                <!-- <button data-modal-target="upload-modal" data-modal-toggle="upload-modal" class="<?php echo $classBtnAlternate; ?> w-full sm:w-auto mb-2 sm:mb-0" type="button">Upload Signature</button> -->
-                <!-- <button type="submit" name="deleteFileForm" class="<?php echo $classBtnSecondary; ?> w-full sm:w-auto mb-2 sm:mb-0">Delete Signature</button> -->
                 <button type="submit" name="delete" class="<?php echo $classBtnDanger; ?> w-full sm:w-auto">Delete Record</button>
             </div>
            
@@ -220,41 +218,6 @@ createMainHeader($headerText, array("Home", "Healthcare Professionals", $headerT
         </div>
     </main>
 
-    <!-- <div id="upload-modal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 flex items-center justify-center overflow-y-auto overflow-x-hidden" style="background: rgba(0,0,0,0.5);">
-        <div class="relative p-4 w-full max-w-2xl max-h-full">
-            <div class="relative bg-white shadow">
-                <div class="flex items-center justify-between p-4 border-b-2 border-sky-500">
-                    <h3 class="font-medium text-sky-500 text-sm">Upload Signature</h3>
-                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="upload-modal">
-                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                        </svg>
-                        <span class="sr-only">Close modal</span>
-                    </button>
-                </div>
-                <div class="p-4 md:p-5 space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium leading-6 text-gray-900 mb-2">Select File</label>
-                        <label for="uploadedFile" class="flex flex-col items-center justify-center w-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50">
-                            <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                                <svg class="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
-                                </svg>
-                                <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click to upload</span> or drag and drop</p>
-                                <p id="file-name" class="text-xs text-gray-500"></p>
-                            </div>
-                            <input id="uploadedFile" type="file" name="uploadedFile" class="form-input-upload hidden" onchange="displayConfirmation()" />
-                        </label>
-                    </div>
-                </div>
-                <div class="flex items-center justify-end flex-col sm:flex-row gap-x-1 p-4 border-t-2 border-sky-500">
-                    <button data-modal-hide="upload-modal" type="button" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Close</button>
-                    <input type="submit" name="uploadFileForm" value="Upload File" class="<?php echo $classBtnAlternate; ?> form-input-upload w-full sm:w-auto">
-                </div>
-            </div>
-        </div>
-    </div> -->
-
     <script>
         const modalToggleButtons = document.querySelectorAll('[data-modal-toggle]');
         const modalHideButtons = document.querySelectorAll('[data-modal-hide]');
@@ -275,6 +238,7 @@ createMainHeader($headerText, array("Home", "Healthcare Professionals", $headerT
 
 </form>
 
+<script src="js/healthcare-professional.js"></script>
 <script>
     $(document).ready( function() {
         var post = <?php echo json_encode($_POST) ?>;
@@ -298,23 +262,11 @@ createMainHeader($headerText, array("Home", "Healthcare Professionals", $headerT
                 
             });
         }
-        
-        // $("#signature-display-image").attr("src", "/images/healthcare-professional-" + post['prof_id'] + "-signature.png");
-
     });
 
-    // function displayConfirmation() {
-    //     var input = document.getElementById('uploadedFile');
-
-    //     console.log(input.files[0].name);
-
-    //     document.getElementById('file-name').innerHTML = ((input.files.length > 0)
-    //         ? input.files[0].name
-    //         : ''
-    //     );
-    // }
-
-
+    const selectRoles = document.getElementById("prof_role");
+    const selectedRole = "<?php echo isset($_POST['prof_role']) ? $_POST['prof_role'] : ''; ?>";
+    document.addEventListener("DOMContentLoaded", setProfessionalsSelect(selectRoles, selectedRole));
 </script>
 
 <?php
