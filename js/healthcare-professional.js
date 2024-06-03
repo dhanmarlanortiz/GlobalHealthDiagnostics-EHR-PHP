@@ -32,3 +32,31 @@ function setProfessionalsSelect(selectRoles, selectedRole) {
     });
 }
 
+function setRoleSelect(listProfessionals, selectProfessionals, selectedProfessional, filterRole) {
+    selectProfessionals.innerHTML = "";
+
+    const defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.textContent = "Select";
+    defaultOption.disabled = true;
+
+    if (selectedProfessional === '') {
+        defaultOption.selected = true;
+    }
+
+    selectProfessionals.appendChild(defaultOption);
+
+    const filteredProfessionals = listProfessionals.filter(prof => prof.prof_role === filterRole);
+
+    filteredProfessionals.forEach(professional => {
+        const optionElement = document.createElement("option");
+        optionElement.value = professional.prof_id;
+        optionElement.textContent = professional.prof_name;
+
+        if (optionElement.value === selectedProfessional) {
+            optionElement.selected = true;
+        }
+
+        selectProfessionals.appendChild(optionElement);
+    });
+}

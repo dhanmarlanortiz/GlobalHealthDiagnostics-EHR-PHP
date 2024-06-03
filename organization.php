@@ -8,6 +8,7 @@ preventAccess([['role' => 2, 'redirect' => 'client/index.php']]);
 include('navbar.php');
 
 $clinics = getLocation($conn);
+$professionals = getProfessional($conn);
 
 function test_input($data) {
     $data = trim($data);
@@ -103,13 +104,7 @@ createMainHeader($headerText, array("Home", "Organizations", $headerText));
 
     <main class='mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8'>
         <div class="mx-auto rounded-b-box rounded-b-box max-w-3xl">
-            <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200">
-                <ul class="flex -mb-px">
-                    <li class="w-full bg-white inline-block p-6 text-green-700 border-b-2 border-green-700 active text-left text-sm">
-                        Information
-                    </li>
-                </ul>
-            </div>
+            <?php createFormHeader('Organization'); ?>
             <div class="flex items-center justify-end gap-x-6 bg-white px-6 py-10 border-b">
                 <div class="space-y-12 w-full">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-8">
@@ -126,6 +121,15 @@ createMainHeader($headerText, array("Home", "Organizations", $headerText));
                         <div class="sm:col-span-2">
                             <input type="text" id="address" data-label="Office Address" />
                         </div> 
+                    </div>
+                </div>
+            </div>
+
+            <?php createFormHeader('Clinic'); ?>
+            <div class="flex items-center justify-end gap-x-6 bg-white px-6 py-10 border-b">
+                <div class="space-y-12 w-full">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-8">
+                    <div class="sm:col-span-2">
                         <div class="sm:col-span-2">
                             <select name="location_fk" id="location_fk" data-label="Clinic Address" required>
                                 <option value='' selected disabled>Select</option>
@@ -138,9 +142,48 @@ createMainHeader($headerText, array("Home", "Organizations", $headerText));
                                 ?>
                             </select>
                         </div> 
+                        </div> 
                     </div>
                 </div>
             </div>
+            
+            <?php createFormHeader('Healthcare Professionals'); ?>            
+            <div class="flex items-center justify-end gap-x-6 bg-white px-6 py-10 border-b">
+                <div class="space-y-12 w-full">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-8">
+                        <div class="sm:col-span-1">
+                            <select id="xraytech_fk" data-filter="X-Ray Technologist" data-label="X-Ray Technologist" required></select>
+                            <p class="mt-2 text-gray-500 text-xs">Radiology Report</p>
+                        </div>
+                        
+                        <div class="sm:col-span-1">
+                            <select id="radiologist_fk" data-filter="Radiologist" data-label="Radiologist" required></select>
+                            <p class="mt-2 text-gray-500 text-xs">Radiology Report</p>
+                        </div>
+                        
+                        <div class="sm:col-span-1">
+                            <select id="medtech1_fk" data-filter="Medical Technologist" data-label="Medical Technologist 1" required></select>
+                            <p class="mt-2 text-gray-500 text-xs">Laboratory Result (Performer)</p>
+                        </div>
+
+                        <div class="sm:col-span-1">
+                            <select id="medtech2_fk" data-filter="Medical Technologist" data-label="Medical Technologist 2" required></select>
+                            <p class="mt-2 text-gray-500 text-xs">Laboratory Result (Verifier)</p>
+                        </div>
+
+                        <div class="sm:col-span-1">
+                            <select id="pathologist_fk" data-filter="Pathologist" data-label="Pathologist" required></select>
+                            <p class="mt-2 text-gray-500 text-xs">Laboratory Result</p>
+                        </div>
+
+                        <div class="sm:col-span-1">
+                            <select id="physician_fk" data-filter="Physician" data-label="Physician" required></select>
+                            <p class="mt-2 text-gray-500 text-xs">Medical Examination Report (Examiner)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
             <div class="flex items-center justify-end flex-col sm:flex-row gap-x-1 bg-white mt-0 px-6 py-4 border-t-2 border-green-700">
                 <a href="<?php echo base_url() . '/organizations.php'; ?>" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Cancel</a>
                 <button type="submit" name="saveChanges" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto mb-2 sm:mb-0">Save Changes</button>
@@ -159,6 +202,7 @@ createMainHeader($headerText, array("Home", "Organizations", $headerText));
 
 </form>
 
+<script src="js/healthcare-professional.js"></script>
 <script>
     $(document).ready( function() {
         var post = <?php echo json_encode($_POST) ?>;
@@ -182,6 +226,32 @@ createMainHeader($headerText, array("Home", "Organizations", $headerText));
             });
         }
     });
+
+    var listProfessionals = <?php echo json_encode($professionals); ?>;
+
+    document.addEventListener("DOMContentLoaded", 
+        setRoleSelect( listProfessionals, document.getElementById("xraytech_fk"), "", "X-Ray Technologist" )
+    );
+
+    document.addEventListener("DOMContentLoaded", 
+        setRoleSelect( listProfessionals, document.getElementById("radiologist_fk"), "", "Radiologist" )
+    );
+
+    document.addEventListener("DOMContentLoaded", 
+        setRoleSelect( listProfessionals, document.getElementById("medtech1_fk"), "", "Medical Technologist" )
+    );
+
+    document.addEventListener("DOMContentLoaded", 
+        setRoleSelect( listProfessionals, document.getElementById("medtech2_fk"), "", "Medical Technologist" )
+    );
+
+    document.addEventListener("DOMContentLoaded", 
+        setRoleSelect( listProfessionals, document.getElementById("pathologist_fk"), "", "Pathologist" )
+    );
+
+    document.addEventListener("DOMContentLoaded", 
+        setRoleSelect( listProfessionals, document.getElementById("physician_fk"), "", "Physician" )
+    );
 </script>
 
 

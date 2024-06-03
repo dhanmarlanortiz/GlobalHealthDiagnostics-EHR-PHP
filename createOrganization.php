@@ -7,6 +7,8 @@ include('header.php');
 preventAccess([['role' => 2, 'redirect' => 'client/index.php']]);
 include('navbar.php');
 
+$professionals = getProfessional($conn);
+
 $styleInput = "block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6";
 $styleLabel = "block text-sm font-medium leading-6 text-gray-900";
 $styleButtonPrimary = "rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600";
@@ -16,34 +18,13 @@ $styleTextError = "mt-2 text-red-400 text-xs";
 // define variables and set to empty values
 $name = $email = $phone = $address = "";
 
-function test_input($data) {
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-    return $data;
-}
-
-// $id = 0;
-// if ($_SERVER["REQUEST_METHOD"] == "GET") {
-//     $id = $_GET['id'];
-//     $getQuery = "SELECT * FROM APE WHERE id = $id";
-//     $apeDetailsResult = $conn->query($apeDetailsQuery);
-
-//     if ($apeDetailsResult !== false && $apeDetailsResult->num_rows > 0) {
-//         while($apeDetails = $apeDetailsResult->fetch_assoc()) {
-//             $_POST = $apeDetails;
-//         }
-//     }
-// }
-
-
 $errVal = $errKey = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $name = test_input($_POST["name"]);
-    $email = test_input($_POST["email"]);
-    $phone = test_input($_POST["phone"]);
-    $address = test_input($_POST["address"]);
-    $location_fk = test_input($_POST["location_fk"]);
+    $name = clean($_POST["name"]);
+    $email = clean($_POST["email"]);
+    $phone = clean($_POST["phone"]);
+    $address = clean($_POST["address"]);
+    $location_fk = clean($_POST["location_fk"]);
   
     $sql = "INSERT INTO Organization (name, email, phone, address, location_fk)
     VALUES ('$name', '$email', '$phone', '$address', $location_fk)";
@@ -95,7 +76,7 @@ $conn->close();
 </header>
 <main class='mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8'>
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" class="prompt-confirm mx-auto rounded-b-box rounded-b-box max-w-3xl">
-        <?php createFormHeader('Information'); ?>
+        <?php createFormHeader('Organization'); ?>
         <div class="flex items-center justify-end gap-x-6 bg-white px-6 py-10 border-b">
             <div class="space-y-12 w-full">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-8">
@@ -112,7 +93,15 @@ $conn->close();
                     <div class="sm:col-span-2">
                         <input id="address" type="text" data-label="Office Address" required />
                     </div>                
-                    <div class="sm:col-span-2">
+                </div>
+            </div>
+        </div>
+
+        <?php createFormHeader('Clinic'); ?>
+        <div class="flex items-center justify-end gap-x-6 bg-white px-6 py-10 border-b">
+            <div class="space-y-12 w-full">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-8">
+                <div class="sm:col-span-2">
                         <select name="location_fk" id="location_fk" data-label="Clinic Address" required>
                             <option value='' selected disabled>Select</option>
                             <?php
@@ -127,6 +116,44 @@ $conn->close();
                 </div>
             </div>
         </div>
+
+        <?php createFormHeader('Healthcare Professionals'); ?>
+        <div class="flex items-center justify-end gap-x-6 bg-white px-6 py-10 border-b">
+            <div class="space-y-12 w-full">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-8">
+                    <div class="sm:col-span-1">
+                        <select id="xraytech_fk" data-filter="X-Ray Technologist" data-label="X-Ray Technologist" required></select>
+                        <p class="mt-2 text-gray-500 text-xs">Radiology Report</p>
+                    </div>
+                    
+                    <div class="sm:col-span-1">
+                        <select id="radiologist_fk" data-filter="Radiologist" data-label="Radiologist" required></select>
+                        <p class="mt-2 text-gray-500 text-xs">Radiology Report</p>
+                    </div>
+                    
+                    <div class="sm:col-span-1">
+                        <select id="medtech1_fk" data-filter="Medical Technologist" data-label="Medical Technologist 1" required></select>
+                        <p class="mt-2 text-gray-500 text-xs">Laboratory Result (Performer)</p>
+                    </div>
+
+                    <div class="sm:col-span-1">
+                        <select id="medtech2_fk" data-filter="Medical Technologist" data-label="Medical Technologist 2" required></select>
+                        <p class="mt-2 text-gray-500 text-xs">Laboratory Result (Verifier)</p>
+                    </div>
+
+                    <div class="sm:col-span-1">
+                        <select id="pathologist_fk" data-filter="Pathologist" data-label="Pathologist" required></select>
+                        <p class="mt-2 text-gray-500 text-xs">Laboratory Result</p>
+                    </div>
+
+                    <div class="sm:col-span-1">
+                        <select id="physician_fk" data-filter="Physician" data-label="Physician" required></select>
+                        <p class="mt-2 text-gray-500 text-xs">Medical Examination Report (Examiner)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <div class="flex items-center justify-end flex-col sm:flex-row gap-x-1 bg-white mt-0 px-6 py-4 border-t-2 border-green-700">
             <a href="<?php base_url(); ?>/organizations.php" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Cancel</a>
             <button type="submit" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">Create</button>
@@ -137,7 +164,10 @@ $conn->close();
     </form>
 </main>
 
+<script src="js/healthcare-professional.js"></script>
 <script>
+    var listProfessionals = <?php echo json_encode($professionals); ?>;
+    
     $(document).ready( function() {
         var post = <?php echo json_encode($_POST) ?>;
         let styleInput = "block w-full rounded py-1.5 px-2 text-gray-900 border-gray-300 placeholder:text-gray-400 focus:border-green-700 focus:ring-0 focus:bg-green-50 sm:text-sm sm:leading-6";
@@ -165,6 +195,64 @@ $conn->close();
         }
 
     });
+
+    
+    // const selectedRole = "<?php echo isset($_POST['prof_role']) ? $_POST['prof_role'] : ''; ?>";
+    
+    document.addEventListener("DOMContentLoaded", 
+        setRoleSelect(
+            listProfessionals, 
+            document.getElementById("xraytech_fk"), 
+            "", 
+            "X-Ray Technologist"
+        )
+    );
+
+    document.addEventListener("DOMContentLoaded", 
+        setRoleSelect(
+            listProfessionals, 
+            document.getElementById("radiologist_fk"), 
+            "", 
+            "Radiologist"
+        )
+    );
+
+    document.addEventListener("DOMContentLoaded", 
+        setRoleSelect(
+            listProfessionals, 
+            document.getElementById("medtech1_fk"), 
+            "", 
+            "Medical Technologist"
+        )
+    );
+
+    document.addEventListener("DOMContentLoaded", 
+        setRoleSelect(
+            listProfessionals, 
+            document.getElementById("medtech2_fk"), 
+            "", 
+            "Medical Technologist"
+        )
+    );
+
+    document.addEventListener("DOMContentLoaded", 
+        setRoleSelect(
+            listProfessionals, 
+            document.getElementById("pathologist_fk"), 
+            "", 
+            "Pathologist"
+        )
+    );
+
+    document.addEventListener("DOMContentLoaded", 
+        setRoleSelect(
+            listProfessionals, 
+            document.getElementById("physician_fk"), 
+            "", 
+            "Physician"
+        )
+    );
+
 </script>
 
 <?php
