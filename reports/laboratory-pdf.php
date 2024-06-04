@@ -5,6 +5,27 @@ class LaboratoryPDF {
         $orgDetails = fetchOrgDetailsById($conn, $apeDetails['organizationId']);
         $labResults = fetchLabResultByApeId($conn, $id);
 
+        $medtech1 = getProfessional($conn, $orgDetails['medtech1_fk']);
+        $medtech1_id = $medtech1['prof_id'] ?? 0;
+        $medtech1_name = $medtech1['prof_name'] ?? '';
+        $medtech1_role = $medtech1['prof_role'] ?? '';
+        $medtech1_license = $medtech1['prof_license'] ?? '';
+        $medtech1_signature = base_url(false) . '/images/healthcare-professional-' . $medtech1_id  . '-signature.png';
+
+        $medtech2 = getProfessional($conn, $orgDetails['medtech2_fk']);
+        $medtech2_id = $medtech2['prof_id'] ?? 0;
+        $medtech2_name = $medtech2['prof_name'] ?? '';
+        $medtech2_role = $medtech2['prof_role'] ?? '';
+        $medtech2_license = $medtech2['prof_license'] ?? '';
+        $medtech2_signature = base_url(false) . '/images/healthcare-professional-' . $medtech2_id  . '-signature.png';
+
+        $pathologist = getProfessional($conn, $orgDetails['pathologist_fk']);
+        $pathologist_id = $pathologist['prof_id'] ?? 0;
+        $pathologist_name = $pathologist['prof_name'] ?? '';
+        $pathologist_role = $pathologist['prof_role'] ?? '';
+        $pathologist_license = $pathologist['prof_license'] ?? '';
+        $pathologist_signature = base_url(false) . '/images/healthcare-professional-' . $pathologist_id  . '-signature.png';
+
         if(null !== $labResults) {
             if(null == $pdf) {
                 $pdf = new labFPDF();
@@ -140,12 +161,62 @@ class LaboratoryPDF {
             $pdf->row('Result:', $labResults['labRes_para_result']);
             $pdf->row('', '', '');
             $pdf->Cell(0, 1,'', 'T', $toBegin);
-            $pdf->ln(57);
+            // $pdf->ln(57);
+            
+            $pdf->ln(20);
 
-            $pdf->Image(base_url(false) . '/images/nova-angela-buyagan-min.png', 11.5, 230, 50);
-            $pdf->Image(base_url(false) . '/images/angel-baquiran-min.png', 75, 230, 37);
-            $pdf->Image(base_url(false) . '/images/noel-c-santos-min.png', 120, 225, 65);
+            $pdf->SetFont('Arial','B', 9);
+            $pdf->SetTextColor(17, 24, 39);
+            $pdf->SetDrawColor(83,99,113);
 
+            $pdf->Cell(5, 8, '' , '', 0, 'L');
+            $pdf->Cell(53, 8, $medtech1_name, 'B', 0, 'C');
+
+            $pdf->Cell(10, 8, '' , '', 0, 'L');
+            $pdf->Cell(53, 8, $medtech2_name, 'B', 0, 'C');
+            
+            $pdf->Cell(10, 8, '' , '', 0, 'L');
+            $pdf->Cell(53, 8, $pathologist_name, 'B', 0, 'C');
+
+            $pdf->ln();
+            $pdf->SetFont('Arial','', 8);
+
+            $pdf->Cell(5, 8, '' , '', 0, 'L');
+            $pdf->Cell(53, 8, $medtech1_role, '', 0, 'C');
+
+            $pdf->Cell(10, 8, '' , '', 0, 'L');
+            $pdf->Cell(53, 8, $medtech2_role, '', 0, 'C');
+            
+            $pdf->Cell(10, 8, '' , '', 0, 'L');
+            $pdf->Cell(53, 8, $pathologist_role, '', 0, 'C');
+
+            $pdf->ln(5);
+
+            $pdf->Cell(5, 8, '' , '', 0, 'L');
+            if($medtech1_license != '') {
+                $pdf->Cell(53, 8, 'License No.: ' . $medtech1_license, '', 0, 'C');
+            } else {
+                $pdf->Cell(53, 8, '', '', 0, 'C');
+            }
+
+            $pdf->Cell(10, 8, '' , '', 0, 'L');
+            if($medtech2_license != '') {
+                $pdf->Cell(53, 8, 'License No.: ' . $medtech2_license, '', 0, 'C');
+            } else {
+                $pdf->Cell(53, 8, '', '', 0, 'C');
+            }
+            
+            $pdf->Cell(10, 8, '' , '', 0, 'L');
+            if($pathologist_license != '') {
+                $pdf->Cell(53, 8, 'License No.: ' . $pathologist_license, '', 0, 'C');
+            } else {
+                $pdf->Cell(53, 8, '', '', 0, 'C');
+            }
+
+            $pdf->ln(20);
+            // $pdf->Image(base_url(false) . '/images/nova-angela-buyagan-min.png', 11.5, 230, 50);
+            // $pdf->Image(base_url(false) . '/images/angel-baquiran-min.png', 75, 230, 37);
+            // $pdf->Image(base_url(false) . '/images/noel-c-santos-min.png', 120, 225, 65);
             $pdf->row('Computer-generated report.', '', '');
 
             return $pdf;

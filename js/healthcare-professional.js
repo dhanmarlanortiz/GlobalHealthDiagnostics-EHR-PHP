@@ -43,7 +43,6 @@ function setRoleSelect(listProfessionals, selectProfessionals, selectedProfessio
     if (selectedProfessional === '') {
         defaultOption.selected = true;
     }
-
     selectProfessionals.appendChild(defaultOption);
 
     const filteredProfessionals = listProfessionals.filter(prof => prof.prof_role === filterRole);

@@ -25,9 +25,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $phone = clean($_POST["phone"]);
     $address = clean($_POST["address"]);
     $location_fk = clean($_POST["location_fk"]);
-  
-    $sql = "INSERT INTO Organization (name, email, phone, address, location_fk)
-    VALUES ('$name', '$email', '$phone', '$address', $location_fk)";
+    $xraytech_fk = clean($_POST["xraytech_fk"]);
+    $radiologist_fk = clean($_POST["radiologist_fk"]);
+    $medtech1_fk = clean($_POST["medtech1_fk"]);
+    $medtech2_fk = clean($_POST["medtech2_fk"]);
+    $pathologist_fk = clean($_POST["pathologist_fk"]);
+    $physician_fk = clean($_POST["physician_fk"]);
+  print_r($_POST);
+    $sql = "INSERT INTO Organization (name, email, phone, address, location_fk, xraytech_fk, radiologist_fk, medtech1_fk, medtech2_fk, pathologist_fk, physician_fk)
+    VALUES ('$name', '$email', '$phone', '$address', '$location_fk', '$xraytech_fk', '$radiologist_fk', '$medtech1_fk', '$medtech2_fk', '$pathologist_fk', '$physician_fk')";
   
     if ($conn->query($sql) === TRUE) {
         create_flash_message('create-success', '<strong>Success!</strong> New Organization has been created.', FLASH_SUCCESS);
@@ -107,7 +113,7 @@ $conn->close();
                             <?php
                                 if (!empty($clinics)) {
                                     foreach ($clinics as $clinic) {
-                                        echo "<option value='" . $clinic['loc_id'] . "'>" . $clinic['loc_address'] . "</option>";
+                                        echo "<option value='" . $clinic['loc_id'] . "'" . (isset($_POST['location_fk']) ? 'selected' : '') . ">" . $clinic['loc_address'] . "</option>";
                                     }
                                 }
                             ?>
@@ -153,7 +159,7 @@ $conn->close();
                 </div>
             </div>
         </div>
-        
+
         <div class="flex items-center justify-end flex-col sm:flex-row gap-x-1 bg-white mt-0 px-6 py-4 border-t-2 border-green-700">
             <a href="<?php base_url(); ?>/organizations.php" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Cancel</a>
             <button type="submit" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto">Create</button>
@@ -196,61 +202,28 @@ $conn->close();
 
     });
 
-    
-    // const selectedRole = "<?php echo isset($_POST['prof_role']) ? $_POST['prof_role'] : ''; ?>";
-    
     document.addEventListener("DOMContentLoaded", 
-        setRoleSelect(
-            listProfessionals, 
-            document.getElementById("xraytech_fk"), 
-            "", 
-            "X-Ray Technologist"
-        )
+        setRoleSelect( listProfessionals, document.getElementById("xraytech_fk"), "<?php echo isset($_POST['xraytech_fk']) ? $_POST['xraytech_fk'] : ''; ?>", "X-Ray Technologist" )
     );
 
     document.addEventListener("DOMContentLoaded", 
-        setRoleSelect(
-            listProfessionals, 
-            document.getElementById("radiologist_fk"), 
-            "", 
-            "Radiologist"
-        )
+        setRoleSelect( listProfessionals, document.getElementById("radiologist_fk"), "<?php echo isset($_POST['radiologist_fk']) ? $_POST['radiologist_fk'] : ''; ?>", "Radiologist" )
     );
 
     document.addEventListener("DOMContentLoaded", 
-        setRoleSelect(
-            listProfessionals, 
-            document.getElementById("medtech1_fk"), 
-            "", 
-            "Medical Technologist"
-        )
+        setRoleSelect( listProfessionals, document.getElementById("medtech1_fk"), "<?php echo isset($_POST['medtech1_fk']) ? $_POST['medtech1_fk'] : ''; ?>", "Medical Technologist" )
     );
 
     document.addEventListener("DOMContentLoaded", 
-        setRoleSelect(
-            listProfessionals, 
-            document.getElementById("medtech2_fk"), 
-            "", 
-            "Medical Technologist"
-        )
+        setRoleSelect( listProfessionals, document.getElementById("medtech2_fk"), "<?php echo isset($_POST['medtech2_fk']) ? $_POST['medtech2_fk'] : ''; ?>", "Medical Technologist" )
     );
 
     document.addEventListener("DOMContentLoaded", 
-        setRoleSelect(
-            listProfessionals, 
-            document.getElementById("pathologist_fk"), 
-            "", 
-            "Pathologist"
-        )
+        setRoleSelect( listProfessionals, document.getElementById("pathologist_fk"), "<?php echo isset($_POST['pathologist_fk']) ? $_POST['pathologist_fk'] : ''; ?>", "Pathologist" )
     );
 
     document.addEventListener("DOMContentLoaded", 
-        setRoleSelect(
-            listProfessionals, 
-            document.getElementById("physician_fk"), 
-            "", 
-            "Physician"
-        )
+        setRoleSelect( listProfessionals, document.getElementById("physician_fk"), "<?php echo isset($_POST['physician_fk']) ? $_POST['physician_fk'] : ''; ?>", "Physician" )
     );
 
 </script>

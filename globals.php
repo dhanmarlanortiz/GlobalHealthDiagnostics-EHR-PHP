@@ -660,3 +660,24 @@ function getProfessional($conn, $id = null) {
         return $resultsArray;
     }
 }
+
+function isValidImageUrl($url) {
+    // Check if the URL is properly formatted
+    if (filter_var($url, FILTER_VALIDATE_URL) === FALSE) {
+        return false;
+    }
+
+    // Send a HEAD request to the URL
+    $headers = @get_headers($url, 1);
+    
+    // Check if the request was successful
+    if ($headers && strpos($headers[0], '200') !== false) {
+        // Check if the content type is an image
+        if (isset($headers['Content-Type'])) {
+            $contentType = is_array($headers['Content-Type']) ? $headers['Content-Type'][0] : $headers['Content-Type'];
+            return strpos($contentType, 'image/') === 0;
+        }
+    }
+
+    return false;
+}

@@ -4,6 +4,15 @@ class MedicalExamPDF {
         $apeDetails = fetchApeDetailsById($conn, $id);
         $medExamReports = getMedExamReport($conn, $id);
 
+        $orgDetails = fetchOrgDetailsById($conn, $apeDetails['organizationId']);
+
+        $physician = getProfessional($conn, $orgDetails['physician_fk']);
+        $physician_id = $physician['prof_id'] ?? 0;
+        $physician_name = $physician['prof_name'] ?? '';
+        $physician_role = $physician['prof_role'] ?? '';
+        $physician_license = $physician['prof_license'] ?? '';
+        $physician_signature = base_url(false) . '/images/healthcare-professional-' . $physician_id  . '-signature.png';
+
         // Instanciation of inherited class
         if(null == $pdf) {
             $pdf = new MedFPDF();
@@ -222,23 +231,33 @@ class MedicalExamPDF {
         $pdf->SetFont('Arial','B', 8);
         $pdf->SetTextColor(17, 24, 39);
         $pdf->SetDrawColor(83,99,113);
-        $pdf->Image(base_url(false) . '/images/jacqueline-esguerra-md-signature.png', 20, 175, 40);
+
+        if (isValidImageUrl($physician_signature)) {
+            $pdf->Image($physician_signature, 20, 175, 40);
+        }
+
         $pdf->Cell(10, 8, '' , '', 0, 'L');
-        $pdf->Cell(50, 8, 'JACQUELINE ESGUERRA, MD' , 'B', 0, 'C');
+        $pdf->Cell(50, 8, $physician_name , 'B', 0, 'C');
         $pdf->ln();
         $pdf->SetFont('Arial','', 8);
         $pdf->Cell(10, 8, '' , '', 0, 'L');
-        $pdf->Cell(50, 8, 'Examining Physician' , '', 0, 'C');
-        $pdf->ln();
-        $pdf->Cell(10, 8, '' , '', 0, 'L');
-        $pdf->Cell(18, 8, 'License No.:' , '', 0, 'L');
-        $pdf->SetFont('Arial','B', 8);
-        $pdf->Cell(12, 8, '119451' , '', 0, 'C');
-        $pdf->SetFont('Arial','', 8);
-        $pdf->Cell(5, 8, '' , '', 0, 'L',);
-        $pdf->Cell(9, 8, 'Date:' , '', 0, 'L');
-        $pdf->SetFont('Arial','B', 8);
-        $pdf->Cell(17, 8, ($medExamReports['medExamReport_recommendation_date'] ?? null), '', 0, 'C');
+        $pdf->Cell(50, 8, $physician_role , '', 0, 'C');
+        $pdf->ln(5);
+        $pdf->Cell(10, 8, '' , '', 0, 'C');
+
+        if($physician_license != '') {
+            $pdf->Cell(50, 8, 'License No.: ' . $physician_license , '', 0, 'C');
+            $pdf->ln(5);
+            $pdf->Cell(10, 8, '' , '', 0, 'C');
+        }
+        // $pdf->SetFont('Arial','B', 8);
+        // $pdf->Cell(12, 8, '' , '', 0, 'C');
+        // $pdf->SetFont('Arial','', 8);
+        // $pdf->Cell(5, 8, '' , '', 0, 'L',);
+        // $pdf->Cell(9, 8, 'Date:' , '', 0, 'L');
+        // $pdf->SetFont('Arial','B', 8);
+        
+        $pdf->Cell(50, 8, 'Date: ' . ($medExamReports['medExamReport_recommendation_date'] ?? null), '', 0, 'C');
         
         // $pdf->Output();
         // $conn->close();

@@ -72,6 +72,20 @@ class RadiologyPDF {
         $apeDetails = fetchApeDetailsById($conn, $id);
         $orgDetails = fetchOrgDetailsById($conn, $apeDetails['organizationId']);
         $rr_row = fetchRadReportDetailsByAPEfk($conn, $id);
+        
+        $xraytech = getProfessional($conn, $orgDetails['xraytech_fk']);
+        $xraytech_id = $xraytech['prof_id'] ?? 0;
+        $xraytech_name = $xraytech['prof_name'] ?? '';
+        $xraytech_role = $xraytech['prof_role'] ?? '';
+        $xraytech_license = $xraytech['prof_license'] ?? '';
+        $xraytech_signature = base_url(false) . '/images/healthcare-professional-' . $xraytech_id  . '-signature.png';
+
+        $radiologist = getProfessional($conn, $orgDetails['radiologist_fk']);
+        $radiologist_id = $radiologist['prof_id'] ?? 0;
+        $radiologist_name = $radiologist['prof_name'] ?? '';
+        $radiologist_role = $radiologist['prof_role'] ?? '';
+        $radiologist_license = $radiologist['prof_license'] ?? '';
+        $radiologist_signature = base_url(false) . '/images/healthcare-professional-' . $radiologist_id  . '-signature.png';
      
         if (null !== $rr_row) {
             $rr_MedicalExamination_FK  = $rr_row["MedicalExamination_FK"];
@@ -150,21 +164,38 @@ class RadiologyPDF {
             $pdf->SetFont('Arial','B', 9);
             $pdf->SetTextColor(17, 24, 39);
             $pdf->SetDrawColor(83,99,113);
-            $pdf->Image(base_url(false) . '/images/alvin-d-rosario-art.png', 35, 150, 8);
-            $pdf->Image(base_url(false) . '/images/ernie-caliboso.png', 150, 146, 20);
+
+            if (isValidImageUrl($xraytech_signature)) {
+                $pdf->Image($xraytech_signature, 35, 150, 8);
+            }
+
+            if (isValidImageUrl($radiologist_signature)) {
+                $pdf->Image($radiologist_signature, 150, 146, 20);
+            }
+            
             $pdf->Cell(10, 8, '' , '', 0, 'L');
-            $pdf->Cell(40, 8, 'ALVIN D. ROSARIO RXT' , 'B', 0, 'C');
+            $pdf->Cell(40, 8, $xraytech_name, 'B', 0, 'C');
             $pdf->Cell(70, 8, '' , '', 0, 'L');
-            $pdf->Cell(60, 8, 'ERNIE CALIBOSO, M.D. F.P.C.R.F.U.S.P.' , 'B', 0, 'C');
+            $pdf->Cell(60, 8, $radiologist_name, 'B', 0, 'C');
             $pdf->ln();
             $pdf->SetFont('Arial','', 8);
             $pdf->Cell(10, 8, '' , '', 0, 'L');
-            $pdf->Cell(40, 8, 'X-RAY TECHNOLOGIST' , '', 0, 'C');
+            $pdf->Cell(40, 8, $xraytech_role , '', 0, 'C');
             $pdf->Cell(70, 8, '' , '', 0, 'L');
-            $pdf->Cell(60, 8, 'RADIOLOGIST' , '', 0, 'C');
+            $pdf->Cell(60, 8, $radiologist_role , '', 0, 'C');
             $pdf->ln(5);
-            $pdf->Cell(10, 8, '' , '', 0, 'L');
-            $pdf->Cell(40, 8, 'License No.: 0002508' , '', 0, 'C');
+            $pdf->Cell(10, 8, '' , '', 0, 'C');
+            
+            if($xraytech_license != '') {
+                $pdf->Cell(40, 8, 'License No.: ' . $xraytech_license , '', 0, 'C');
+            }
+            
+            $pdf->Cell(70, 8, '' , '', 0, 'C');
+
+            if($radiologist_license != '') {
+                $pdf->Cell(60, 8, 'License No.: ' . $radiologist_license , '', 0, 'C');
+            }
+            
             $pdf->Ln(20);
             $pdf->SetTextColor(83,99,113);
             $pdf->Cell(40, 8,'Computer-generated report.', '', 0, 'L');

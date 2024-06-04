@@ -30,7 +30,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = test_input( $_POST['email'] );
     $phone = test_input( $_POST['phone'] );
     $address = test_input( $_POST['address'] );
-    $location_fk = test_input( $_POST['location_fk'] );
+    $location_fk = clean($_POST["location_fk"]);
+    $xraytech_fk = clean($_POST["xraytech_fk"]);
+    $radiologist_fk = clean($_POST["radiologist_fk"]);
+    $medtech1_fk = clean($_POST["medtech1_fk"]);
+    $medtech2_fk = clean($_POST["medtech2_fk"]);
+    $pathologist_fk = clean($_POST["pathologist_fk"]);
+    $physician_fk = clean($_POST["physician_fk"]);
 
     if(isset( $_POST['saveChanges'] )) {
 
@@ -39,7 +45,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             email = '$email',
                             phone = '$phone',
                             address = '$address',
-                            location_fk = '$location_fk'
+                            location_fk = '$location_fk',
+                            xraytech_fk = '$xraytech_fk',
+                            radiologist_fk = '$radiologist_fk',
+                            medtech1_fk = '$medtech1_fk',
+                            medtech2_fk = '$medtech2_fk',
+                            pathologist_fk = '$pathologist_fk',
+                            physician_fk = '$physician_fk'
                             WHERE id = $id";
 
         if ($conn->query($orgUpdateQuery) === TRUE) {
@@ -230,27 +242,27 @@ createMainHeader($headerText, array("Home", "Organizations", $headerText));
     var listProfessionals = <?php echo json_encode($professionals); ?>;
 
     document.addEventListener("DOMContentLoaded", 
-        setRoleSelect( listProfessionals, document.getElementById("xraytech_fk"), "", "X-Ray Technologist" )
+        setRoleSelect( listProfessionals, document.getElementById("xraytech_fk"), "<?php echo isset($_POST['xraytech_fk']) ? $_POST['xraytech_fk'] : ''; ?>", "X-Ray Technologist" )
     );
 
     document.addEventListener("DOMContentLoaded", 
-        setRoleSelect( listProfessionals, document.getElementById("radiologist_fk"), "", "Radiologist" )
+        setRoleSelect( listProfessionals, document.getElementById("radiologist_fk"), "<?php echo isset($_POST['radiologist_fk']) ? $_POST['radiologist_fk'] : ''; ?>", "Radiologist" )
     );
 
     document.addEventListener("DOMContentLoaded", 
-        setRoleSelect( listProfessionals, document.getElementById("medtech1_fk"), "", "Medical Technologist" )
+        setRoleSelect( listProfessionals, document.getElementById("medtech1_fk"), "<?php echo isset($_POST['medtech1_fk']) ? $_POST['medtech1_fk'] : ''; ?>", "Medical Technologist" )
     );
 
     document.addEventListener("DOMContentLoaded", 
-        setRoleSelect( listProfessionals, document.getElementById("medtech2_fk"), "", "Medical Technologist" )
+        setRoleSelect( listProfessionals, document.getElementById("medtech2_fk"), "<?php echo isset($_POST['medtech2_fk']) ? $_POST['medtech2_fk'] : ''; ?>", "Medical Technologist" )
     );
 
     document.addEventListener("DOMContentLoaded", 
-        setRoleSelect( listProfessionals, document.getElementById("pathologist_fk"), "", "Pathologist" )
+        setRoleSelect( listProfessionals, document.getElementById("pathologist_fk"), "<?php echo isset($_POST['pathologist_fk']) ? $_POST['pathologist_fk'] : ''; ?>", "Pathologist" )
     );
 
     document.addEventListener("DOMContentLoaded", 
-        setRoleSelect( listProfessionals, document.getElementById("physician_fk"), "", "Physician" )
+        setRoleSelect( listProfessionals, document.getElementById("physician_fk"), "<?php echo isset($_POST['physician_fk']) ? $_POST['physician_fk'] : ''; ?>", "Physician" )
     );
 </script>
 
