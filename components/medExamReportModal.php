@@ -834,7 +834,7 @@ if (isset($_POST['generateMedExamReport'])) {
                     'L. Others', 
                     'medExamReport_xrayEcgLab_other',
                     $medExamReport['medExamReport_xrayEcgLab_other'] ?? '',
-                    'maxLength="60"'
+                    'maxLength="255"'
                 );
                 sectionClose();
 
@@ -864,14 +864,14 @@ if (isset($_POST['generateMedExamReport'])) {
                 );
 
                 echo "</div>";
-                echo "<div class='col-span-1'>";
+                echo "<div class='col-span-2'>";
                     medExamInput(
                         '', 
                         'text', 
                         'Remarks', 
                         'medExamReport_recommendation_remarks',
                         $medExamReport['medExamReport_recommendation_remarks'] ?? '',
-                        'maxLength="60"'
+                        'maxLength="255"'
                     );
                 echo "</div>";
 

@@ -24,7 +24,6 @@ class MedicalExamPDF {
         $toRight = 0;
         $toBegin = 1;
         $toBelow = 2;
-        $space = " ";
         
         $pdf->AliasNbPages();
         $pdf->AddPage();
@@ -48,39 +47,39 @@ class MedicalExamPDF {
         $pdf->thFontStyle();
         $pdf->Cell(25, $lineHeight,' Name: ', $border, $toRight, 'L', true);
         $pdf->tdFontStyle();
-        $pdf->Cell(115, $lineHeight, $space.$apeDetails['lastName'] . ", " . $apeDetails['firstName'].$space, $border);
+        $pdf->Cell(115, $lineHeight, $apeDetails['lastName'] . ", " . $apeDetails['firstName'], $border);
         
         // Sex
         $pdf->thFontStyle();
         $pdf->Cell(10, $lineHeight,' Sex: ', $border, $toRight, 'L', true);
         $pdf->tdFontStyle();
-        $pdf->Cell(15, $lineHeight, $space.substr($apeDetails['sex'], 0,1).$space , $border);
+        $pdf->Cell(15, $lineHeight, substr($apeDetails['sex'], 0,1) , $border);
         
         // Age
         $pdf->thFontStyle();
         $pdf->Cell(10, $lineHeight,' Age: ', $border, $toRight, 'L', true);
         $pdf->tdFontStyle();
-        $pdf->Cell(15, $lineHeight, $space.$apeDetails['age'].$space , $border, $toBegin);
+        $pdf->Cell(15, $lineHeight, $apeDetails['age'] , $border, $toBegin);
         
         // Civil Status
         $pdf->thFontStyle();
         $pdf->Cell(25, $lineHeight,' Civil Status: ', $border, $toRight, 'L', true);
         $pdf->tdFontStyle();
-        // $pdf->Cell(25, $lineHeight, $space.date('d-M-y', strtotime($medExamReports['medExamReport_recommendation_date'])).$space, $border, $toBegin);
-        $pdf->Cell(30, $lineHeight, $space.$apeDetails['civilStatus'].$space, $border);
+        // $pdf->Cell(25, $lineHeight, date('d-M-y', strtotime($medExamReports['medExamReport_recommendation_date'])), $border, $toBegin);
+        $pdf->Cell(30, $lineHeight, $apeDetails['civilStatus'], $border);
         
         // Home Address
         $pdf->thFontStyle();
         $pdf->Cell(25, $lineHeight,' Home Address: ', $border, $toRight, 'L', true);
         $pdf->tdFontStyle();
-        $pdf->MultiCell(0, $lineHeight, $space.$apeDetails['homeAddress'].$space, $border);
+        $pdf->MultiCell(0, $lineHeight, $apeDetails['homeAddress'], $border);
         
         $pdf->Cell(0, 1,'', 'T', $toBegin);
         
         $pdf->ln(5);
         
         $pdf->thFontStyle();
-        $pdf->MultiCell(190, $lineHeight, ' I. HISTORY: ', 0);
+        $pdf->MultiCell(190, $lineHeight, 'I. HISTORY: ', 0);
         $pdf->row('Childhood Illness:', $medExamReports['medExamReport_history_childhoodIllness'] ?? null);
         $pdf->row('Past Illness:', $medExamReports['medExamReport_history_pastIllness'] ?? null);
         $pdf->ln();
@@ -92,7 +91,7 @@ class MedicalExamPDF {
         $pdf->ln(10);
         
         $pdf->thFontStyle();
-        $pdf->MultiCell(190, $lineHeight, ' II. PERSONAL & SOCIAL HISTORY: ', 0);
+        $pdf->MultiCell(190, $lineHeight, 'II. PERSONAL & SOCIAL HISTORY: ', 0);
         $pdf->row('Smoking History:', ($medExamReports['medExamReport_personalSocial_smokingHistory'] ?? null) . '     Pack per: ' . ($medExamReports['medExamReport_personalSocial_smokingHistory_pack'] ?? null));
         $pdf->row('Alcohol Intake:', ($medExamReports['medExamReport_personalSocial_alcoholIntake'] ?? null) . '     Bottle per: ' . ($medExamReports['medExamReport_personalSocial_alcoholIntake_bottle'] ?? null));
         $pdf->ln();
@@ -110,7 +109,7 @@ class MedicalExamPDF {
         $pdf->ln(10);
         
         $pdf->thFontStyle();
-        $pdf->MultiCell(190, $lineHeight, ' III. FAMILY HISTORY: ', 0);
+        $pdf->MultiCell(190, $lineHeight, 'III. FAMILY HISTORY: ', 0);
         $pdf->row('Hypertension:', $medExamReports['medExamReport_family_hypertension'] ?? null . '     ' . ($medExamReports['medExamReport_family_hypertension_note'] ?? null));
         $pdf->row('HeartDisease:', $medExamReports['medExamReport_family_heartDisease'] ?? null . '     ' . ($medExamReports['medExamReport_family_heartDisease_note'] ?? null));
         $pdf->ln();
@@ -122,7 +121,7 @@ class MedicalExamPDF {
         $pdf->ln(10);
         
         $pdf->thFontStyle();
-        $pdf->MultiCell(190, $lineHeight, ' IV. REVIEW OF SYSTEMS: ', 0);
+        $pdf->MultiCell(190, $lineHeight, 'IV. REVIEW OF SYSTEMS: ', 0);
         $pdf->row('Eyes:', ($medExamReports['medExamReport_system_eyes'] ?? null) . '     ' . ($medExamReports['medExamReport_system_eyes_note'] ?? null));
         $pdf->row('ENT/Mouth:', ($medExamReports['medExamReport_system_entMouth'] ?? null) . '     ' . ($medExamReports['medExamReport_system_entMouth_note'] ?? null));
         $pdf->ln();
@@ -143,7 +142,7 @@ class MedicalExamPDF {
         $pdf->ln(10);
         
         $pdf->thFontStyle();
-        $pdf->MultiCell(190, $lineHeight, ' V. PHYSICAL EXAMINATION: ', 0);
+        $pdf->MultiCell(190, $lineHeight, 'V. PHYSICAL EXAMINATION: ', 0);
         
         $pdf->row('Height (cm):', $medExamReports['medExamReport_physical_height'] ?? null);
         $pdf->row('Weight (kg):', $medExamReports['medExamReport_physical_weight'] ?? null);
@@ -189,43 +188,30 @@ class MedicalExamPDF {
         $pdf->ln(10);
         
         $pdf->thFontStyle();
-        $pdf->MultiCell(190, $lineHeight, ' VI. X-RAY, ECG AND LABORATORY EXAMINATION REPORT: ', 0);
-        $pdf->rowCol4('A. Chest X-ray: ' , ($medExamReports['medExamReport_xrayEcgLab_chestXray'] ?? null) . '     ' . ($medExamReports['medExamReport_xrayEcgLab_chestXray_sub'] ?? null) . '     ' . ($medExamReports['medExamReport_xrayEcgLab_chestXray_other'] ?? null));
-        $pdf->ln();
-        $pdf->rowCol4('B. ECG: ' , ($medExamReports['medExamReport_xrayEcgLab_ecg'] ?? null));
-        $pdf->ln();
-        $pdf->rowCol4('C. Complete Blood Count:' , ($medExamReports['medExamReport_xrayEcgLab_bloodCount'] ?? null) . '     ' . ($medExamReports['medExamReport_xrayEcgLab_bloodCount_findings'] ?? null));
-        $pdf->ln();
-        $pdf->rowCol4('D. Urinalysis: Findings: WBC:', ($medExamReports['medExamReport_xrayEcgLab_urinalysis_wbc'] ?? null) == '' ? ($medExamReports['medExamReport_xrayEcgLab_urinalysis'] ?? null) : ($medExamReports['medExamReport_xrayEcgLab_urinalysis_wbc'] ?? null) .'/hpf');
-        $pdf->ln();
-        $pdf->rowCol4('E. Stool Examination: Findings: Positive:', ($medExamReports['medExamReport_xrayEcgLab_stoolSample_positive'] ?? null) == '' ? ($medExamReports['medExamReport_xrayEcgLab_stoolSample'] ?? null) : ($medExamReports['medExamReport_xrayEcgLab_stoolSample_positive'] . '/hpf'));
-        $pdf->ln();
-        $pdf->rowCol4('F. Serological Test (VDRL): ', ($medExamReports['medExamReport_xrayEcgLab_serologicalTest'] ?? null));
-        $pdf->ln();
-        $pdf->rowCol4('G. Hepatitis - A Screening: ', ($medExamReports['medExamReport_xrayEcgLab_hepatitisAScreening'] ?? null));
-        $pdf->ln();
-        $pdf->rowCol4('H. Hepatitis - B Surface Antigen (Hbsag): ', ($medExamReports['medExamReport_xrayEcgLab_hepatitisBSurfaceAntigen'] ?? null));
-        $pdf->ln();
-        $pdf->rowCol4('I. Pregnancy Test: ' , ($medExamReports['medExamReport_xrayEcgLab_pregnancyTest'] ?? null));
-        $pdf->ln();
-        $pdf->rowCol4('J. Blood Type:' , ($medExamReports['medExamReport_xrayEcgLab_bloodType'] ?? null));
-        $pdf->ln();
-        $pdf->rowCol4('K. Drug Test' , '');
-        $pdf->ln();
-        $pdf->rowCol4('    Marijuana (tetrahydrocannabinol):', ($medExamReports['medExamReport_xrayEcgLab_marijuana'] ?? null));
-        $pdf->ln();
-        $pdf->rowCol4('    Shabu (Methamphetamine):', ($medExamReports['medExamReport_xrayEcgLab_marijuana'] ?? null));
-        $pdf->ln();
-        $pdf->rowCol4('L. Others:' , ($medExamReports['medExamReport_xrayEcgLab_other'] ?? null));
-        $pdf->ln(10);
-        
+        $pdf->MultiCell(190, $lineHeight, 'VI. X-RAY, ECG AND LABORATORY EXAMINATION REPORT: ', 0);
+        $pdf->ln(0);
+        $pdf->rowCol4('A. Chest X-ray: ', '55', ($medExamReports['medExamReport_xrayEcgLab_chestXray'] ?? null) . '     ' . ($medExamReports['medExamReport_xrayEcgLab_chestXray_sub'] ?? null) . '     ' . ($medExamReports['medExamReport_xrayEcgLab_chestXray_other'] ?? null));
+        $pdf->rowCol4('B. ECG: ' , '55', ($medExamReports['medExamReport_xrayEcgLab_ecg'] ?? null));
+        $pdf->rowCol4('C. Complete Blood Count:' , '55', ($medExamReports['medExamReport_xrayEcgLab_bloodCount'] ?? null) . '     ' . ($medExamReports['medExamReport_xrayEcgLab_bloodCount_findings'] ?? null));
+        $pdf->rowCol4('D. Urinalysis: Findings: WBC:', '55', ($medExamReports['medExamReport_xrayEcgLab_urinalysis_wbc'] ?? null) == '' ? ($medExamReports['medExamReport_xrayEcgLab_urinalysis'] ?? null) : ($medExamReports['medExamReport_xrayEcgLab_urinalysis_wbc'] ?? null) .'/hpf');
+        $pdf->rowCol4('E. Stool Examination: Findings: Positive:', '55',($medExamReports['medExamReport_xrayEcgLab_stoolSample_positive'] ?? null) == '' ? ($medExamReports['medExamReport_xrayEcgLab_stoolSample'] ?? null) : ($medExamReports['medExamReport_xrayEcgLab_stoolSample_positive'] . '/hpf'));
+        $pdf->rowCol4('F. Serological Test (VDRL): ', '55',($medExamReports['medExamReport_xrayEcgLab_serologicalTest'] ?? null));
+        $pdf->rowCol4('G. Hepatitis - A Screening: ', '55',($medExamReports['medExamReport_xrayEcgLab_hepatitisAScreening'] ?? null));
+        $pdf->rowCol4('H. Hepatitis - B Surface Antigen (Hbsag): ','55', ($medExamReports['medExamReport_xrayEcgLab_hepatitisBSurfaceAntigen'] ?? null));
+        $pdf->rowCol4('I. Pregnancy Test: ' ,'55',($medExamReports['medExamReport_xrayEcgLab_pregnancyTest'] ?? null));
+        $pdf->rowCol4('J. Blood Type:' , '55',($medExamReports['medExamReport_xrayEcgLab_bloodType'] ?? null));
+        $pdf->rowCol4('K. Drug Test' ,'55', '');
+        $pdf->rowCol4('    Marijuana (tetrahydrocannabinol):', '55',($medExamReports['medExamReport_xrayEcgLab_marijuana'] ?? null));
+        $pdf->rowCol4('    Shabu (Methamphetamine):', '55',($medExamReports['medExamReport_xrayEcgLab_marijuana'] ?? null));
+        $pdf->rowCol4('L. Others:' , '55',($medExamReports['medExamReport_xrayEcgLab_other'] ?? null));
+        $pdf->ln(5);
+
         $pdf->thFontStyle();
-        $pdf->MultiCell(190, $lineHeight, ' RECOMMENDATIONS: ', 0);
-        
-        $pdf->row('Ratings: ', ($medExamReports['medExamReport_recommendation_ratings_note'] ?? null) . '     ' . ($medExamReports['medExamReport_recommendation_ratings'] ?? null));
-        $pdf->ln();
-        $pdf->row('Remarks: ', ($medExamReports['medExamReport_recommendation_remarks'] ?? null));
-        $pdf->ln(30);
+        $pdf->MultiCell(190, $lineHeight, 'RECOMMENDATIONS: ', 0);        
+        $pdf->ln(0);
+        $pdf->rowCol4('Ratings: ','30', ($medExamReports['medExamReport_recommendation_ratings_note'] ?? null) . '     ' . ($medExamReports['medExamReport_recommendation_ratings'] ?? null));
+        $pdf->rowCol4('Remarks: ', '30',($medExamReports['medExamReport_recommendation_remarks'] ?? null));
+        $pdf->ln(20);
         // $pdf->row('Examining Physician:', $medExamReports['medExamReport_recommendation_physicianName']);
         
         $pdf->SetFont('Arial','B', 8);
@@ -233,7 +219,7 @@ class MedicalExamPDF {
         $pdf->SetDrawColor(83,99,113);
 
         if (isValidImageUrl($physician_signature)) {
-            $pdf->Image($physician_signature, 20, 175, 40);
+            // $pdf->Image($physician_signature, 20, 175, 40);
         }
 
         $pdf->Cell(10, 8, '' , '', 0, 'L');
@@ -296,60 +282,33 @@ class MedFPDF extends FPDF {
         $this->SetTextColor(17, 24, 39);
     }
 
-    function row($title, $value, $default = null) {
+    function row($title, $value) {
         $border = 0;
         $lineHeight = 5;
         $toRight = 0;
-        $space = " ";
 
         $this->SetFont('Arial','', 8);
         $this->SetTextColor(83,99,113);
-        $this->Cell(30, $lineHeight, $space.$title.$space , $border, $toRight, 'L', false);
+        $this->Cell(47.5, $lineHeight, $title , $border, $toRight, 'L');
 
         $this->SetFont('Arial','B', 8);
         $this->SetTextColor(17, 24, 39);
-        $this->Cell(25, $lineHeight, $space.$value.$space, $border, $toRight);
-
-        $this->SetFont('Arial','', 8);
-        $this->SetTextColor(83,99,113);
-        $this->Cell(35, $lineHeight, $space.$default.$space, $border, $toRight);
-        $this->Cell(10, $lineHeight, $space, $border, $toRight);
+        $this->Cell(47.5, $lineHeight, $value, $border, $toRight, 'L');
     }
 
-    function row2($title, $value, $default = null) {
+    function rowCol4($title, $title_width, $value, $value_w = 0) {
         $border = 0;
         $lineHeight = 5;
         $toRight = 0;
-        $space = " ";
-
+        $align = 'L';
         $this->SetFont('Arial','', 8);
         $this->SetTextColor(83,99,113);
-        $this->Cell(30, $lineHeight, $space.$title.$space , $border, $toRight, 'L', false);
-
-        $this->SetFont('Arial','', 8);
-        $this->SetTextColor(17, 24, 39);
-        $this->Cell(25, $lineHeight, $space.$value.$space, $border, $toRight);
-
-        $this->SetFont('Arial','B', 8);
-        $this->SetTextColor(83,99,113);
-        $this->Cell(35, $lineHeight, $space.$default.$space, $border, $toRight);
-        $this->Cell(10, $lineHeight, $space, $border, $toRight);
-    }
-
-    function rowCol4($title, $value) {
-        $border = 0;
-        $lineHeight = 5;
-        $toRight = 0;
-        $space = " ";
-
-        $this->SetFont('Arial','', 8);
-        $this->SetTextColor(83,99,113);
-        $this->Cell(55, $lineHeight, $space.$title.$space , $border, $toRight, 'L', false);
+        $this->Cell($title_width, 5, $title , $border, $toRight, $align);
 
         $this->SetFont('Arial','B', 8);
         $this->SetTextColor(17, 24, 39);
-        $this->Cell(35, $lineHeight, $space.$value.$space, $border, $toRight);
-        $this->Cell(10, $lineHeight, $space, $border, $toRight);
+        $this->MultiCell($value_w, $lineHeight, $value, $border, $align);
+        $this->ln(1);
     }
 
     function processRow($pdf, $title, $key, $medExamReports) {
