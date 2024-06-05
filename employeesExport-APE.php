@@ -174,7 +174,13 @@ if(isset($_POST['generate'])) {
                 
                 $prefix = $y . '-' . $o . '-' . $id;
                 $combinedFilename = $prefix . "-APE.pdf";
-                $finalFilename = $apeDetails['controlNumber'] . " - " . $apeDetails['lastName'] . " " . $apeDetails['firstName'] . ".pdf";
+                
+                $employeeNumber = "";
+                if($apeDetails['employeeNumber'] !== '') {
+                    $employeeNumber = " - " . $apeDetails['employeeNumber'];
+                }
+                
+                $finalFilename = $apeDetails['controlNumber'] . " - " . $apeDetails['lastName'] . " " . $apeDetails['firstName'] .  $employeeNumber .  ".pdf";
         
                 $pdf = new reportsFPDF();
     
