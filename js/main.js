@@ -22,3 +22,47 @@ function htmlEntityDecode(input) {
 $(window).on("load", function() {
     $("body").removeClass("is-loading")
 });
+
+
+(function($) {
+    $(document).ready(function() {
+        function resetInputs(container) {
+            $(container).find('input').each(function() {
+                switch (this.type) {
+                    case 'text':
+                    case 'number':
+                        $(this).val('');
+                        break;
+                    case 'radio':
+                    case 'checkbox':
+
+                        $(this).prop('checked', false);
+                        $(this).removeAttr('checked');
+
+                        var originalElement = this;
+                        var clonedElement = originalElement.cloneNode(true); // true to clone all descendants
+                  
+                        originalElement.parentNode.replaceChild(clonedElement, originalElement);
+
+
+                        break;
+                    default:
+                        $(this).val('');
+                }
+            });
+            
+            $(container).find('select').each(function() {
+                $(this).prop('selectedIndex', 0);
+            });
+            
+            $(container).find('textarea').each(function() {
+                $(this).val('');
+            });
+        }
+
+        // Example usage: reset all inputs in the container with id 'form-container'
+        $('.has-reset-input--trigger').on('click', function() {
+            resetInputs($(this).closest('.has-reset-input'));
+        });
+    });
+})(jQuery);

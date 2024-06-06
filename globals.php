@@ -507,9 +507,10 @@ function fetchRadReportDetailsByAPEfk($conn, $medExam_fk) {
 }
 
 function medExamRadioAndInput($mainClass, $label, $checkBoxId, $inputLabel=null, $inputId=null, $checkBoxVal='', $inputVal=null, $attribute=null, $inputType='text') {
-    echo '<div class="'.$mainClass.'">
-            <label for="" class="block text-sm font-medium leading-6 text-gray-900">'.$label.'</label>
-            <div class="flex flex-wrap gap-x-5 gap-y-1.5 border border-l border-r-0 border-t-0 border-b-0 pl-4 items-center sm:flex-nowrap sm:pl-0 sm:border-0">
+    echo '<div class="'.$mainClass.' relative">';
+    echo    '<label for="" class="block text-sm font-medium leading-6 text-gray-900 pr-6">'.$label.'</label>';
+
+    echo    '<div class="flex flex-wrap gap-x-5 gap-y-1.5 border border-l border-r-0 border-t-0 border-b-0 pl-4 items-center sm:flex-nowrap sm:pl-0 sm:border-0">
                 <div class="checkbox-item-1 flex items-center py-3">
                     <input id="'.$checkBoxId.'" type="radio" value="Yes" name="'.$checkBoxId.'" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300" '. ($checkBoxVal=="Yes" ? "checked": "") .'>
                     <label for="'.$checkBoxId.'" class="ms-2 text-xs font-medium text-gray-500">Yes</label>
@@ -517,7 +518,14 @@ function medExamRadioAndInput($mainClass, $label, $checkBoxId, $inputLabel=null,
                 <div class="checkbox-item-2 flex items-center py-3">
                     <input id="'.$checkBoxId.'" type="radio" value="No" name="'.$checkBoxId.'" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300" '. ($checkBoxVal=="No" ? "checked": "") .'>
                     <label for="'.$checkBoxId.'" class="ms-2 text-xs font-medium text-gray-500">No</label>
-                </div>';
+                </div>
+                <div class="checkbox-item-2 flex items-center py-3">
+                    <input id="'.$checkBoxId.'-void" type="radio" value="" name="'.$checkBoxId.'" class="text-blue-600 bg-gray-100 border-gray-300 h-0 w-0 opacity-0">
+                    <label for="'.$checkBoxId.'-void" class="text-xs font-medium text-gray-500 opacity-40 hover:opacity-70 cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" fill="#6b7280" height="16" width="16"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg>
+                    </label>
+                </div>
+                ';
 
     if($inputLabel !== null) {
     echo        '<div class="input-wrapper sm:flex sm:items-baseline sm:gap-2 sm:pl-4 w-full">
@@ -549,6 +557,13 @@ function medExamRadioMulti($mainClass, $mainId, $label, $options, $inputLabel=nu
                     echo    '<label for="'.$mainId.$o.'" class="ms-2 text-xs font-medium text-gray-500">'.$opt.'</label>
                         </div>';
                 }
+                echo '<div class="flex items-center py-3">';
+                echo '<input id="'.$mainId.$o.'-void" type="radio" value="" name="'.$mainId.'" class="w-0 h-0 opacity-0 text-blue-600 bg-gray-100 border-gray-300" html-transform="false">';
+                echo '<label for="'.$mainId.$o.'-void" class="text-xs font-medium text-gray-500 opacity-40 hover:opacity-70 cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" fill="#6b7280" height="16" width="16"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg>
+                     </label>';
+                echo '</div>';
+
                 if($inputLabel !== null) {
                     // $o++;
                     // echo '<div class="flex items-center">
