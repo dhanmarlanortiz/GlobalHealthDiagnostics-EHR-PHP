@@ -207,9 +207,29 @@ if (isset($_POST['generateMedExamReport'])) {
                 sectionOpen('grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-5 p-4 md:p-5', 'medExamReport-section-xrayEcgAndLabExamReport');
 
                 medExamRadioMulti( 'col-span-1 sm:col-span-3', 'medExamReport_xrayEcgLab_chestXray', 'A. Chest X-Ray', array('PA', 'LORDOTIC'), null, null, $medExamReport['medExamReport_xrayEcgLab_chestXray'] ?? '', );
-                medExamRadioMulti( 'col-span-1 sm:col-span-3 -mt-5', 'medExamReport_xrayEcgLab_chestXray_sub', '', array('Essentially Normal Chest', 'Significant Finding For Lordotic View', 'Minimal PTB, Activity Undetermined', 'Pneumonitis', 'Healed & Stable Ptb', 'Pulmonary Scar', 'Other'), '', 'medExamReport_xrayEcgLab_chestXray_other', $medExamReport['medExamReport_xrayEcgLab_chestXray_sub'] ?? '', $medExamReport['medExamReport_xrayEcgLab_chestXray_other'] ?? '' );
-                medExamRadioMulti( 'col-span-1 sm:col-span-3', 'medExamReport_xrayEcgLab_ecg', 'B. ECG Report', array('Normal', 'Significant Findings', 'Not Required'), null, null, $medExamReport['medExamReport_xrayEcgLab_ecg'] ?? '' );
-                medExamRadioMulti( 'col-span-1 sm:col-span-3', 'medExamReport_xrayEcgLab_bloodCount', 'C. Complete Blood Count', array('Normal', 'Findings'), '', 'medExamReport_xrayEcgLab_bloodCount_findings', $medExamReport['medExamReport_xrayEcgLab_bloodCount'] ?? '', $medExamReport['medExamReport_xrayEcgLab_bloodCount_findings'] ?? '' );
+                medExamRadioMulti( 'col-span-1 sm:col-span-3 -mt-5', 'medExamReport_xrayEcgLab_chestXray_sub', '', array('Essentially Normal Chest', 'Significant Finding For Lordotic View', 'Minimal PTB, Activity Undetermined', 'Pneumonitis', 'Healed & Stable Ptb', 'Pulmonary Scar', 'Other'), 'Other', 'medExamReport_xrayEcgLab_chestXray_other', $medExamReport['medExamReport_xrayEcgLab_chestXray_sub'] ?? '', $medExamReport['medExamReport_xrayEcgLab_chestXray_other'] ?? '' );
+                
+                medExamRadioMulti( 
+                                'col-span-1 sm:col-span-3', 
+                                    'medExamReport_xrayEcgLab_ecg', 
+                                    'B. ECG Report', 
+                                    array('Normal', 'Not Required', 'Significant Findings'), 
+                                    'Significant Findings',
+                                    'medExamReport_xrayEcgLab_ecg_findings', 
+                                    $medExamReport['medExamReport_xrayEcgLab_ecg'] ?? '',
+                                    $medExamReport['medExamReport_xrayEcgLab_ecg_findings'] ?? '' 
+                                );
+
+                medExamRadioMulti( 
+                                'col-span-1 sm:col-span-3', 
+                                'medExamReport_xrayEcgLab_bloodCount', 
+                                'C. Complete Blood Count', 
+                                array('Normal', 'Findings'), 
+                                'Findings', 
+                                'medExamReport_xrayEcgLab_bloodCount_findings', 
+                                $medExamReport['medExamReport_xrayEcgLab_bloodCount'] ?? '', 
+                                $medExamReport['medExamReport_xrayEcgLab_bloodCount_findings'] ?? '' 
+                            );
 
                 /* URINALYSIS - START */
                 echo '<div class="xrayEcgLab-urinalysis-item col-span-1 sm:col-span-3">';

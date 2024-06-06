@@ -571,8 +571,8 @@ function medExamRadioMulti($mainClass, $mainId, $label, $options, $inputLabel=nu
                     //         <label for="'.$mainId.$o.'" class="ms-2 mr-2 text-xs font-medium text-gray-500">'.$inputLabel.'</label>                                            
                     //         <input type="text" id="'.$inputId.'" value="'.$inputVal.'" class="block w-full rounded py-1.5 px-2 border-gray-300 placeholder:text-gray-400 focus:border-green-700 focus:ring-0 focus:bg-green-50 sm:text-xs sm:leading-6" name="'.$inputId.'" html-transform="false" maxLength="60">
                     //     </div>';
-                    echo '<div class="flex items-center">
-                        <input type="text" id="'.$inputId.'" value="'.$inputVal.'" class="block w-full rounded py-1.5 px-2 border-gray-300 placeholder:text-gray-400 focus:border-green-700 focus:ring-0 focus:bg-green-50 sm:text-xs sm:leading-6" name="'.$inputId.'" html-transform="false" maxLength="60">
+                    echo '<div class="flex items-center w-full">
+                        <input placeholder="'.$inputLabel.'" type="text" id="'.$inputId.'" value="'.$inputVal.'" class="block w-full rounded py-1.5 px-2 border-gray-300 placeholder:text-gray-400 focus:border-green-700 focus:ring-0 focus:bg-green-50 sm:text-xs sm:leading-6" name="'.$inputId.'" html-transform="false" maxLength="255">
                     </div>';
                 }
                 echo '</div>';
