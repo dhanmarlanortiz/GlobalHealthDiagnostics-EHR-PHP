@@ -931,52 +931,66 @@ if (isset($_POST['generateMedExamReport'])) {
 
 
 <script>
-    $(document).ready( function() {
-        $(".physical-examination-item").each(function() {
-            if ($(this).find('.checkbox-item-2 input').is(':checked')) {
-                $(this).find('.input-wrapper').css('visibility', 'visible');
-            } else {
-                $(this).find('.input-wrapper').css('visibility', 'hidden');
+(function($) {
+    $(document).ready(function() {
+        function toggleInputWrapper() {
+            $(".physical-examination-item").each(function() {
+                const inputWrapper = $(this).find('.input-wrapper');
+                const isChecked = $(this).find('.checkbox-item-2 input').is(':checked');
+                inputWrapper.css('visibility', isChecked ? 'visible' : 'hidden');
+            });
+        }
+
+        function resetCheckboxes(checkboxes) {
+            checkboxes.prop("checked", false);
+        }
+
+        function onUrinalysisChange() {
+            const urinalysisWBC = $("#medExamReport_xrayEcgLab_urinalysis_wbc");
+            const urinalysisCheckboxes = $("#medExamReport_xrayEcgLab_urinalysis0, #medExamReport_xrayEcgLab_urinalysis1");
+
+            if (urinalysisWBC.val() !== "") {
+                resetCheckboxes(urinalysisCheckboxes);
             }
-        });
-
-
-        if($("#medExamReport_xrayEcgLab_urinalysis_wbc").val() != "") {
-            $("#medExamReport_xrayEcgLab_urinalysis0").prop("checked", false).removeAttr("checked");
-            $("#medExamReport_xrayEcgLab_urinalysis1").prop("checked", false).removeAttr("checked");
         }
 
-        if($("#medExamReport_xrayEcgLab_stoolSample_positive").val() != "") {
-            $("#medExamReport_xrayEcgLab_stoolSample0").prop("checked", false).removeAttr("checked");
-            $("#medExamReport_xrayEcgLab_stoolSample1").prop("checked", false).removeAttr("checked");
+        function onStoolSampleChange() {
+            const stoolSamplePositive = $("#medExamReport_xrayEcgLab_stoolSample_positive");
+            const stoolSampleCheckboxes = $("#medExamReport_xrayEcgLab_stoolSample0, #medExamReport_xrayEcgLab_stoolSample1");
+
+            if (stoolSamplePositive.val() !== "") {
+                resetCheckboxes(stoolSampleCheckboxes);
+            }
         }
-    });
-    
 
-    $(".physical-examination-item input[type=radio]").on('change', function() {
-        if($(this).val() == 'No') {
-            $(this).closest('.physical-examination-item').find('.input-wrapper').css('visibility', 'visible');
-        } else {
-            $(this).closest('.physical-examination-item').find('.input-wrapper').css('visibility', 'hidden');
+        function bindEvents() {
+            $(".physical-examination-item input[type=radio]").on('change', function() {
+                const inputWrapper = $(this).closest('.physical-examination-item').find('.input-wrapper');
+                inputWrapper.css('visibility', $(this).val() === 'No' ? 'visible' : 'hidden');
+            });
+
+            $("#medExamReport_xrayEcgLab_urinalysis_wbc").on("change", function() {
+                resetCheckboxes($("#medExamReport_xrayEcgLab_urinalysis0, #medExamReport_xrayEcgLab_urinalysis1"));
+            });
+
+            $("[name=medExamReport_xrayEcgLab_urinalysis]").on("change", function() {
+                $("#medExamReport_xrayEcgLab_urinalysis_wbc").val("");
+            });
+
+            $("#medExamReport_xrayEcgLab_stoolSample_positive").on("change", function() {
+                resetCheckboxes($("#medExamReport_xrayEcgLab_stoolSample0, #medExamReport_xrayEcgLab_stoolSample1"));
+            });
+
+            $("[name=medExamReport_xrayEcgLab_stoolSample]").on("change", function() {
+                $("#medExamReport_xrayEcgLab_stoolSample_positive").val("");
+            });
         }
-    })
 
-
-    $("#medExamReport_xrayEcgLab_urinalysis_wbc").on("change", function() {
-        $("#medExamReport_xrayEcgLab_urinalysis0").prop("checked", false).removeAttr("checked");
-        $("#medExamReport_xrayEcgLab_urinalysis1").prop("checked", false).removeAttr("checked");
+        toggleInputWrapper();
+        onUrinalysisChange();
+        onStoolSampleChange();
+        bindEvents();
     });
+})(jQuery);
 
-    $("[name=medExamReport_xrayEcgLab_urinalysis]").on("change", function() {
-        $("#medExamReport_xrayEcgLab_urinalysis_wbc").val("")
-    });
-    
-    $("#medExamReport_xrayEcgLab_stoolSample_positive").on("change", function() {
-        $("#medExamReport_xrayEcgLab_stoolSample0").prop("checked", false).removeAttr("checked");
-        $("#medExamReport_xrayEcgLab_stoolSample1").prop("checked", false).removeAttr("checked");
-    })
-
-    $("[name=medExamReport_xrayEcgLab_stoolSample]").on("change", function() {
-        $("#medExamReport_xrayEcgLab_stoolSample_positive").val("")
-    });
 </script>
