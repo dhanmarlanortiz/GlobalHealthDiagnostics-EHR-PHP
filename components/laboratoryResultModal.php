@@ -5,7 +5,7 @@
 if (isset($_POST['generateLaboratoryResult'])) {
 
     $labResGenQuery =   "INSERT INTO LaboratoryResult(
-                        labRes_APE_FK, labRes_user_FK, labRes_date, labRes_hepa_b, labRes_drug_shabu, labRes_drug_marijuana, labRes_hema_hemoglobin, labRes_hema_hematocrit, labRes_hema_whiteblood, labRes_hema_segmenters, labRes_hema_lymphocytes, labRes_hema_monocytes, labRes_hema_eosinophils, labRes_hema_basophils, labRes_hema_rbc, labRes_urin_color, labRes_urin_transparency, labRes_urin_reaction, labRes_urin_gravity, labRes_urin_protein, labRes_urin_glucose, labRes_urin_wbc, labRes_urin_rbc, labRes_urin_mucous, labRes_urin_epithelial, labRes_urin_amorphous, labRes_urin_bacteria, labRes_urin_cast, labRes_urin_crystals, labRes_para_color, labRes_para_consistency, labRes_para_result)
+                        labRes_APE_FK, labRes_user_FK, labRes_date, labRes_hepa_b, labRes_drug_shabu, labRes_drug_marijuana, labRes_hema_hemoglobin, labRes_hema_hematocrit, labRes_hema_whiteblood, labRes_hema_segmenters, labRes_hema_lymphocytes, labRes_hema_monocytes, labRes_hema_eosinophils, labRes_hema_basophils, labRes_hema_rbc, labRes_platelet_count, labRes_urin_color, labRes_urin_transparency, labRes_urin_reaction, labRes_urin_gravity, labRes_urin_protein, labRes_urin_glucose, labRes_urin_wbc, labRes_urin_rbc, labRes_urin_mucous, labRes_urin_epithelial, labRes_urin_amorphous, labRes_urin_bacteria, labRes_urin_cast, labRes_urin_crystals, labRes_para_color, labRes_para_consistency, labRes_para_result)
                      VALUES('" . clean( $_POST['labRes_APE_FK'] ) . "',
                             '" . clean( $_POST['labRes_user_FK'] ) . "',
                             '" . clean( $_POST['labRes_date'] ) . "',
@@ -21,6 +21,7 @@ if (isset($_POST['generateLaboratoryResult'])) {
                             '" . clean( $_POST['labRes_hema_eosinophils'] ) . "',
                             '" . clean( $_POST['labRes_hema_basophils'] ) . "',
                             '" . clean( $_POST['labRes_hema_rbc'] ) . "',
+                            '" . clean( $_POST['labRes_platelet_count'] ) . "',
                             '" . clean( $_POST['labRes_urin_color'] ) . "',
                             '" . clean( $_POST['labRes_urin_transparency'] ) . "',
                             '" . clean( $_POST['labRes_urin_reaction'] ) . "',
@@ -65,6 +66,7 @@ if (isset($_POST['generateLaboratoryResult'])) {
                         labRes_hema_eosinophils = '" . clean( $_POST['labRes_hema_eosinophils'] ) . "',
                         labRes_hema_basophils = '" . clean( $_POST['labRes_hema_basophils'] ) . "',
                         labRes_hema_rbc = '" . clean( $_POST['labRes_hema_rbc'] ) . "',
+                        labRes_platelet_count = '" . clean( $_POST['labRes_platelet_count'] ) . "',
                         labRes_urin_color = '" . clean( $_POST['labRes_urin_color'] ) . "',
                         labRes_urin_transparency = '" . clean( $_POST['labRes_urin_transparency'] ) . "',
                         labRes_urin_reaction = '" . clean( $_POST['labRes_urin_reaction'] ) . "',
@@ -195,6 +197,9 @@ if (isset($_POST['generateLaboratoryResult'])) {
                     </div>
                     <div class="col-span-1">
                         <input type="text" id="labRes_hema_rbc" data-label="Red Blood Cell" placeholder="Red Blood Cell" title="Hematology: Red Blood Cell" />
+                    </div>
+                    <div class="col-span-1">
+                        <input type="text" id="labRes_platelet_count" data-label="Platelet Count" placeholder="Platelet Count" title="Hematology: Platelet Count" />
                     </div>
                 </div>
 

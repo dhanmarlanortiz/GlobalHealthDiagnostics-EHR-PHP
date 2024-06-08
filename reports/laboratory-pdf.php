@@ -119,6 +119,7 @@ class LaboratoryPDF {
             $pdf->row('Basophils:', $labResults['labRes_hema_basophils'], '0-2%');
             $pdf->ln();
             $pdf->row('Red Blood Cell:', $labResults['labRes_hema_rbc'], '3.80 - 5.80 x 10^12/L');
+            $pdf->row('Platelet Count:', $labResults['labRes_platelet_count'], '100 - 400 x 10^9/L');
             $pdf->Cell(0, 1,'', '', $toBegin);
             $pdf->ln(5);
 
