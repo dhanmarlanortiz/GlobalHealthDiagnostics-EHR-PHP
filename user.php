@@ -20,17 +20,16 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 $errVal = $errKey = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id = clean( $_POST['id'] );
-    $username = clean( $_POST['username'] );
-    $email = clean( $_POST['email'] );
-    $role = clean( $_POST['role'] );
-    $isActive = clean( $_POST['isActive'] );
-    $organizationId = clean( $_POST['organizationId'] );
-
     $user = getUser($id);
     $headerText = $user['username'];
 
     if(isset( $_POST['saveChanges'] )) {
-
+        $username = clean( $_POST['username'] );
+        $email = clean( $_POST['email'] );
+        $role = clean( $_POST['role'] );
+        $isActive = clean( $_POST['isActive'] );
+        $organizationId = clean( $_POST['organizationId'] );
+        
         $userUpdateQuery =  "UPDATE User SET 
                             username = '$username',
                             email = '$email',
@@ -73,6 +72,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if($conn->errno == 1451) {
                 create_flash_message('delete-failed', '<strong>Failed!</strong> Unable to delete a user linked to other data.', FLASH_ERROR);
             }
+        }
+    } else if(isset( $_POST['changePassword'] )) {
+        $password = clean( $_POST['password'] );
+        $url = base_url(false) . "/user.php?id=" . $id;
+
+        $changePasswordQuery =  "UPDATE User SET password = '$password' WHERE id = $id";
+
+        if ($conn->query($changePasswordQuery) === TRUE) {
+            create_flash_message('update-success', '<strong>Change password successful!</strong> User has been successfully updated.', FLASH_SUCCESS);
+            header("Location: " . $url ."");
+
+            exit();
+        } else {
+            create_flash_message('update-failed', '<strong>Change password Failed!</strong> Please review and try again.', FLASH_ERROR);
+
+            // duplicate entry error
+            if($conn->errno == 1062) {
+                $errMsg = explode("'", $conn->error);
+                $errVal = $errMsg[1];
+                $errKey = $errMsg[3];
+            }
+
+            header("Location: " . $url ."");
+            exit();
         }
     }
 }
@@ -154,6 +177,7 @@ createMainHeader($headerText, array("Home", "Users", $headerText));
             <a href="<?php echo base_url() . '/users.php'; ?>" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Cancel</a>
             <!-- <button type="button" class="<?php echo $classBtnSecondary; ?> w-full sm:w-auto">Reset Password</button> -->
             <button type="submit" name="saveChanges" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto mb-2 sm:mb-0">Save Changes</button>
+            <button type='button' onClick='changePasswordModal.showModal()' title='Change password' class="<?php echo $classBtnAlternate; ?> w-full sm:w-auto mb-2 sm:mb-0">Change Password</button>
             <input type="submit" name="deleteUser" class="<?php echo $classBtnDanger; ?> w-full sm:w-auto mb-2 sm:mb-0" value="Delete Record" />
         </div>
 
@@ -163,6 +187,37 @@ createMainHeader($headerText, array("Home", "Users", $headerText));
         <?php flash('delete-failed'); ?>
 
     </form>
+
+    <form id="changePasswordForm" method="post" enctype="multipart/form-data" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id=" . $_GET['id'] ) ;?>" class="prompt-confirm">
+        <input type="hidden" id="id" name="id" value="<?php echo $id; ?>">
+        <dialog id="changePasswordModal" class="modal">
+            <div class="modal-box bg-white rounded-none max-w-2xl p-0">
+                    <div class="flex items-center justify-between p-4 border-b-2 border-green-700">
+                        <h3 class="font-medium text-green-700 text-sm">Change Password</h3>
+                        <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 focus:outline-none rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" onClick="radiologyReportModal.close();">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"></path>
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-8 p-4 md:p-5">
+                        <div class="sm:col-span-1">
+                            <input id="password" type="password" data-label="New Password" required />
+                        </div>
+                        <div class="sm:col-span-1">
+                            <input id="password-confirm" type="password" data-label="Confirm New Password" required />
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-end flex-col sm:flex-row gap-x-1 p-4 border-t-2 border-green-700">
+                        <button type="button" class="btn <?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0" onClick="changePasswordModal.close();">Cancel</button>
+                        <input type="submit" name="changePassword" value="Save Changes" class="<?php echo $classBtnAlternate; ?> w-full sm:w-auto mb-2 sm:mb-0">
+                    </div>
+            </div>
+        </dialog>
+    </form>
+
+
 </main>
 
 <script>
@@ -171,7 +226,7 @@ createMainHeader($headerText, array("Home", "Users", $headerText));
         let styleInput = "block w-full rounded py-1.5 px-2 text-gray-900 border-gray-300 placeholder:text-gray-400 focus:border-green-700 focus:ring-0 focus:bg-green-50 sm:text-sm sm:leading-6";
         let styleLabel = "block text-sm font-medium leading-6 text-gray-900";
 
-        $('input[type=text], input[type=number], input[type=date], input[type=email], select').each( function() {
+        $('input[type=text], input[type=number], input[type=date], input[type=email], input[type=password], select').each( function() {
             let id = $(this).attr('id');
             
             $(`<label for='${$(this).attr("id")}' class='${styleLabel}'>${ $(this).attr('data-label') }</label>`).insertBefore($(this));
@@ -181,7 +236,7 @@ createMainHeader($headerText, array("Home", "Users", $headerText));
         });
 
         if(Object.keys(post).length !== 0) {
-            $('input').each( function(key) {
+            $('input:not([type=password])').each( function(key) {
                 let id = $(this).attr('id');
                 $(this).attr('value', post[id]);
                 $(this).attr('name', id);
@@ -191,12 +246,18 @@ createMainHeader($headerText, array("Home", "Users", $headerText));
 
     class FormValidation {
         constructor() {
-            this.form = document.getElementById("userUpdateForm");
-            this.usernameInput = document.getElementById("username");
             this.pattern = /^[a-zA-Z0-9_\-]{3,20}$/;
-
+            this.usernameInput = document.getElementById("username");
             this.usernameInput.addEventListener("input", this.validateUsername.bind(this));
+            this.form = document.getElementById("userUpdateForm");
             this.form.addEventListener("submit", this.checkForm.bind(this));
+            
+            this.passwordInput = document.getElementById("password");
+            this.passwordInput.addEventListener("input", this.validatePassword.bind(this));
+            this.passwordConfirmInput = document.getElementById("password-confirm");
+            this.passwordConfirmInput.addEventListener("input", this.validatePassword.bind(this));
+            this.changePasswordForm = document.getElementById("changePasswordForm");
+            this.changePasswordForm.addEventListener("submit", this.checkForm.bind(this));
         }
 
         validateUsername() {
@@ -211,8 +272,31 @@ createMainHeader($headerText, array("Home", "Users", $headerText));
             }
         }
 
+        validatePassword() {
+            const password = this.passwordInput.value;
+            const passwordConfirm = this.passwordConfirmInput.value;
+
+            if (password == passwordConfirm) {
+                this.changePasswordForm.classList.remove("form-error");
+                this.passwordInput.classList.remove("input-error");
+                this.passwordConfirmInput.classList.remove("input-error");
+                this.passwordInput.classList.add("input-valid");
+                this.passwordConfirmInput.classList.add("input-valid");
+            } else {
+                this.changePasswordForm.classList.add("form-error");
+                this.passwordInput.classList.add("input-error");
+                this.passwordConfirmInput.classList.add("input-error");
+                this.passwordInput.classList.remove("input-valid");
+                this.passwordConfirmInput.classList.remove("input-valid");
+            }
+
+        }
+
         checkForm(event) {
             if (this.form.classList.contains("form-error")) {
+                event.preventDefault();
+            }
+            if (this.changePasswordForm.classList.contains("form-error")) {
                 event.preventDefault();
             }
         }

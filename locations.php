@@ -32,7 +32,7 @@ createMainHeader("Clinics", array("Home", "Clinics"));
                                 "<td>" . $location["loc_address"] . "</td>".
                                 "<td class='text-right'>
                                     <a class='" . $classTblBtnPrimary . " mb-1 lg:mb-0 lg:mr-1 w-full lg:w-auto' href='" . base_url(false) . "/location.php?id=" . $location['loc_id'] . "' title='View location details'>
-                                        Details
+                                        View
                                     </a>
                                 </td>".                         
                             "</tr>";

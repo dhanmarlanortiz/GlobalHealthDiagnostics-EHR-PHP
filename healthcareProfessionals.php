@@ -34,7 +34,7 @@ createMainHeader("Healthcare Professionals", array("Home", "Healthcare Professio
                                 "<td>" . $prof["prof_license"] . "</td>" .
                                 "<td class='text-right'>
                                     <a class='" . $classTblBtnPrimary . " mb-1 lg:mb-0 lg:mr-1 w-full lg:w-auto' href='" . base_url(false) . "/healthcareProfessional.php?id=" . $prof['prof_id'] . "' title='View information'>
-                                        Details
+                                        View
                                     </a>
                                 </td>".                         
                             "</tr>";

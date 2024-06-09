@@ -14,13 +14,14 @@
 }
 
 form {
-    &.input-error--username {
-        #username,
-        #username:hover,
-        #username:focus {
-            border-color: #f87171;
-            background-color: rgba(248, 113, 113, 0.1)
-        }
+    .input-error, .input-error:hover, .input-error:focus {
+        border-color: #f87171;
+        background-color: rgba(248, 113, 113, 0.1)
+    }
+
+    .input-valid, .input-valid:hover, .input-valid:focus {
+        border-color: #15803d;
+        background-color: #f0fdf4;
     }
 }
 

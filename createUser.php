@@ -86,14 +86,16 @@ createMainHeader("Create User", array("Home", "Users", "Create User"));
                     </div>
                     <div class="sm:col-span-3">
                         <select id="role" data-label="Role" required>
-                            <option <?php echo ($role == "1") ? "selected" : "" ?> value="1">Admin</option>
+                            <option value="" selected disabled>Select</option>
                             <option <?php echo ($role == "2") ? "selected" : "" ?> value="2">Client</option>
+                            <option <?php echo ($role == "1") ? "selected" : "" ?> value="1">Admin</option>
                         </select>
                         <p class="mt-3 text-gray-600 text-xs"><span class="font-semibold">Admin:</span> Global Health Diagnostics employees</p>
                         <p class="mt-1 text-gray-600 text-xs"><span class="font-semibold">Client:</span> Company HR & Admin Officer</p>
                     </div>
                     <div class="sm:col-span-3">
                         <select id="organizationId" data-label="Organization" required>   
+                            <option value="" selected disabled>Select</option>
                         <?php
                             if ($OrgResult->num_rows > 0) {
                                 while($org = $OrgResult->fetch_assoc()) {
@@ -104,7 +106,10 @@ createMainHeader("Create User", array("Home", "Users", "Create User"));
                         </select>
                     </div>
                     <div class="sm:col-span-3">
-                        <input id="password" type="text" data-label="Password" required />
+                        <input id="password" type="password" data-label="Password" required />
+                    </div>
+                    <div class="sm:col-span-3">
+                        <input id="password-confirm" type="password" data-label="Confirm Password" required />
                     </div>
                 </div>
             </div>
@@ -126,7 +131,7 @@ createMainHeader("Create User", array("Home", "Users", "Create User"));
         let styleInput = "block w-full rounded py-1.5 px-2 text-gray-900 border-gray-300 placeholder:text-gray-400 focus:border-green-700 focus:ring-0 focus:bg-green-50 sm:text-sm sm:leading-6";
         let styleLabel = "block text-sm font-medium leading-6 text-gray-900";
 
-        $('input[type=text], input[type=number], input[type=date], input[type=email], select').each( function() {
+        $('input[type=text], input[type=number], input[type=date], input[type=email], input[type=password], select').each( function() {
             let id = $(this).attr('id');
             
             $(`<label for='${$(this).attr("id")}' class='${styleLabel}'>${ $(this).attr('data-label') }</label>`).insertBefore($(this));
@@ -148,11 +153,14 @@ createMainHeader("Create User", array("Home", "Users", "Create User"));
     class FormValidation {
         constructor() {
             this.form = document.getElementById("userCreateForm");
-            this.usernameInput = document.getElementById("username");
-            this.pattern = /^[a-zA-Z0-9_\-]{3,20}$/;
-
-            this.usernameInput.addEventListener("input", this.validateUsername.bind(this));
             this.form.addEventListener("submit", this.checkForm.bind(this));
+            this.pattern = /^[a-zA-Z0-9_\-]{3,20}$/;
+            this.usernameInput = document.getElementById("username");
+            this.usernameInput.addEventListener("input", this.validateUsername.bind(this));
+            this.passwordInput = document.getElementById("password");
+            this.passwordInput.addEventListener("input", this.validatePassword.bind(this));
+            this.passwordConfirmInput = document.getElementById("password-confirm");
+            this.passwordConfirmInput.addEventListener("input", this.validatePassword.bind(this));
         }
 
         validateUsername() {
@@ -160,10 +168,31 @@ createMainHeader("Create User", array("Home", "Users", "Create User"));
 
             if (this.pattern.test(username)) {
                 this.form.classList.remove("form-error");
-                this.form.classList.remove("input-error--username");
+                this.usernameInput.classList.remove("input-error");
+                this.usernameInput.classList.add("input-valid");
             } else {
                 this.form.classList.add("form-error");
-                this.form.classList.add("input-error--username");
+                this.usernameInput.classList.add("input-error");
+                this.usernameInput.classList.remove("input-valid");
+            }
+        }
+
+        validatePassword() {
+            const password = this.passwordInput.value;
+            const passwordConfirm = this.passwordConfirmInput.value;
+
+            if (password == passwordConfirm) {
+                this.form.classList.remove("form-error");
+                this.passwordInput.classList.remove("input-error");
+                this.passwordConfirmInput.classList.remove("input-error");
+                this.passwordConfirpasswordInputmInput.classList.add("input-valid");
+                this.passwordConfirmInput.classList.add("input-valid");
+            } else {
+                this.form.classList.add("form-error");
+                this.passwordInput.classList.add("input-error");
+                this.passwordConfirmInput.classList.add("input-error");
+                this.passwordInput.classList.remove("input-valid");
+                this.passwordConfirmInput.classList.remove("input-valid");
             }
         }
 
