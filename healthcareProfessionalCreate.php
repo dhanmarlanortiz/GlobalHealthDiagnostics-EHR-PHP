@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         create_flash_message('create-success', '<strong>Success!</strong> New record has been created.', FLASH_SUCCESS);
 
         $id = $conn->insert_id;
-        $url = base_url(false) . "/HealthcareProfessional.php?id=" . $id;
+        $url = base_url(false) . "/healthcareProfessional.php?id=" . $id;
         header("Location: " . $url ."");
 
         exit();
