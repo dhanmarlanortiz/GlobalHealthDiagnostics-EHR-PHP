@@ -542,18 +542,35 @@ if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
             </div>
 
             <div class="mx-auto rounded-b-box rounded-b-box">
-                <div class="flex items-center justify-end flex-col sm:flex-row gap-x-1 bg-white mt-0 px-3 sm:px-6 py-4">
+                <div class="flex items-center justify-end flex-wrap flex-col sm:flex-row bg-white mt-0 px-2 sm:px-5 py-2 sm:py-5">
                     <input type="hidden" id="organizationId">
                     <input type="hidden" id="dateRegistered">
                     <?php if($_SESSION['role'] == 1) { ?>
-                        <a href="<?php echo base_url(false) . '/employees-APE.php?o=' . $o . '&y=' . $y; ?>" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Back</a>
-                        <button data-modal-target="default-modal" data-modal-toggle="default-modal" class="<?php echo $classBtnAlternate; ?> w-full sm:w-auto mb-2 sm:mb-0" type="button">Upload Result</button>
-                        <a href="<?php echo base_url(false) . '/employeeExport-APE.php?id=' . $id; ?>" class="<?php echo $classBtnSecondary; ?> w-full sm:w-auto mb-2 sm:mb-0" type="button">Export Results</a>
-                        <button type="submit" name="updateDetailsForm" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto mb-2 sm:mb-0">Save Changes</button>
-                        <input type="submit" name="deleteRecord" value="Delete Record" class="<?php echo $classBtnDanger; ?> w-full sm:w-auto mb-2 sm:mb-0">
+                        <div class="w-full sm:w-1/2 p-1">
+                            <a href="<?php echo base_url(false) . '/employees-APE.php?o=' . $o . '&y=' . $y; ?>" class="w-full <?php echo $classBtnDefault; ?>">Back</a>
+                        </div>
+                        <div class="w-full sm:w-1/2 p-1">
+                            <button type="submit" name="updateDetailsForm" class="w-full <?php echo $classBtnPrimary; ?>">Save Changes</button>
+                        </div>
+                        <div class="w-full sm:w-1/2 md:w-1/4 p-1">
+                            <button type="button" id="print-patient-button" class="w-full btn btn-sm text-xs rounded normal-case h-9 bg-purple-500 hover:bg-purple-600 border-purple-500 hover:border-purple-600 text-white">Print Patient Info</button>
+                        </div>
+                        <div class="w-full sm:w-1/2 md:w-1/4 p-1">
+                            <button data-modal-target="default-modal" data-modal-toggle="default-modal" class="w-full <?php echo $classBtnAlternate; ?>" type="button">Upload Result</button>
+                        </div>
+                        <div class="w-full sm:w-1/2 md:w-1/4 p-1">
+                            <a href="<?php echo base_url(false) . '/employeeExport-APE.php?id=' . $id; ?>" class="w-full <?php echo $classBtnSecondary; ?>" type="button">Export Results</a>
+                        </div>
+                        <div class="w-full sm:w-1/2 md:w-1/4 p-1">
+                            <input type="submit" name="deleteRecord" value="Delete Record" class="w-full <?php echo $classBtnDanger; ?>">
+                        </div>
                     <?php } else if($_SESSION['role'] == 2) {  ?>
-                        <a href="<?php echo base_url(false) . '/client'; ?>" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Back</a>
-                        <a href="<?php echo base_url(false) . '/employeeExport-APE.php?id=' . $id; ?>" class="<?php echo $classBtnSecondary; ?> w-full sm:w-auto mb-2 sm:mb-0" type="button">Export Results</a>
+                        <div class="w-full sm:auto p-1">
+                            <a href="<?php echo base_url(false) . '/client'; ?>" class="w-full <?php echo $classBtnDefault; ?>">Back</a>
+                        </div>
+                        <div class="w-full sm:auto p-1">
+                            <a href="<?php echo base_url(false) . '/employeeExport-APE.php?id=' . $id; ?>" class="w-full <?php echo $classBtnSecondary; ?>" type="button">Export Results</a>
+                        </div>
                     <?php } ?>
                 </div>
 
@@ -638,6 +655,50 @@ if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
 
 </form>
 
+<style>
+@media screen {
+    body #print-patient-info {
+        display: none;
+    }
+}
+
+@media print {
+    body {
+        width: 800px;
+        height: 1000px;
+        margin: 0 auto; 
+    }
+
+    body > * {
+        display: none !important;
+    }
+
+    body #print-patient-info {
+        display: inline-block !important;
+        width: 400px;
+        float: left;
+    }
+    
+    body #print-patient-info p {
+        line-height: 1em;
+    }
+
+    body #print-patient-info p span {
+        color: rgb(17, 24, 39);
+        font-size: 14px;
+        font-weight: 600;
+    }
+    body #print-patient-info p strong {
+        display: block;
+        font-size: 10px;
+        font-weight: 500;
+        color: rgb(107, 114, 128);
+        margin-bottom: 5px;
+    }
+}
+</style>
+
+
 <script>
     $(document).ready( function() {
         var post = <?php echo json_encode($_POST); ?>;
@@ -681,7 +742,120 @@ if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
             : ''
         );
     }
+
+    function printSection(sectionId) {
+    var printContents = document.getElementById(sectionId).innerHTML;
+    var originalContents = document.body.innerHTML;
+
+    // document.body.innerHTML = printContents;
+    document.body.classList.add('print-active');
+
+    window.print();
+
+    // document.body.innerHTML = originalContents;
+    document.body.classList.remove('print-active');
+
+    // Reload the page to restore the original state
+    // location.reload();
+}
+
+    // Listen for changes in the print media state
+    var mediaQueryList = window.matchMedia('print');
+
+    mediaQueryList.addListener(function(mql) {
+        if (mql.matches) {
+            // The print dialog is open
+            document.body.classList.add('print-active');
+        } else {
+            // The print dialog is closed
+            document.body.classList.remove('print-active');
+        }
+    });
+
+    document.getElementById('print-patient-button').addEventListener('click', function() {
+        printSection('print-patient-info');
+    });
+
+    $(document).ready( function() {
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+
+        today = mm + '/' + dd + '/' + yyyy;
+        $("#ppi-controlNumber").text( $("#controlNumber" ).val() );
+        $("#ppi-date").text( today );
+        $("#ppi-firstName").text( $("#firstName" ).val() );
+        $("#ppi-middleName").text( $("#middleName" ).val() );
+        $("#ppi-lastName").text( $("#lastName" ).val() );
+        $("#ppi-age").text( $("#age" ).val() );
+        $("#ppi-sex").text( $("#sex" ).val() );
+        $("#ppi-civilStatus").text( $("#civilStatus" ).val() );
+        $("#ppi-homeAddress").text( $("#homeAddress" ).val() );
+        $("#ppi-company").text( $("h1 span" ).text() );
+        $("#ppi-employeeNumber").text( $("#employeeNumber" ).val() );
+    });
+    
 </script>
+
 <?php
 include('footer.php')
 ?>
+
+<div id="print-patient-info" class="p-1">
+    <div class="flex border border-b-0 p-1">
+        <p class="w-1/2">
+            <strong>Control Number:</strong>
+            <span id="ppi-controlNumber"></span>
+        </p>
+        <p class="w-1/2">
+            <strong>Date:</strong>
+            <span id="ppi-date"></span>
+        </p>
+    </div>
+    <div class="flex border border-b-0 p-1 flex-grow flex-wrap gap-x-5 gap-y-2">
+        <p class="">
+            <strong>First Name</strong>
+            <span id="ppi-firstName"></span>
+        </p>
+        <p class="">
+            <strong>Middle Name</strong>
+            <span id="ppi-middleName"></span>
+        </p>
+        <p class="">
+            <strong>Last Name</strong>
+            <span id="ppi-lastName"></span>
+        </p>
+    </div>
+    <div class="flex border border-b-0 p-1">
+        <p class="w-1/3 pr-5">
+            <strong>Age</strong>
+            <span id="ppi-age"></span>
+        </p>
+        <p class="w-1/3 pr-5">
+            <strong>Sex</strong>
+            <span id="ppi-sex"></span>
+        </p>
+        <p class="w-1/3">
+            <strong>Civil Status</strong>
+            <span id="ppi-civilStatus"></span>
+        </p>
+    </div>
+    <div class="flex border border-b-0 p-1">
+        <p class="w-full">
+            <strong>Home Address</strong>
+            <span id="ppi-homeAddress"></span>
+        </p>
+    </div>
+    <div class="flex border p-1">
+        <p class="w-1/2 pr-5">
+            <strong>Company Name</strong>
+            <span id="ppi-company"></span>
+        </p>
+        <p class="w-1/2">
+            <strong>Employee Number</strong>
+            <span id="ppi-employeeNumber"></span>
+        </p>
+    </div>
+</div>
+

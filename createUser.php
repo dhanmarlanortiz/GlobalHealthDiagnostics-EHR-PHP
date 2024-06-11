@@ -185,7 +185,7 @@ createMainHeader("Create User", array("Home", "Users", "Create User"));
                 this.form.classList.remove("form-error");
                 this.passwordInput.classList.remove("input-error");
                 this.passwordConfirmInput.classList.remove("input-error");
-                this.passwordConfirpasswordInputmInput.classList.add("input-valid");
+                this.passwordInput.classList.add("input-valid");
                 this.passwordConfirmInput.classList.add("input-valid");
             } else {
                 this.form.classList.add("form-error");
