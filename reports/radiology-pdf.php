@@ -103,6 +103,14 @@ class RadiologyPDF {
             $pdf->SetDrawColor(241, 245, 249);
             $pdf->Cell(0,4.5,'RADIOLOGY REPORT', 0, 1, 'L');
 
+            if (isValidImageUrl($xraytech_signature)) {
+                $pdf->Image($xraytech_signature, 15, 140, 50);
+            }
+
+            if (isValidImageUrl($radiologist_signature)) {
+                $pdf->Image($radiologist_signature, 135, 140, 50);
+            }
+
             $pdf->SetFont('Arial', '', 12);
 
             $pdf->Ln(10);
@@ -165,13 +173,7 @@ class RadiologyPDF {
             $pdf->SetTextColor(17, 24, 39);
             $pdf->SetDrawColor(83,99,113);
 
-            if (isValidImageUrl($xraytech_signature)) {
-                $pdf->Image($xraytech_signature, 35, 150, 8);
-            }
-
-            if (isValidImageUrl($radiologist_signature)) {
-                $pdf->Image($radiologist_signature, 150, 146, 20);
-            }
+            
             
             $pdf->Cell(10, 8, '' , '', 0, 'L');
             $pdf->Cell(40, 8, $xraytech_name, 'B', 0, 'C');

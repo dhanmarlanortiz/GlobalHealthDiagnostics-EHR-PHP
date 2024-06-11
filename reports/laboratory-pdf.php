@@ -48,6 +48,16 @@ class LaboratoryPDF {
 
             $pdf->ln(5);
 
+            if (isValidImageUrl($medtech1_signature)) {
+                $pdf->Image($medtech1_signature, 16, 220, 50);
+            }
+            if (isValidImageUrl($medtech2_signature)) {
+                $pdf->Image($medtech2_signature, 79, 220, 50);
+            }
+            if (isValidImageUrl($pathologist_signature)) {
+                $pdf->Image($pathologist_signature, 142, 220, 50);
+            }
+
             // Name
             $pdf->thFontStyle();
             $pdf->Cell(20, $lineHeight,' Name: ', $border, $toRight, 'L', true);
@@ -164,7 +174,7 @@ class LaboratoryPDF {
             $pdf->Cell(0, 1,'', 'T', $toBegin);
             // $pdf->ln(57);
             
-            $pdf->ln(20);
+            $pdf->ln(25);
 
             $pdf->SetFont('Arial','B', 9);
             $pdf->SetTextColor(17, 24, 39);
@@ -214,7 +224,7 @@ class LaboratoryPDF {
                 $pdf->Cell(53, 8, '', '', 0, 'C');
             }
 
-            $pdf->ln(20);
+            $pdf->ln(15);
             // $pdf->Image(base_url(false) . '/images/nova-angela-buyagan-min.png', 11.5, 230, 50);
             // $pdf->Image(base_url(false) . '/images/angel-baquiran-min.png', 75, 230, 37);
             // $pdf->Image(base_url(false) . '/images/noel-c-santos-min.png', 120, 225, 65);

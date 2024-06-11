@@ -17,7 +17,7 @@ class MedicalExamPDF {
         if(null == $pdf) {
             $pdf = new MedFPDF();
         }
-        
+
         $vw = $pdf->GetPageWidth();
         $border = "T L R";
         $lineHeight = 8;
@@ -40,7 +40,7 @@ class MedicalExamPDF {
         } else if($rating == 'pending') {
             $pdf->Image(base_url(false) . '/images/badge-pending.jpg', 165, 30, 35);
         }
-        
+
         $pdf->ln(5);
         
         // Name
@@ -186,6 +186,10 @@ class MedicalExamPDF {
         $pdf->processRow($pdf, 'Genitalia:', 'medExamReport_physical_genitalia', $medExamReports);
         
         $pdf->ln(10);
+
+        if (isValidImageUrl($physician_signature)) {
+            $pdf->Image($physician_signature, 20, 195, 50);
+        }
         
         $pdf->thFontStyle();
         $pdf->MultiCell(190, $lineHeight, 'VI. X-RAY, ECG AND LABORATORY EXAMINATION REPORT: ', 0);
@@ -211,16 +215,13 @@ class MedicalExamPDF {
         $pdf->ln(0);
         $pdf->rowCol4('Ratings: ','30', ($medExamReports['medExamReport_recommendation_ratings_note'] ?? null) . '     ' . ($medExamReports['medExamReport_recommendation_ratings'] ?? null));
         $pdf->rowCol4('Remarks: ', '30',($medExamReports['medExamReport_recommendation_remarks'] ?? null));
-        $pdf->ln(20);
+        
+        $pdf->ln(28);
         // $pdf->row('Examining Physician:', $medExamReports['medExamReport_recommendation_physicianName']);
         
         $pdf->SetFont('Arial','B', 8);
         $pdf->SetTextColor(17, 24, 39);
         $pdf->SetDrawColor(83,99,113);
-
-        if (isValidImageUrl($physician_signature)) {
-            // $pdf->Image($physician_signature, 20, 175, 40);
-        }
 
         $pdf->Cell(10, 8, '' , '', 0, 'L');
         $pdf->Cell(50, 8, $physician_name , 'B', 0, 'C');
@@ -247,6 +248,9 @@ class MedicalExamPDF {
         
         // $pdf->Output();
         // $conn->close();
+
+        $pdf->ln(20);
+        $pdf->row('Computer-generated report.', '', '');
         return $pdf;
     }
 }
