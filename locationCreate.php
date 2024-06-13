@@ -19,10 +19,12 @@ $errVal = $errKey = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = clean($_POST["loc_name"]);
-    $address = clean($_POST["loc_address"]);
+    $address1 = clean($_POST["loc_address1"]);
+    $address2 = clean($_POST["loc_address2"]);
+    $telephone = clean($_POST["loc_telephone"]);
 
-    $sql = "INSERT INTO Location (loc_name, loc_address)
-    VALUES ('$name', '$address')";
+    $sql = "INSERT INTO Location (loc_name, loc_address1, loc_address2, loc_telephone)
+    VALUES ('$name', '$address1', '$address2', '$telephone')";
 
     if ($conn->query($sql) === TRUE) {
         create_flash_message('create-success', '<strong>Success!</strong> New record has been created.', FLASH_SUCCESS);
@@ -63,8 +65,14 @@ $conn->close();
                         <?php echo ($errKey == 'loc_name') ? '<div class="input-error--message"><p>' . $errVal . ' already exists.</p></div>' : ''; ?>
                     </div>
                     <div class="sm:col-span-2">
-                        <input id="loc_address" type="text" data-label="Address" maxlength="200" required />
-                    </div>                
+                        <input id="loc_address1" type="text" data-label="Address 1" maxlength="255" required />
+                    </div>
+                    <div class="sm:col-span-2">
+                        <input id="loc_address2" type="text" data-label="Address 2" maxlength="255" required />
+                    </div>
+                    <div class="sm:col-span-2">
+                        <input id="loc_telephone" type="text" data-label="Telephone" maxlength="50" required />
+                    </div>
                 </div>
             </div>
         </div>

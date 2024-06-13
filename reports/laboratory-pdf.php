@@ -240,15 +240,21 @@ class labFPDF extends FPDF {
     function Header() {
         $id = $_GET["id"];
         $location = getLocationDetailsByApe($id);
-        $address = $location['loc_address'];
+        $address1 = $location['loc_address1'];
+        $address2 = $location['loc_address2'];
+        $telephone = $location['loc_telephone'];
 
         $this->Image(base_url(false) . '/images/ghd-logo-with-text.png', 10, 10, 60);
         $this->SetFont('Arial','', 8);
         $this->SetTextColor(83,99,113);
         $this->ln(1);
-        $this->Cell(0,4.5, $address, 0, 1, 'R');
-        // $this->Cell(0,4.5,'Paranaque City, Metro Manila', 0, 1, 'R');
-        $this->Cell(0,4.5,'Tel/Fax No. 8825-9964', 0, 1, 'R');
+        $this->Cell(0,4.5, $address1, 0, 1, 'R');
+        
+        if($address2) {
+            $this->Cell(0,4.5, $address2, 0, 1, 'R');
+        }
+        
+        $this->Cell(0,4.5,'Tel/Fax No. ' . $telephone, 0, 1, 'R');
         $this->Ln(10);
     }
 

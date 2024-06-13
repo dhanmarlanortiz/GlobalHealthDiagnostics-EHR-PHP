@@ -19,6 +19,7 @@ createMainHeader("Clinics", array("Home", "Clinics"));
                     <tr>
                         <th>Name</th>
                         <th>Address</th>
+                        <th>Telephone</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -29,7 +30,8 @@ createMainHeader("Clinics", array("Home", "Clinics"));
                         echo 
                             "<tr>" .
                                 "<td>" . $location["loc_name"] . "</td>" .
-                                "<td>" . $location["loc_address"] . "</td>".
+                                "<td>" . $location["loc_address1"] . " " . $location["loc_address2"] . "</td>".
+                                "<td>" . $location["loc_telephone"] . "</td>".
                                 "<td class='text-right'>
                                     <a class='" . $classTblBtnPrimary . " mb-1 lg:mb-0 lg:mr-1 w-full lg:w-auto' href='" . base_url(false) . "/location.php?id=" . $location['loc_id'] . "' title='View location details'>
                                         View

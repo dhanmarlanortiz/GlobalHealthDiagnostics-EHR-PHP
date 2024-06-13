@@ -148,7 +148,7 @@ createMainHeader($headerText, array("Home", "Organizations", $headerText));
                                 <?php
                                     if (!empty($clinics)) {
                                         foreach ($clinics as $clinic) {
-                                            echo "<option value='" . $clinic['loc_id'] . "' " . (($_POST['location_fk'] == $clinic['loc_id']) ? 'selected' : '') . ">" . $clinic['loc_address'] . "</option>";
+                                            echo "<option value='" . $clinic['loc_id'] . "' " . (($_POST['location_fk'] == $clinic['loc_id']) ? 'selected' : '') . ">" . $clinic['loc_address1'] . "</option>";
                                         }
                                     }
                                 ?>

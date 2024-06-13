@@ -27,7 +27,9 @@ if(empty($_POST)){
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id = clean( $_POST['loc_id'] );
     $name = clean( $_POST['loc_name'] );
-    $address = clean( $_POST['loc_address'] );
+    $address1 = clean( $_POST['loc_address1'] );
+    $address2 = clean( $_POST['loc_address2'] );
+    $telephone = clean( $_POST['loc_telephone'] );
 
     $location = getLocation($conn, $id);
     $headerText = $location['loc_name'];
@@ -35,7 +37,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if(isset( $_POST['saveChanges'] )) {
         $updateQuery =  "UPDATE Location SET 
                             loc_name = '$name',
-                            loc_address = '$address'                            
+                            loc_address1 = '$address1',
+                            loc_address2 = '$address2',
+                            loc_telephone = '$telephone'
                             WHERE loc_id = $id";
 
         if ($conn->query($updateQuery) === TRUE) {
@@ -114,7 +118,13 @@ createMainHeader($headerText, array("Home", "Clinics", $headerText));
                             <input type="text" id="loc_name" data-label="Name" maxlength="50" required />
                         </div> 
                         <div class="sm:col-span-2">
-                            <input type="text" id="loc_address" data-label="Address" maxlength="200" required />
+                            <input type="text" id="loc_address1" data-label="Address 1" maxlength="255" required />
+                        </div>
+                        <div class="sm:col-span-2">
+                            <input type="text" id="loc_address2" data-label="Address 2" maxlength="255" required />
+                        </div>
+                        <div class="sm:col-span-2">
+                            <input type="text" id="loc_telephone" data-label="Telephone" maxlength="50" required />
                         </div>
                     </div>
                 </div>

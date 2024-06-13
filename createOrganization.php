@@ -113,7 +113,7 @@ $conn->close();
                             <?php
                                 if (!empty($clinics)) {
                                     foreach ($clinics as $clinic) {
-                                        echo "<option value='" . $clinic['loc_id'] . "'" . (isset($_POST['location_fk']) ? 'selected' : '') . ">" . $clinic['loc_address'] . "</option>";
+                                        echo "<option value='" . $clinic['loc_id'] . "'" . (isset($_POST['location_fk']) ? 'selected' : '') . ">" . $clinic['loc_address1'] . "</option>";
                                     }
                                 }
                             ?>
