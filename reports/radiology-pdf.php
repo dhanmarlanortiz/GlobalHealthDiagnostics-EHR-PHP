@@ -1,13 +1,18 @@
 <?php 
+
 class radioFPDF extends FPDF {
 
     function Header() {
+        $id = $_GET["id"];
+        $location = getLocationDetailsByApe($id);
+        $address = $location['loc_address'];
+
         $this->Image(base_url(false) . '/images/ghd-logo-with-text.png', 10, 10, 60);
         $this->SetFont('Arial','', 8);
         $this->SetTextColor(83,99,113);
         $this->ln(1);
-        $this->Cell(0,4.5,'3/F LMB Bldg., 158 San Antonio Ave., San Antonio Valley I,', 0, 1, 'R');
-        $this->Cell(0,4.5,'Paranaque City, Metro Manila', 0, 1, 'R');
+        $this->Cell(0,4.5, $address, 0, 1, 'R');
+        // $this->Cell(0,4.5,'Paranaque City, Metro Manila', 0, 1, 'R');
         $this->Cell(0,4.5,'Tel/Fax No. 8825-9964', 0, 1, 'R');
         $this->Ln(10);
     }

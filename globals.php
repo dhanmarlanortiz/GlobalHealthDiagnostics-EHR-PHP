@@ -696,3 +696,15 @@ function isValidImageUrl($url) {
 
     return false;
 }
+
+function getLocationDetailsByApe($id) {
+require("connection.php");
+    $query = "SELECT L.* FROM APE A LEFT JOIN Organization O On O.id = A.organizationId LEFT JOIN Location L On L.loc_id = O.location_fk WHERE A.id = $id";
+    $result = $conn->query($query);
+    
+    if ($result !== false && $result->num_rows > 0) {
+        return $result->fetch_assoc();
+    }
+    
+    return;
+}
