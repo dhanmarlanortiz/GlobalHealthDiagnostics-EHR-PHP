@@ -198,7 +198,7 @@ class MedicalExamPDF {
         $pdf->rowCol4('B. ECG: ' , '55', ($medExamReports['medExamReport_xrayEcgLab_ecg'] ?? null));
         $pdf->rowCol4('C. Complete Blood Count:' , '55', ($medExamReports['medExamReport_xrayEcgLab_bloodCount'] ?? null) . '     ' . ($medExamReports['medExamReport_xrayEcgLab_bloodCount_findings'] ?? null));
         $pdf->rowCol4('D. Urinalysis: Findings: WBC:', '55', ($medExamReports['medExamReport_xrayEcgLab_urinalysis_wbc'] ?? null) == '' ? ($medExamReports['medExamReport_xrayEcgLab_urinalysis'] ?? null) : ($medExamReports['medExamReport_xrayEcgLab_urinalysis_wbc'] ?? null) .'/hpf');
-        $pdf->rowCol4('E. Stool Examination: Findings: Positive:', '55',($medExamReports['medExamReport_xrayEcgLab_stoolSample_positive'] ?? null) == '' ? ($medExamReports['medExamReport_xrayEcgLab_stoolSample'] ?? null) : ($medExamReports['medExamReport_xrayEcgLab_stoolSample_positive'] . '/hpf'));
+        $pdf->rowCol4('E. Stool Examination: Findings:', '55',($medExamReports['medExamReport_xrayEcgLab_stoolSample_positive'] ?? null) == '' ? ($medExamReports['medExamReport_xrayEcgLab_stoolSample'] ?? null) : ($medExamReports['medExamReport_xrayEcgLab_stoolSample_positive'] . '/hpf'));
         $pdf->rowCol4('F. Serological Test (VDRL): ', '55',($medExamReports['medExamReport_xrayEcgLab_serologicalTest'] ?? null));
         $pdf->rowCol4('G. Hepatitis - A Screening: ', '55',($medExamReports['medExamReport_xrayEcgLab_hepatitisAScreening'] ?? null));
         $pdf->rowCol4('H. Hepatitis - B Surface Antigen (Hbsag): ','55', ($medExamReports['medExamReport_xrayEcgLab_hepatitisBSurfaceAntigen'] ?? null));
