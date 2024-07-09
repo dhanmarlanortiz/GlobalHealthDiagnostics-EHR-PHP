@@ -195,7 +195,7 @@ class MedicalExamPDF {
         $pdf->MultiCell(190, $lineHeight, 'VI. X-RAY, ECG AND LABORATORY EXAMINATION REPORT: ', 0);
         $pdf->ln(0);
         $pdf->rowCol4('A. Chest X-ray: ', '55', ($medExamReports['medExamReport_xrayEcgLab_chestXray'] ?? null) . '     ' . ($medExamReports['medExamReport_xrayEcgLab_chestXray_sub'] ?? null) . '     ' . ($medExamReports['medExamReport_xrayEcgLab_chestXray_other'] ?? null));
-        $pdf->rowCol4('B. ECG: ' , '55', ($medExamReports['medExamReport_xrayEcgLab_ecg'] ?? null));
+        $pdf->rowCol4('B. ECG Report: ' , '55', ($medExamReports['medExamReport_xrayEcgLab_ecg'] ?? null) . '     ' . ($medExamReports['medExamReport_xrayEcgLab_ecg_findings'] ?? null));
         $pdf->rowCol4('C. Complete Blood Count:' , '55', ($medExamReports['medExamReport_xrayEcgLab_bloodCount'] ?? null) . '     ' . ($medExamReports['medExamReport_xrayEcgLab_bloodCount_findings'] ?? null));
         $pdf->rowCol4('D. Urinalysis: Findings: WBC:', '55', ($medExamReports['medExamReport_xrayEcgLab_urinalysis_wbc'] ?? null) == '' ? ($medExamReports['medExamReport_xrayEcgLab_urinalysis'] ?? null) : ($medExamReports['medExamReport_xrayEcgLab_urinalysis_wbc'] ?? null) .'/hpf');
         $pdf->rowCol4('E. Stool Examination: Findings:', '55',($medExamReports['medExamReport_xrayEcgLab_stoolSample_positive'] ?? null) == '' ? ($medExamReports['medExamReport_xrayEcgLab_stoolSample'] ?? null) : ($medExamReports['medExamReport_xrayEcgLab_stoolSample_positive'] . '/hpf'));
