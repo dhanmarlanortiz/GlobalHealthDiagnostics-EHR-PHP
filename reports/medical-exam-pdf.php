@@ -206,7 +206,7 @@ class MedicalExamPDF {
         $pdf->rowCol4('J. Blood Type:' , '55',($medExamReports['medExamReport_xrayEcgLab_bloodType'] ?? null));
         $pdf->rowCol4('K. Drug Test' ,'55', '');
         $pdf->rowCol4('    Marijuana (tetrahydrocannabinol):', '55',($medExamReports['medExamReport_xrayEcgLab_marijuana'] ?? null));
-        $pdf->rowCol4('    Shabu (Methamphetamine):', '55',($medExamReports['medExamReport_xrayEcgLab_marijuana'] ?? null));
+        $pdf->rowCol4('    Shabu (Methamphetamine):', '55', ($medExamReports['medExamReport_xrayEcgLab_shabu'] ?? null));
         $pdf->rowCol4('L. Others:' , '55',($medExamReports['medExamReport_xrayEcgLab_other'] ?? null));
         $pdf->ln(5);
 
