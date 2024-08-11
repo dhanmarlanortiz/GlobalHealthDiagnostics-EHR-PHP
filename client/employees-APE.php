@@ -6,7 +6,10 @@ session_start();
 require_once('../connection.php');
 include('../header.php');
 
-preventAccess([['role' => 1, 'redirect' => 'home.php']]);
+preventAccess([
+    ['role' => 1, 'redirect' => 'home.php'],
+    ['role' => 3, 'redirect' => 'manager']
+]);
 
 include('navbar.php');
 
@@ -46,20 +49,20 @@ print_r($empResult->fetch_assoc());
 ?>
 
 <main class='<?php echo $classMainContainer; ?>'>
-    <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200">
+    <!-- <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200">
         <ul class="flex -mb-px">
             <li class="mr-2">
                 <a href="" class="inline-block p-2 md:p-4 text-green-700 border-b-2 border-green-700 rounded-t-lg active text-left text-xs md:text-sm" aria-current="page">
                     Annual Physical Examination
                 </a>
             </li>
-            <!-- <li class="mr-2">
+            <li class="mr-2">
                 <a href="#" class="inline-block p-2 md:p-4 border-b-2 border-transparent rounded-t-lg text-left text-xs md:text-sm hover:text-gray-600 hover:border-gray-300">
                     Pre-employment Medical Assessment
                 </a>
-            </li> -->
+            </li>
         </ul>
-    </div>
+    </div> -->
     
     <div class="bg-white p-2 md:p-4">
         <div class='p-1 overflow-auto'>

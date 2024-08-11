@@ -4,14 +4,23 @@ ob_start();
 session_start();
 
 $adminUrl = ($_SERVER['HTTP_HOST'] == 'app.globalhealth-diagnostics.com') ? "https://app.globalhealth-diagnostics.com" : "http://localhost/globalhealth-php";
+$managerUrl = ($_SERVER['HTTP_HOST'] == 'app.globalhealth-diagnostics.com') ? "https://app.globalhealth-diagnostics.com/manager" : "http://localhost/globalhealth-php/manager";
 $clientUrl = ($_SERVER['HTTP_HOST'] == 'app.globalhealth-diagnostics.com') ? "https://app.globalhealth-diagnostics.com/client" : "http://localhost/globalhealth-php/client";
+$loginUrl = ($_SERVER['HTTP_HOST'] == 'app.globalhealth-diagnostics.com') ? "https://app.globalhealth-diagnostics.com/login.php" : "http://localhost/globalhealth-php/login.php";
 
 if(isset($_SESSION["valid"])){
 	if($_SESSION["role"] == 1) {
 		header("location:" . $adminUrl);
 		exit();
-	} else {
+	} else if($_SESSION["role"] == 2) { 
 		header("location:" . $clientUrl);
+		exit();
+	} else if($_SESSION["role"] == 3) { 
+		header("location:" . $managerUrl);
+		exit();
+	} else {
+		header("location:" . $loginUrl);
+		exit();
 	}
 }
 /* AUTHENTICATION - END */
@@ -54,8 +63,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			if($row['role'] == 1) {
 				header("location:" . $adminUrl);
 				exit();
-			} else {
+			} else if($row['role'] == 2) {
 				header("location:" . $clientUrl);
+				exit();
+			} else if($row['role'] == 3) {
+				header("location:" . $managerUrl);
+				exit();
+			} else {
+				header("location:" . $loginUrl);
 				exit();				
 			}
 		}

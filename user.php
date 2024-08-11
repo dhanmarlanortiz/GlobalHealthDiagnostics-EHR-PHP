@@ -157,11 +157,15 @@ createMainHeader($headerText, array("Home", "Users", $headerText));
                     </div>
                     <div class="sm:col-span-3">
                         <select id="role" data-label="User Role" required>   
+                            <option value="2" <?php echo (($_POST['role'] == 2 ? "selected" : "")); ?>>Client Administrator</option>
+                            <option value="3" <?php echo (($_POST['role'] == 3 ? "selected" : "")); ?>>Manager</option>
                             <option value="1" <?php echo (($_POST['role'] == 1 ? "selected" : "")); ?>>Admin</option>
-                            <option value="2" <?php echo (($_POST['role'] == 2 ? "selected" : "")); ?>>Client</option>
                         </select>
-                        <p class="mt-3 text-gray-600 text-xs"><span class="font-semibold">Admin:</span> Global Health Diagnostics employees</p>
-                        <p class="mt-1 text-gray-600 text-xs"><span class="font-semibold">Client:</span> Company HR & Admin Officer</p>
+                    </div>                
+                    <div class="sm:col-span-3">
+                        <p class="mt-1 text-gray-600 text-xs"><span class="font-semibold">Client Administrator:</span> A representative from a client company with access to their company’s data and the ability to manage their employees’ accounts.</p>
+                        <p class="mt-3 text-gray-600 text-xs"><span class="font-semibold">Manager:</span> Manages specific sections of the system, such as client accounts, patients, or certain data sets.</p>
+                        <p class="mt-3 text-gray-600 text-xs"><span class="font-semibold">Admin:</span> Full access to the system, including user management, settings, and sensitive data.</p>
                     </div>                
                     <div class="sm:col-span-3">
                         <select id="isActive" data-label="Account Status" required>   
@@ -217,7 +221,64 @@ createMainHeader($headerText, array("Home", "Users", $headerText));
         </dialog>
     </form>
 
-
+    <div class="p-6 border-b mt-6 max-w-3xl mx-auto">
+        <div class="px-4 sm:px-0">
+            <h3 class="text-sm font-semibold leading-7 text-gray-900">Admin Account Capabilities and Permissions</h3>
+            <!-- <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">Personal details and application.</p> -->
+        </div>
+        <div class="mt-4 border-t border-gray-100">
+            <dl class="divide-y divide-gray-100">
+                <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                    <dt class="text-xs font-medium leading-6 text-gray-900">User Management</dt>
+                    <dd class="mt-1 text-xs leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                        <p>View, create, update, and delete users.</p>
+                    </dd>
+                </div>
+                <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                    <dt class="text-xs font-medium leading-6 text-gray-900">Clinic Management</dt>
+                    <dd class="mt-1 text-xs leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                        <p>View, create, update, and delete clinics.</p>
+                        <p>Assign clinics to an organization.</p>
+                    </dd>
+                </div>
+                <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                    <dt class="text-xs font-medium leading-6 text-gray-900">Healthcare Professional Management</dt>
+                    <dd class="mt-1 text-xs leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                        <p>Create, update, and delete healthcare professionals.</p>
+                        <p>Assign healthcare professionals to an organization.</p>
+                    </dd>
+                </div>
+                <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                    <dt class="text-xs font-medium leading-6 text-gray-900">Organization Management</dt>
+                    <dd class="mt-1 text-xs leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                        <p>View, create, update, and delete organization information.</p>
+                    </dd>
+                </div>
+                <div class="px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                    <dt class="text-xs font-medium leading-6 text-gray-900">Patient Data Management</dt>
+                    <dd class="mt-1 text-xs leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                        <p>View, create, update, print, and delete patient information.</p>
+                        <p>View, create, download, update, upload, export, print, and delete patient results.</p>
+                        <p>Export a list of all patients within an organization to a CSV file.</p>
+                        <p>Import a list of all patients into an organization from a CSV file.</p>
+                        <p>Export the APE results of all patients within an organization to a PDF file.</p>
+                    </dd>
+                </div>
+            </dl>            
+        </div>
+    </div>
+    <div class="p-6 border-b mt-6 max-w-3xl mx-auto">
+        <div class="px-4 sm:px-0">
+            <h3 class="text-sm font-semibold leading-7 text-gray-900">Manager Account Capabilities and Permissions</h3>            
+        </div>
+        <div class="mt-4 border-t border-gray-100"></div>
+    </div>
+    <div class="p-6 border-b mt-6 max-w-3xl mx-auto">
+        <div class="px-4 sm:px-0">
+            <h3 class="text-sm font-semibold leading-7 text-gray-900">Client Administrator Account Capabilities and Permissions</h3>            
+        </div>
+        <div class="mt-4 border-t border-gray-100"></div>
+    </div>
 </main>
 
 <script>

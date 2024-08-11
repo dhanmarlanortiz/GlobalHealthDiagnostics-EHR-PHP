@@ -4,7 +4,10 @@ session_start();
 
 include('header.php');
 
-preventAccess([['role' => 2, 'redirect' => 'client/index.php']]);
+preventAccess([
+	['role' => 2, 'redirect' => 'client'],
+	['role' => 3, 'redirect' => 'manager'],
+]);
 
 include('navbar.php'); 
 ?>

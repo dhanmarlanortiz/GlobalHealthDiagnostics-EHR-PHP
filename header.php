@@ -21,7 +21,7 @@
 	$serverName = $_SERVER['SERVER_NAME']; // or $_SERVER['HTTP_HOST']
 	if ($serverName === 'localhost' || $serverName === '127.0.0.1') {
 		echo '
-		<script src="'. base_url(false) .'/js/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+		<script src="'. base_url(false) .'/js/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
 		<script src="'. base_url(false) .'/js/tailwindcss.js"></script>
 		
 		<link href="'. base_url(false) .'/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
@@ -29,7 +29,7 @@
 		';
 	} else {
 		echo '
-		<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+		<script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
 		<script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
 		
 		<link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />

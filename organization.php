@@ -5,7 +5,13 @@ session_start();
 require_once('connection.php');
 include('header.php');
 preventAccess([['role' => 2, 'redirect' => 'client/index.php']]);
-include('navbar.php');
+
+$role = $_SESSION['role'];
+if($role == 1) {
+    include('navbar.php');
+} else if($role == 3) {
+    include('manager/navbar.php');
+}
 
 $clinics = getLocation($conn);
 $professionals = getProfessional($conn);
@@ -18,12 +24,19 @@ function test_input($data) {
 }
 
 $id = 0;
-if ($_SERVER["REQUEST_METHOD"] == "GET") {
+
+if ($_SERVER["REQUEST_METHOD"] == "GET" && $role == 1) {
     $id = isset($_GET['id']) ? $_GET['id'] : 0;
     $_POST = getOrganization($id);
 }
 
+if($_SERVER["REQUEST_METHOD"] != "POST" && $role == 3) {
+    $id = $id = $_SESSION['organizationId'];
+    $_POST = getOrganization($id);
+}
+
 $errVal = $errKey = "";
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id = test_input( $_POST['id'] );
     $name = test_input( $_POST['name'] );
@@ -39,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $physician_fk = clean($_POST["physician_fk"]);
 
     if(isset( $_POST['saveChanges'] )) {
-
+        
         $orgUpdateQuery =  "UPDATE Organization SET 
                             name = '$name',
                             email = '$email',
@@ -57,7 +70,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($conn->query($orgUpdateQuery) === TRUE) {
             create_flash_message('update-success', '<strong>Success!</strong> Record has been updated.', FLASH_SUCCESS);
             
-            $url = base_url(false) . "/organization.php?id=" . $id;
+            $url = base_url(false) . "/home.php";
+            if($role == 1) {
+                $url = base_url(false) . "/organization.php?id=" . $id;
+            } else if($role == 3) {
+                $url = base_url(false) . "/organization.php";
+            }
+            
             header("Location: " . $url ."");
             
             exit();
@@ -106,12 +125,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 $headerText = (null !== getOrganization($id)) ? getOrganization($id)['name'] : "Not found";
+if($role == 1) {
+    createMainHeader($headerText, array("Home", "Organizations"));    
+} else if($role == 3) {
+    createMainHeader($headerText, array("Home", "Organization"));    
+}
 
 $conn->close();
-createMainHeader($headerText, array("Home", "Organizations", $headerText));
 ?>
 
-<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id=" . $_GET['id'] ) ;?>" class="prompt-confirm">
+<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id=" . $id ) ;?>" class="prompt-confirm">
     <input type="hidden" id="id" name="id" value="<?php echo $id; ?>">
 
     <main class='mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8'>
@@ -197,9 +220,16 @@ createMainHeader($headerText, array("Home", "Organizations", $headerText));
             </div>
             
             <div class="flex items-center justify-end flex-col sm:flex-row gap-x-1 bg-white mt-0 px-6 py-4 border-t-2 border-green-700">
-                <a href="<?php echo base_url() . '/organizations.php'; ?>" class="<?php echo $classBtnDefault; ?> w-full sm:w-auto mb-2 sm:mb-0">Cancel</a>
-                <button type="submit" name="saveChanges" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto mb-2 sm:mb-0">Save Changes</button>
-                <button type="submit" name="delete" class="<?php echo $classBtnDanger; ?> w-full sm:w-auto">Delete Record</button>
+                <?php 
+                    if($role == 1) {
+                        echo '<a href="' . base_url(false) . '/organizations.php' . '" class="' . $classBtnDefault . ' w-full sm:w-auto mb-2 sm:mb-0">Cancel</a>';
+                        echo '<button type="submit" name="saveChanges" class="' . $classBtnPrimary . ' w-full sm:w-auto mb-2 sm:mb-0">Save Changes</button>';
+                        echo '<button type="submit" name="delete" class="' . $classBtnDanger . ' w-full sm:w-auto">Delete Record</button>';
+                    } else if ($role == 3) {
+                        echo '<a href="' . base_url(false) . '/manager' . '" class="' . $classBtnDefault . ' w-full sm:w-auto mb-2 sm:mb-0">Close</a>';
+                        echo '<button type="submit" name="saveChanges" class="' . $classBtnPrimary . ' w-full sm:w-auto mb-2 sm:mb-0">Save Changes</button>';
+                    }
+                ?>
             </div>
 
             <?php flash('update-success'); ?>
@@ -215,6 +245,7 @@ createMainHeader($headerText, array("Home", "Organizations", $headerText));
 </form>
 
 <script src="js/healthcare-professional.js"></script>
+
 <script>
     $(document).ready( function() {
         var post = <?php echo json_encode($_POST) ?>;
@@ -265,7 +296,6 @@ createMainHeader($headerText, array("Home", "Organizations", $headerText));
         setRoleSelect( listProfessionals, document.getElementById("physician_fk"), "<?php echo isset($_POST['physician_fk']) ? $_POST['physician_fk'] : ''; ?>", "Physician" )
     );
 </script>
-
 
 <?php
   include('footer.php');

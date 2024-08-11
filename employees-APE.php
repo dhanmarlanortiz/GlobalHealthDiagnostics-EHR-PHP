@@ -8,7 +8,15 @@ session_start();
 require_once('connection.php');
 include('header.php');
 preventAccess([['role' => 2, 'redirect' => 'client/index.php']]);
-include('navbar.php');
+
+$role = $_SESSION['role'];
+if($role == 1) {
+    include('navbar.php');    
+} else if($role == 3) {
+    include('manager/navbar.php');
+}
+
+
 function test_input($data) {
     $data = trim($data);
     $data = stripslashes($data);
@@ -17,55 +25,31 @@ function test_input($data) {
 }
 
 $o = $y = 0;
-
 $empJSON = "";
+
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
     $o = test_input( isset($_GET['o']) ? $_GET['o'] : 0 );
+    $y = test_input( isset($_GET['y']) ? $_GET['y'] : date("Y") );    
+}
+ 
+if($role == 3) {
+    $o = test_input( isset($_SESSION['organizationId']) ? $_SESSION['organizationId'] : 0 );
     $y = test_input( isset($_GET['y']) ? $_GET['y'] : date("Y") );
-    $empQuery = "SELECT * FROM APE WHERE organizationId = '$o' AND YEAR(dateRegistered) = '$y'";
-    $empResult = $conn->query($empQuery);
-
-    $empResultArray = array();
-    while ($row = mysqli_fetch_assoc($empResult)) {
-        $empResultArray[] = $row;
-    }
-    
-    $empJSON = json_encode($empResultArray);
+    createMainHeader($_SESSION['organizationName'], array("Annual Physical Examination"));
 }
 
-$organizationName = "";
-$orgDetailsQuery = "SELECT * FROM Organization WHERE id = '$o'";
-$orgDetailsResult = $conn->query($orgDetailsQuery);
+$apeDetails = fetchApeDetailsByOrgAndYear($conn, $o, $y);
+$empJSON = json_encode($apeDetails);
 
-if ($orgDetailsResult !== false && $orgDetailsResult->num_rows > 0) {
-    while($orgDetails = $orgDetailsResult->fetch_assoc()) {
-        $organizationName = $orgDetails['name'];
-    }
+$organizationName = (null !== getOrganization($o)) ? getOrganization($o)['name'] : "";
+
+if($role == 1) {
+    createMainHeader($organizationName, array("Home", "Organizations", $organizationName, "Annual Physical Examination"), "APE");    
 }
 
 ?>
-<header class="bg-white shadow-sm">
-    <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center overflow-hidden">
-            <div>
-                <h1 class="text-3xl font-bold tracking-tight text-gray-900 mb-2">
-                    <span class="pr-3"><?php echo $organizationName; ?></span>
-                    <span class="font-normal text-xl border-l-2 border-green-700 pl-3">APE</span>
-                </h1>
-                <div class="text-xs breadcrumbs p-0 text-gray-800">
-                    <ul>
-                        <li>Home</li> 
-                        <li>Organizations</li> 
-                        <li><?php echo $organizationName;?></li>
-                        <li>Annual Physical Examination</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
 <main class='<?php echo $classMainContainer; ?>'>
-    <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200">
+    <!-- <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200">
         <ul class="flex -mb-px">
             <li class="mr-2">
                 <a href="" class="inline-block p-2 md:p-4 text-green-700 border-b-2 border-green-700 rounded-t-lg active text-left text-xs md:text-sm" aria-current="page">
@@ -73,7 +57,7 @@ if ($orgDetailsResult !== false && $orgDetailsResult->num_rows > 0) {
                 </a>
             </li>
         </ul>
-    </div>
+    </div> -->
 
     <div class="bg-white p-2 md:p-4">
         <div class='p-1 overflow-auto'>
@@ -130,13 +114,17 @@ if ($orgDetailsResult !== false && $orgDetailsResult->num_rows > 0) {
     </script>
 
     <div class="bg-white p-2 md:px-4 md:pb-4 border-t-2 border-green-700">
-        <div class="flex sm:justify-between flex-col sm:flex-row">
+        <div class="flex md:justify-between flex-col md:flex-row">
             <div class="dataTables_year p-1">
                 <form id="searchYear-APE" method="GET" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" class="flex flex-col sm:flex-row sm:items-center max-w-2xl">
                     <label>
                         Year: <input id="y" value="<?php echo $y; ?>" type="number" id="y" name="y" min="1900" max="2099" step="1"  class="border placeholder-gray-500 ml-2 px-3 py-2 rounded-lg border-gray-200 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" required />
                     </label>
-                    <input type="hidden" name="o" value="<?php echo $o; ?>">
+                    <?php 
+                    if($role == 1) {
+                        echo '<input type="hidden" name="o" value="'. $o .'">';
+                    }
+                    ?>
                 </form>
                 <script>
                     document.getElementById("y").onchange = function () {
@@ -144,14 +132,16 @@ if ($orgDetailsResult !== false && $orgDetailsResult->num_rows > 0) {
                     };
                 </script>
             </div>
-            <div class="p-1">
-                <a href="<?php base_url()?>/organizations.php" class="btn btn-default btn-sm text-xs rounded normal-case h-9 w-full sm:w-auto mb-2 sm:mb-0">Back</a>
-                <a href="<?php echo base_url(false) . "/employeesImport-APE.php?o=" . $o . "&y=" . $y; ?>" class="<?php echo $classBtnAlternate; ?> w-full sm:w-auto mb-2 sm:mb-0">Import Data</a>
-                <a href="<?php echo base_url(false) . "/employeesCSV-APE.php?o=" . $o . "&y=" . $y; ?>" class="<?php echo $classBtnSuccess; ?> w-full sm:w-auto mb-2 sm:mb-0" id="export-csv-button">Export CSV</a>
-                <a href="<?php echo base_url(false) . "/employeesExport-APE.php?o=" . $o . "&y=" . $y; ?>" class="<?php echo $classBtnSecondary; ?> w-full sm:w-auto mb-2 sm:mb-0" id="export-result-button">Export Results</a>
-                <a href="<?php echo base_url(false) . "/employeeCreate-APE.php?o=" . $o . "&y=" . $y; ?>" class="<?php echo $classBtnPrimary; ?> w-full sm:w-auto mb-2 sm:mb-0">APE Registration</a>
+            <div class="p-1 flex flex-wrap">
+
+                <?php if($role == 1) {
+                    echo '<a href="' . base_url(false) . '/organizations.php" class="btn btn-default btn-sm text-xs rounded normal-case h-9 w-full sm:w-auto grow mb-2 sm:mb-0 mr-0 sm:mr-2">Back</a>';
+                    echo '<a href="' . base_url(false) . '/employeesImport-APE.php?o=' . $o . '&y=' . $y . '" class="'. $classBtnAlternate . ' w-full sm:w-auto grow mb-2 sm:mb-0 mr-0 sm:mr-2">Import Data</a>';
+                    echo '<a href="' . base_url(false) . '/employeesCSV-APE.php?o=' . $o . '&y=' . $y . '" class="'. $classBtnSuccess . ' w-full sm:w-auto grow mb-2 sm:mb-0 mr-0 sm:mr-2" id="export-csv-button">Export CSV</a>';
+                    echo '<a href="' . base_url(false) . '/employeesExport-APE.php?o=' . $o . '&y=' . $y . '" class="'. $classBtnSecondary . ' w-full sm:w-auto grow mb-2 sm:mb-0 mr-0 sm:mr-2" id="export-result-button">Export Results</a>';
+                    echo '<a href="' . base_url(false) . '/employeeCreate-APE.php?o=' . $o . '&y=' . $y . '" class="'. $classBtnPrimary . ' w-full sm:w-auto grow mb-2 sm:mb-0">APE Registration</a>';
+                }
                 
-                <?php
                 $employeeClearDataAPE = ['o' => $o,'y' => $y];
                 $encodeEmployeeClearDataAPE = base64_encode(json_encode( $employeeClearDataAPE ));
                 ?>

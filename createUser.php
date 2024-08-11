@@ -84,16 +84,8 @@ createMainHeader("Create User", array("Home", "Users", "Create User"));
                     <div class="sm:col-span-3">
                         <input id="email" type="email" data-label="Email" required />
                     </div>
-                    <div class="sm:col-span-3">
-                        <select id="role" data-label="Role" required>
-                            <option value="" selected disabled>Select</option>
-                            <option <?php echo ($role == "2") ? "selected" : "" ?> value="2">Client</option>
-                            <option <?php echo ($role == "1") ? "selected" : "" ?> value="1">Admin</option>
-                        </select>
-                        <p class="mt-3 text-gray-600 text-xs"><span class="font-semibold">Admin:</span> Global Health Diagnostics employees</p>
-                        <p class="mt-1 text-gray-600 text-xs"><span class="font-semibold">Client:</span> Company HR & Admin Officer</p>
-                    </div>
-                    <div class="sm:col-span-3">
+                    
+                    <div class="sm:col-span-6">
                         <select id="organizationId" data-label="Organization" required>   
                             <option value="" selected disabled>Select</option>
                         <?php
@@ -104,6 +96,20 @@ createMainHeader("Create User", array("Home", "Users", "Create User"));
                             }
                         ?>
                         </select>
+                    </div>
+                    
+                    <div class="sm:col-span-3">
+                        <select id="role" data-label="User Role" required>
+                            <option value="" selected disabled>Select</option>
+                            <option <?php echo ($role == "2") ? "selected" : "" ?> value="2">Client Administrator</option>
+                            <option <?php echo ($role == "3") ? "selected" : "" ?> value="3">Manager</option>
+                            <option <?php echo ($role == "1") ? "selected" : "" ?> value="1">Admin</option>
+                        </select>
+                    </div>
+                    <div class="sm:col-span-3">
+                        <p class="mt-1 text-gray-600 text-xs"><span class="font-semibold">Client Administrator:</span> A representative from a client company with access to their company’s data and the ability to manage their employees’ accounts.</p>
+                        <p class="mt-3 text-gray-600 text-xs"><span class="font-semibold">Manager:</span> Manages specific sections of the system, such as client accounts, patients, or certain data sets.</p>
+                        <p class="mt-3 text-gray-600 text-xs"><span class="font-semibold">Admin:</span> Full access to the system, including user management, settings, and sensitive data.</p>
                     </div>
                     <div class="sm:col-span-3">
                         <input id="password" type="password" data-label="Password" required />
@@ -139,6 +145,9 @@ createMainHeader("Create User", array("Home", "Users", "Create User"));
             $(this).attr('class', styleInput);  
             $(this).attr('name', id);
         });
+
+        $('select').addClass('pr-8');
+
 
         if(Object.keys(post).length !== 0) {
             $('input').each( function(key) {

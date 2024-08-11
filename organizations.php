@@ -9,24 +9,9 @@ include('navbar.php');
 
 $sql = "SELECT * FROM Organization";
 $result = $conn->query($sql);
+createMainHeader('Organizations', array('Home', 'Organizations'));
+
 ?>
-
-
-<header class="bg-white shadow-sm">
-    <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center">
-            <div>
-                <h1 class="text-3xl font-bold tracking-tight text-gray-900 mb-2">Organizations</h1>
-                <div class="text-xs breadcrumbs p-0 text-gray-800">
-                    <ul>
-                        <li>Home</li> 
-                        <li>Organizations</li> 
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
 <main class='<?php echo $classMainContainer; ?>'>
     <!-- <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200">
         <ul class="flex -mb-px">
@@ -61,11 +46,6 @@ $result = $conn->query($sql);
                                 <a class='" . $classTblBtnSecondary . " mb-1 lg:mb-0 lg:mr-1 w-full lg:w-auto' href='" . base_url(false) . "/employees-APE.php?o=" . $org['id'] . "&y=" . date('Y') . "' title='View Medical Service Record'>
                                     View
                                 </a>
-
-                                <a class='" . $classTblBtnAlternate . " mb-1 lg:mb-0 lg:mr-1 w-full lg:w-auto' href='" . base_url(false) . "/employeesCSV-APE.php?o=" . $org['id'] . "&y=" . date('Y') . "' title='Export CSV'>
-                                    Export
-                                </a>
-
                                 <a class='" . $classTblBtnPrimary . " w-full lg:w-auto' href='" . base_url(false) . "/organization.php?id=" . $org['id'] . "' title='View or edit organization details'>
                                     Edit
                                 </a>

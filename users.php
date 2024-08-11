@@ -44,7 +44,7 @@ $result = $conn->query($sql);
                     </thead>
                     <tbody>";
                     while($user = $result->fetch_assoc()) {
-                        $userRole = ($user["role"] == "1") ? "Admin" : "Client";
+                        $userRole = ($user['role'] == 1 ? 'Admin' : ($user['role'] == 2 ? 'Client Administrator' : ($user['role'] == 3 ? 'Manager' : '')));
                         $userStatus= ($user["isActive"] == "1") ? "Active" : "Inactive";
                     echo 
                         "<tr>" .
