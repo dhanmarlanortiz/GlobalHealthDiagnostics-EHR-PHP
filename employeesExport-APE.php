@@ -2,39 +2,70 @@
 $start_time = microtime(true);
 ini_set('max_execution_time', '0'); // for infinite time of execution 
 
-// ini_set('display_errors', 1);
-// ini_set('display_startup_errors', 1);
-// error_reporting(E_ALL);
-
 ob_start();
 session_start();
 
 require_once('connection.php');
 include('header.php');
+
 preventAccess();
-include('navbar.php');
+
+$role = $_SESSION['role'];
+
+/* SET NAV - START */
+if($role == 1) {
+    include('navbar.php');    
+} else if($role == 2) {
+    include('client/navbar.php');    
+} else if($role == 3) {
+    include('manager/navbar.php');
+}
+/* SET NAV - END */
+
+
+/* PDF IMPORTS - START */
 require('fpdf/fpdf.php');
-// require('fpdf/fpdf_merge.php');
 include("reports/radiology-pdf.php");
 include("reports/laboratory-pdf.php");
 include("reports/medical-exam-pdf.php");
+/* PDF IMPORTS - END */
 
 $o = $y = $id = 0 ;
 
-if ($_SERVER["REQUEST_METHOD"] == "GET") {
+if ($_SERVER["REQUEST_METHOD"] == "GET" && $role == 1) {
     $o = clean(isset($_GET['o']) ? $_GET['o'] : 0);
     $y = clean(isset($_GET['y']) ? $_GET['y'] : date("Y"));
     $id = clean(isset($_GET['id']) ? $_GET['id'] : 0);
-} else if($_SERVER["REQUEST_METHOD"] == "POST") {
+} 
+
+if($_SERVER["REQUEST_METHOD"] == "POST") {
     $o = clean(isset($_POST['o']) ? $_POST['o'] : 0);
     $y = clean(isset($_POST['y']) ? $_POST['y'] : date("Y"));
     $id = clean(isset($_POST['id']) ? $_POST['id'] : 0);
 }
 
-$orgDetailsResult = fetchOrgDetailsById($conn, $o);
-$organizationName = (null !== $orgDetailsResult) ? $orgDetailsResult["name"] : "Not Found";
+/* SET HEADER BAR - START */
+$organizationName  = $breadcrumbsArray = "";
+if($role == 1) {
+    $orgDetailsResult = fetchOrgDetailsById($conn, $o);
+    $organizationName = (null !== $orgDetailsResult) ? $orgDetailsResult["name"] : "Not Found";
+    $breadcrumbsArray = array("Home", "Organizations", $organizationName, "Annual Physical Examination", "Export Results (PDF)");
+} else if($role == 2) {
+    $o = clean(isset($_SESSION['organizationId']) ? $_SESSION['organizationId'] : 0);
+    $y = clean(isset($_GET['y']) ? $_GET['y'] : date("Y"));
 
-createMainHeader($organizationName, array("Home", "Organizations", $organizationName, "Annual Physical Examination", "Export Results (PDF)"), "Export Results (PDF)");
+    $organizationName = (null !== getOrganization($o)) ? getOrganization($o)['name'] : "";
+    $breadcrumbsArray = array("Annual Physical Examination", "Export Results (PDF)");
+} else if($role == 3) {
+    $o = clean(isset($_SESSION['organizationId']) ? $_SESSION['organizationId'] : 0);
+    $y = clean(isset($_GET['y']) ? $_GET['y'] : date("Y"));
+
+    $organizationName = (null !== getOrganization($o)) ? getOrganization($o)['name'] : "";
+    $breadcrumbsArray = array("Annual Physical Examination", "Export Results (PDF)");
+}
+
+createMainHeader($organizationName, $breadcrumbsArray, "Export Results (PDF)");
+/* SET HEADER BAR - END */
 
 if($id != 0){
     $apeQuery = "SELECT * FROM APE WHERE organizationId = '$o' AND id = '$id'";
@@ -43,8 +74,7 @@ if($id != 0){
 }
 
 
-/* === */
-
+/* reportsFPDF - START */
 class reportsFPDF extends FPDF {
 
     function Header() {
@@ -143,11 +173,8 @@ class reportsFPDF extends FPDF {
             $pdf->row($title, '');
         }
     }
-
 }
-
-
-/* === */
+/* reportsFPDF - END */
 
 if(isset($_POST['generate'])) {
     $apeResult = $conn->query($apeQuery);
@@ -213,7 +240,7 @@ if(isset($_POST['generate'])) {
     }
 }
 
-/* ZIP VARIABLES */
+/* ZIP VARIABLES - START */
 $folder = 'reports/combine-temp/';
 $zipFilename = strtolower($organizationName);
 $zipFilename = str_replace("&amp;", "and", $zipFilename);
@@ -222,6 +249,9 @@ $zipFilename = preg_replace('/[^a-zA-Z0-9\s]/', '', $zipFilename);
 $zipFilename = str_replace(' ', '-', $zipFilename);
 $zipFilename = $zipFilename. "-APE-" . $y . ".zip";
 $zipPath = $folder. $zipFilename;
+/* ZIP VARIABLES - END */
+
+
 
 ?>
 
@@ -264,17 +294,25 @@ $zipPath = $folder. $zipFilename;
                 </p>
             </div>
             <div class="p-1">
-                <a href="<?php echo base_url(false) . "/employees-APE.php?o=" . $o . "&y=" . $y;?>" class="btn btn-default btn-sm text-xs rounded normal-case h-9 w-full sm:w-auto mb-2 sm:mb-0">Back</a>
+            <?php 
+                    $employeesApeUrl = base_url(false);
 
-                
+                    if($role == 1) {
+                        $employeesApeUrl = base_url(false) . "/employees-APE.php?o=" . $o . "&y=" . $y;
+                    } else if($role == 2) {
+                        $employeesApeUrl = base_url(false) . "/client/employees-APE.php?o=" . $o . "&y=" . $y;
+                    } else if($role == 3) {
+                        $employeesApeUrl = base_url(false) . "/employees-APE.php?o=" . $o . "&y=" . $y;
+                    }
+                ?>
+                <a href="<?php echo $employeesApeUrl; ?>" class="btn btn-default btn-sm text-xs rounded normal-case h-9 w-full sm:w-auto mb-2 sm:mb-0">Back</a>
+
                 <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?o=" . $o . "&y=" . $y ;?>" class=" inline-block w-full sm:w-auto /prompt-confirm">
                     <button id="generate-result-button" type="submit" name='generate' class="<?php echo $classBtnSecondary; ?> w-full sm:w-auto mb-2 sm:mb-0">Generate</button>
                     <input type="hidden" name="o" value="<?php echo $o; ?>">
                     <input type="hidden" name="y" value="<?php echo $y; ?>">
                     <input type="hidden" name="id" value="<?php echo $id; ?>">
                 <form>
-
-                
 
                 <?php 
                     if(file_exists($zipPath)){
@@ -288,18 +326,14 @@ $zipPath = $folder. $zipFilename;
 
 <script>
     $("#generate-result-button").on("click", function() {
-    //     $(".prompt-button-yes").on("click", function() {
-            $('.page-loader').show();
-            $('.page-loader p').html("<br><br><br>Records are currently being generated...<br>The duration of this process will vary based on the records involved.<br><span id='ellapsed-time'>0</span>s");
+        $('.page-loader').show();
+        $('.page-loader p').html("<br><br><br>Records are currently being generated...<br>The duration of this process will vary based on the records involved.<br><span id='ellapsed-time'>0</span>s");
 
-            var ctr = 1;
-            setInterval(() => {
-                $('#ellapsed-time').text(ctr++);
-            }, 1000);
-    //         $('#prompConfirmModal').removeAttr('open');
-    //     })
-    });
-    
+        var ctr = 1;
+        setInterval(() => {
+            $('#ellapsed-time').text(ctr++);
+        }, 1000);
+    });    
 </script>
 
 

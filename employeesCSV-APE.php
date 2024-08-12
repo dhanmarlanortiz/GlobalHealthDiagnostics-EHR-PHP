@@ -1,29 +1,63 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 ob_start();
 session_start();
 
-
 require_once('connection.php');
 include('header.php');
+
 preventAccess([['role' => 2, 'redirect' => 'client/index.php']]);
-include('navbar.php');
+
+$role = $_SESSION['role'];
+
+/* SET NAV - START */
+if($role == 1) {
+    include('navbar.php');    
+} else if($role == 3) {
+    include('manager/navbar.php');
+}
+/* SET NAV - END */
 
 $o = $y = $id = 0 ;
 
-if ($_SERVER["REQUEST_METHOD"] == "GET") {
+if ($_SERVER["REQUEST_METHOD"] == "GET" && $role == 1) {
     $o = clean(isset($_GET['o']) ? $_GET['o'] : 0);
     $y = clean(isset($_GET['y']) ? $_GET['y'] : date("Y"));
     $id = clean(isset($_GET['id']) ? $_GET['id'] : 0);
-} else if($_SERVER["REQUEST_METHOD"] == "POST") {
+} 
+
+if($_SERVER["REQUEST_METHOD"] == "POST") {
     $o = clean(isset($_POST['o']) ? $_POST['o'] : 0);
     $y = clean(isset($_POST['y']) ? $_POST['y'] : date("Y"));
     $id = clean(isset($_POST['id']) ? $_POST['id'] : 0);
 }
 
-$orgDetailsResult = fetchOrgDetailsById($conn, $o);
-$organizationName = (null !== $orgDetailsResult) ? $orgDetailsResult["name"] : "Not Found";
+// $orgDetailsResult = fetchOrgDetailsById($conn, $o);
+// $organizationName = (null !== $orgDetailsResult) ? $orgDetailsResult["name"] : "Not Found";
+
+/* SET HEADER BAR - START */
+$organizationName  = $breadcrumbsArray = "";
+if($role == 1) {
+    $orgDetailsResult = fetchOrgDetailsById($conn, $o);
+    $organizationName = (null !== $orgDetailsResult) ? $orgDetailsResult["name"] : "Not Found";
+    $breadcrumbsArray = array("Home", "Organizations", $organizationName, "Annual Physical Examination", "Export Record (CSV)");
+} else if($role == 2) {
+    $o = clean(isset($_SESSION['organizationId']) ? $_SESSION['organizationId'] : 0);
+    $y = clean(isset($_GET['y']) ? $_GET['y'] : date("Y"));
+
+    $organizationName = (null !== getOrganization($o)) ? getOrganization($o)['name'] : "";
+    $breadcrumbsArray = array("Annual Physical Examination", "Export Record (CSV)");
+} else if($role == 3) {
+    $o = clean(isset($_SESSION['organizationId']) ? $_SESSION['organizationId'] : 0);
+    $y = clean(isset($_GET['y']) ? $_GET['y'] : date("Y"));
+
+    $organizationName = (null !== getOrganization($o)) ? getOrganization($o)['name'] : "";
+    $breadcrumbsArray = array("Annual Physical Examination", "Export Record (CSV)");
+}
+
+// createMainHeader($organizationName, array("Home", "Organizations", $organizationName, "Annual Physical Examination", "Export Record (CSV)"), "Export Record (CSV)");
+createMainHeader($organizationName, $breadcrumbsArray, "Export Record (CSV)");
+/* SET HEADER BAR - END */
+
 
 /* CSV VARIABLES */
 $folder = 'csv/';
@@ -66,7 +100,7 @@ if(isset($_POST['generate'])) {
 
 }
 
-createMainHeader($organizationName, array("Home", "Organizations", $organizationName, "Annual Physical Examination", "Export Record (CSV)"), "Export Record (CSV)");
+
 
 
 ?>
@@ -106,7 +140,18 @@ createMainHeader($organizationName, array("Home", "Organizations", $organization
                 <p class="text-xs text-gray-500"></p>
             </div>
             <div class="p-1">
-                <a href="<?php echo base_url(false) . "/employees-APE.php?o=" . $o . "&y=" . $y;?>" class="btn btn-default btn-sm text-xs rounded normal-case h-9 w-full sm:w-auto mb-2 sm:mb-0">Back</a>
+                <?php 
+                    $employeesApeUrl = base_url(false);
+
+                    if($role == 1) {
+                        $employeesApeUrl = base_url(false) . "/employees-APE.php?o=" . $o . "&y=" . $y;
+                    } else if($role == 2) {
+                        $employeesApeUrl = base_url(false) . "/client/employees-APE.php?o=" . $o . "&y=" . $y;
+                    } else if($role == 3) {
+                        $employeesApeUrl = base_url(false) . "/employees-APE.php?o=" . $o . "&y=" . $y;
+                    }
+                ?>
+                <a href="<?php echo $employeesApeUrl; ?>" class="btn btn-default btn-sm text-xs rounded normal-case h-9 w-full sm:w-auto mb-2 sm:mb-0">Back</a>
                 
                 <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?o=" . $o . "&y=" . $y ;?>" class=" inline-block w-full sm:w-auto /prompt-confirm">
                     <button id="generate-result-button" type="submit" name='generate' class="<?php echo $classBtnSecondary; ?> w-full sm:w-auto mb-2 sm:mb-0">Generate</button>

@@ -481,7 +481,6 @@ function fetchApeDetailsById($conn, $id) {
     }
 }
 
-
 function fetchApeDetailsByOrgAndYear($conn, $o, $y) {
     $empQuery = "SELECT * FROM APE WHERE organizationId = '$o' AND YEAR(dateRegistered) = '$y'";
     $empResult = $conn->query($empQuery);
@@ -494,8 +493,6 @@ function fetchApeDetailsByOrgAndYear($conn, $o, $y) {
 
     return $empResultArray;
 }
-
-
 
 function fetchOrgDetailsById($conn, $id) {
     $sql = "SELECT * FROM Organization WHERE id = ?";

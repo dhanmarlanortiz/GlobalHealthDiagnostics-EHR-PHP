@@ -4,6 +4,8 @@ session_start();
 
 require_once('connection.php');
 include('header.php');
+include('classes/CSVImporter.php');
+
 preventAccess([['role' => 2, 'redirect' => 'client/index.php']]);
 
 $role = $_SESSION['role'];
@@ -128,7 +130,7 @@ $headerText = (null !== getOrganization($id)) ? getOrganization($id)['name'] : "
 if($role == 1) {
     createMainHeader($headerText, array("Home", "Organizations"));    
 } else if($role == 3) {
-    createMainHeader($headerText, array("Home", "Organization"));    
+    createMainHeader($headerText, array("Organization"));    
 }
 
 $conn->close();

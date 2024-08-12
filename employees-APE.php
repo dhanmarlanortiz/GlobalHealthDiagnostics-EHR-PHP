@@ -16,34 +16,27 @@ if($role == 1) {
     include('manager/navbar.php');
 }
 
-
-function test_input($data) {
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-    return $data;
-}
-
 $o = $y = 0;
 $empJSON = "";
 
-if ($_SERVER["REQUEST_METHOD"] == "GET") {
-    $o = test_input( isset($_GET['o']) ? $_GET['o'] : 0 );
-    $y = test_input( isset($_GET['y']) ? $_GET['y'] : date("Y") );    
+if ($_SERVER["REQUEST_METHOD"] == "GET" && $role == 1) {
+    $o = clean( isset($_GET['o']) ? $_GET['o'] : 0 );
+    $y = clean( isset($_GET['y']) ? $_GET['y'] : date("Y") );    
 }
  
 if($role == 3) {
-    $o = test_input( isset($_SESSION['organizationId']) ? $_SESSION['organizationId'] : 0 );
-    $y = test_input( isset($_GET['y']) ? $_GET['y'] : date("Y") );
-    createMainHeader($_SESSION['organizationName'], array("Annual Physical Examination"));
+    $o = clean( isset($_SESSION['organizationId']) ? $_SESSION['organizationId'] : 0 );
+    $y = clean( isset($_GET['y']) ? $_GET['y'] : date("Y") );
+    
+    $organizationName = (null !== getOrganization($o)) ? getOrganization($o)['name'] : "";
+    createMainHeader($organizationName, array("Annual Physical Examination"));
 }
 
 $apeDetails = fetchApeDetailsByOrgAndYear($conn, $o, $y);
 $empJSON = json_encode($apeDetails);
 
-$organizationName = (null !== getOrganization($o)) ? getOrganization($o)['name'] : "";
-
 if($role == 1) {
+    $organizationName = (null !== getOrganization($o)) ? getOrganization($o)['name'] : "";
     createMainHeader($organizationName, array("Home", "Organizations", $organizationName, "Annual Physical Examination"), "APE");    
 }
 
@@ -134,13 +127,26 @@ if($role == 1) {
             </div>
             <div class="p-1 flex flex-wrap">
 
-                <?php if($role == 1) {
-                    echo '<a href="' . base_url(false) . '/organizations.php" class="btn btn-default btn-sm text-xs rounded normal-case h-9 w-full sm:w-auto grow mb-2 sm:mb-0 mr-0 sm:mr-2">Back</a>';
-                    echo '<a href="' . base_url(false) . '/employeesImport-APE.php?o=' . $o . '&y=' . $y . '" class="'. $classBtnAlternate . ' w-full sm:w-auto grow mb-2 sm:mb-0 mr-0 sm:mr-2">Import Data</a>';
-                    echo '<a href="' . base_url(false) . '/employeesCSV-APE.php?o=' . $o . '&y=' . $y . '" class="'. $classBtnSuccess . ' w-full sm:w-auto grow mb-2 sm:mb-0 mr-0 sm:mr-2" id="export-csv-button">Export CSV</a>';
-                    echo '<a href="' . base_url(false) . '/employeesExport-APE.php?o=' . $o . '&y=' . $y . '" class="'. $classBtnSecondary . ' w-full sm:w-auto grow mb-2 sm:mb-0 mr-0 sm:mr-2" id="export-result-button">Export Results</a>';
-                    echo '<a href="' . base_url(false) . '/employeeCreate-APE.php?o=' . $o . '&y=' . $y . '" class="'. $classBtnPrimary . ' w-full sm:w-auto grow mb-2 sm:mb-0">APE Registration</a>';
+                <?php 
+                $organizations = "";
+                $employeesImportAPE = base_url(false) . '/employeesImport-APE.php?o=' . $o . '&y=' . $y;
+                $employeesCSVAPE = base_url(false) . '/employeesCSV-APE.php?o=' . $o . '&y=' . $y;
+                $employeesExportAPE = base_url(false) . '/employeesExport-APE.php?o=' . $o . '&y=' . $y;
+                $employeeCreateAPE = base_url(false) . '/employeeCreate-APE.php?o=' . $o . '&y=' . $y;
+
+                if($role == 1) {
+                    $organizations = base_url(false) . '/organizations.php';
+                    
+                } else if($role == 3) {
+                    $organizations = base_url(false) . '/manager';
                 }
+
+                echo '<a href="' . $organizations . '" class="btn btn-default btn-sm text-xs rounded normal-case h-9 w-full sm:w-auto grow mb-2 sm:mb-0 mr-0 sm:mr-2">Back</a>';
+                echo '<a href="' . $employeesImportAPE . '" class="'. $classBtnAlternate . ' w-full sm:w-auto grow mb-2 sm:mb-0 mr-0 sm:mr-2">Import Data</a>';
+                echo '<a href="' . $employeesCSVAPE . '" class="'. $classBtnSuccess . ' w-full sm:w-auto grow mb-2 sm:mb-0 mr-0 sm:mr-2" id="export-csv-button">Export CSV</a>';
+                echo '<a href="' . $employeesExportAPE . '" class="'. $classBtnSecondary . ' w-full sm:w-auto grow mb-2 sm:mb-0 mr-0 sm:mr-2" id="export-result-button">Export Results</a>';
+                echo '<a href="' . $employeeCreateAPE . '" class="'. $classBtnPrimary . ' w-full sm:w-auto grow mb-2 sm:mb-0">APE Registration</a>';
+
                 
                 $employeeClearDataAPE = ['o' => $o,'y' => $y];
                 $encodeEmployeeClearDataAPE = base64_encode(json_encode( $employeeClearDataAPE ));
