@@ -19,20 +19,13 @@ $OrgResult = $conn->query($orgQuery);
 // define variables and set to empty values
 $username = $email = $role = $organizationId = $password = "";
 
-function test_input($data) {
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-    return $data;
-}
-
 $errVal = $errKey = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = test_input($_POST["username"]);
-    $email = test_input($_POST["email"]);
-    $role = intval(test_input($_POST["role"]));
-    $organizationId = intval(test_input($_POST["organizationId"]));
-    $password = test_input($_POST["password"]);
+    $username = clean($_POST["username"]);
+    $email = clean($_POST["email"]);
+    $role = intval(clean($_POST["role"]));
+    $organizationId = intval(clean($_POST["organizationId"]));
+    $password = clean($_POST["password"]);
 
     $userQuery = "INSERT INTO User (username, email, role, organizationId, password) 
     VALUES ('$username', '$email', $role, $organizationId, '$password')";

@@ -95,26 +95,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (isset($_POST['deleteRecord'])) {
-        $deleteQuery =  "DELETE FROM APE WHERE id = $id";
-
-        if ($conn->query($deleteQuery) === TRUE) {
-            create_flash_message('delete-success', $flashMessage['delete-success'] , FLASH_SUCCESS);
-
-            $url = base_url(false) . "/employees-APE.php?o=" . $organizationId . "&y=" . date("Y", strtotime($dateRegistered));
-            header("Location: " . $url ."");
-
-            exit();
-        } else {
-            create_flash_message('delete-failed', $flashMessage['delete-failed'], FLASH_ERROR);
-
-            if($conn->errno == 1451) {
-                create_flash_message('delete-failed', $flashMessage['delete-failed-linked'] , FLASH_ERROR);
+        try {
+            $deleteQuery = "DELETE FROM APE WHERE id = $id";
+    
+            if ($conn->query($deleteQuery) === TRUE) {
+                create_flash_message('delete-success', $flashMessage['delete-success'], FLASH_SUCCESS);
+    
+                $url = base_url(false) . "/employees-APE.php?o=" . $organizationId . "&y=" . date("Y", strtotime($dateRegistered));
+                header("Location: " . $url);
+                exit();
+            } else {
+                throw new Exception($conn->error);
             }
-
+        } catch (Exception $e) {
+            create_flash_message('delete-failed', $flashMessage['delete-failed'], FLASH_ERROR);
+            if ($conn->errno == 1451) {
+                create_flash_message('delete-failed', $flashMessage['delete-failed-linked'], FLASH_ERROR);
+            }
+    
             $url = base_url(false) . "/employee-APE.php?id=" . $id;
-            header("Location: " . $url ."");
+            header("Location: " . $url);
+            exit();
         }
-    }
+    }   
 
     if (isset($_POST['generateControlNumber'])) {
         getControlNumberAPE($id, $organizationId, $dateRegistered);
@@ -226,13 +229,16 @@ include("components/medExamReportModal.php");
 
 $conn->close();
 
-if($_SESSION['role'] == 1) {
+$role = $_SESSION['role'];
+if($role == 1) {
     include('navbar.php');
-} else if($_SESSION['role'] == 2) {
+} else if($role == 2) {
     include('client/navbar.php');
+} else if($role == 3) {
+    include('manager/navbar.php');
 }
 
-if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
+if( $role != 1 && $_SESSION['organizationId'] != $o ) {
     $url = base_url(false) . "/page-not-found.php";
     header("Location: " . $url);
 }
@@ -240,11 +246,13 @@ if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
 
 <form id="employee-APE-form" method="post" enctype="multipart/form-data" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id=" . $_GET['id'] ) ;?>" class="prompt-confirm">
     <?php
-        if($_SESSION['role'] == 1) {
+        if($role == 1) {
             createMainHeader($organizationDetail['name'], array("Home", "Organizations", $organizationDetail['name'], "Annual Physical Examination", "Information"));
-        } else if($_SESSION['role'] == 2) {
+        } else if($role == 2) {
             createMainHeader($organizationDetail['name'], array("Annual Physical Examination", "Information Sheet"));
-        }
+        } else if($role == 3) {
+            createMainHeader($organizationDetail['name'], array("Annual Physical Examination", "Information Sheet"));
+        }        
     ?>
 
     <main class='mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8'>
@@ -252,22 +260,23 @@ if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
             <?php createFormHeader("Information"); ?>
             <div class="flex items-center justify-end gap-x-6 bg-white px-3 sm:px-6 py-10 border-b mb-4">
                 <div class="space-y-12 w-full">
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-8">
-                        <?php if($_SESSION['role'] == '1') { ?>
-                            <div class="col-span-1">
-                                <input type="number" id="headCount" data-label="Head Count" readonly min="1" step="1"  />
-                            </div>
-                            <div class="col-span-1">
-                                <input class="tes" type="number" id="controlNumber" data-label="Control Number" readonly min="1" step="1" placeholder="Not Available" />
-                                <?php
-                                if( ! isset($_POST['controlNumber']) ) {
-                                    // echo "<p class='text-xs mt-1 text-gray-600 whitespace-nowrap'><span class='font-medium'>Generated: </span><input type='date' id='controlDate' data-label='Control Date' readonly /></p>";
-                                    echo '<button type="submit" name="generateControlNumber" class="'.$classBtnDefault.' w-full font-normal" style="height:38px;transform:translateY(-38px);">Generate</button>';
-                                }
-                                ?>
-                            </div>
-                        <?php } ?>
-                    </div>
+                    <?php if($role == '1' || $role == '3') { ?>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-8">
+                            
+                                <div class="col-span-1">
+                                    <input type="number" id="headCount" data-label="Head Count" readonly min="1" step="1"  />
+                                </div>
+                                <div class="col-span-1">
+                                    <input class="tes" type="number" id="controlNumber" data-label="Control Number" readonly min="1" step="1" placeholder="Not Available" />
+                                    <?php
+                                    if( ! isset($_POST['controlNumber']) ) {
+                                        // echo "<p class='text-xs mt-1 text-gray-600 whitespace-nowrap'><span class='font-medium'>Generated: </span><input type='date' id='controlDate' data-label='Control Date' readonly /></p>";
+                                        echo '<button type="submit" name="generateControlNumber" class="'.$classBtnDefault.' w-full font-normal" style="height:38px;transform:translateY(-38px);">Generate</button>';
+                                    }
+                                    ?>
+                                </div>                            
+                        </div>
+                    <?php } ?>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-8">
                         <div class="col-span-1">
                             <input type="text" id="firstName" data-label="First Name" required />
@@ -366,7 +375,7 @@ if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
                                                     <svg xmlns='http://www.w3.org/2000/svg' fill='#fff' height='1em' viewBox='0 0 512 512'><path d='M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32V274.7l-73.4-73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l128 128c12.5 12.5 32.8 12.5 45.3 0l128-128c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L288 274.7V32zM64 352c-35.3 0-64 28.7-64 64v32c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V416c0-35.3-28.7-64-64-64H346.5l-45.3 45.3c-25 25-65.5 25-90.5 0L165.5 352H64zm368 56a24 24 0 1 1 0 48 24 24 0 1 1 0-48z'/></svg>
                                                 </a>";
 
-                                            if($_SESSION['role'] == 1) {
+                                            if($role == 1 || $role == 3) {
                                                 echo "<button type='button' onClick='radiologyReportModal.showModal()' title='Edit' class='btn btn-sm ml-1 bg-amber-500 hover:bg-amber-600 text-white'>
                                                     <svg xmlns='http://www.w3.org/2000/svg' fill='#fff' height='1em' viewBox='0 0 512 512'><path d='M441 58.9L453.1 71c9.4 9.4 9.4 24.6 0 33.9L424 134.1 377.9 88 407 58.9c9.4-9.4 24.6-9.4 33.9 0zM209.8 256.2L344 121.9 390.1 168 255.8 302.2c-2.9 2.9-6.5 5-10.4 6.1l-58.5 16.7 16.7-58.5c1.1-3.9 3.2-7.5 6.1-10.4zM373.1 25L175.8 222.2c-8.7 8.7-15 19.4-18.3 31.1l-28.6 100c-2.4 8.4-.1 17.4 6.1 23.6s15.2 8.5 23.6 6.1l100-28.6c11.8-3.4 22.5-9.7 31.1-18.3L487 138.9c28.1-28.1 28.1-73.7 0-101.8L474.9 25C446.8-3.1 401.2-3.1 373.1 25zM88 64C39.4 64 0 103.4 0 152V424c0 48.6 39.4 88 88 88H360c48.6 0 88-39.4 88-88V312c0-13.3-10.7-24-24-24s-24 10.7-24 24V424c0 22.1-17.9 40-40 40H88c-22.1 0-40-17.9-40-40V152c0-22.1 17.9-40 40-40H200c13.3 0 24-10.7 24-24s-10.7-24-24-24H88z'/></svg>
                                                     </button>";
@@ -376,7 +385,7 @@ if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
                                                 </button>";
                                             }
                                         } else {
-                                            if($_SESSION['role'] == 1) {
+                                            if($role == 1 || $role == 3) {
                                                 echo "<button type='button' onClick='radiologyReportModal.showModal()' title='Create' class='btn btn-sm bg-green-700 hover:bg-green-800'>
                                                         <svg xmlns='http://www.w3.org/2000/svg' fill='#fff' height='14' width='12' viewBox='0 0 448 512'><path d='M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z'/></svg>
                                                     </button>";
@@ -420,7 +429,7 @@ if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
                                                     <svg xmlns='http://www.w3.org/2000/svg' fill='#fff' height='1em' viewBox='0 0 512 512'><path d='M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32V274.7l-73.4-73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l128 128c12.5 12.5 32.8 12.5 45.3 0l128-128c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L288 274.7V32zM64 352c-35.3 0-64 28.7-64 64v32c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V416c0-35.3-28.7-64-64-64H346.5l-45.3 45.3c-25 25-65.5 25-90.5 0L165.5 352H64zm368 56a24 24 0 1 1 0 48 24 24 0 1 1 0-48z'/></svg>
                                                 </a>";
 
-                                            if($_SESSION['role'] == 1) {
+                                            if($role == 1 || $role == 3) {
                                                 echo "<button type='button' onClick='laboratoryResultModal.showModal()' title='Edit' class='btn btn-sm ml-1 bg-amber-500 hover:bg-amber-600 text-white'>
                                                     <svg xmlns='http://www.w3.org/2000/svg' fill='#fff' height='1em' viewBox='0 0 512 512'><path d='M441 58.9L453.1 71c9.4 9.4 9.4 24.6 0 33.9L424 134.1 377.9 88 407 58.9c9.4-9.4 24.6-9.4 33.9 0zM209.8 256.2L344 121.9 390.1 168 255.8 302.2c-2.9 2.9-6.5 5-10.4 6.1l-58.5 16.7 16.7-58.5c1.1-3.9 3.2-7.5 6.1-10.4zM373.1 25L175.8 222.2c-8.7 8.7-15 19.4-18.3 31.1l-28.6 100c-2.4 8.4-.1 17.4 6.1 23.6s15.2 8.5 23.6 6.1l100-28.6c11.8-3.4 22.5-9.7 31.1-18.3L487 138.9c28.1-28.1 28.1-73.7 0-101.8L474.9 25C446.8-3.1 401.2-3.1 373.1 25zM88 64C39.4 64 0 103.4 0 152V424c0 48.6 39.4 88 88 88H360c48.6 0 88-39.4 88-88V312c0-13.3-10.7-24-24-24s-24 10.7-24 24V424c0 22.1-17.9 40-40 40H88c-22.1 0-40-17.9-40-40V152c0-22.1 17.9-40 40-40H200c13.3 0 24-10.7 24-24s-10.7-24-24-24H88z'/></svg>
                                                     </button>";
@@ -430,7 +439,7 @@ if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
                                                 </button>";
                                             }
                                         } else {
-                                            if($_SESSION['role'] == 1) {
+                                            if($role == 1 || $role == 3) {
                                                 echo "<button type='button' onClick='laboratoryResultModal.showModal()' title='Create' class='btn btn-sm bg-green-700 hover:bg-green-800'>
                                                         <svg xmlns='http://www.w3.org/2000/svg' fill='#fff' height='14' width='12' viewBox='0 0 448 512'><path d='M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z'/></svg>
                                                     </button>";
@@ -474,7 +483,7 @@ if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
                                                     <svg xmlns='http://www.w3.org/2000/svg' fill='#fff' height='1em' viewBox='0 0 512 512'><path d='M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32V274.7l-73.4-73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l128 128c12.5 12.5 32.8 12.5 45.3 0l128-128c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L288 274.7V32zM64 352c-35.3 0-64 28.7-64 64v32c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V416c0-35.3-28.7-64-64-64H346.5l-45.3 45.3c-25 25-65.5 25-90.5 0L165.5 352H64zm368 56a24 24 0 1 1 0 48 24 24 0 1 1 0-48z'/></svg>
                                                 </a>";
 
-                                            if($_SESSION['role'] == 1) {
+                                            if($role == 1 || $role == 3) {
                                                 echo "<button type='button' onClick='medExamReportModal.showModal()' title='Edit' class='btn btn-sm ml-1 bg-amber-500 hover:bg-amber-600 text-white'>
                                                     <svg xmlns='http://www.w3.org/2000/svg' fill='#fff' height='1em' viewBox='0 0 512 512'><path d='M441 58.9L453.1 71c9.4 9.4 9.4 24.6 0 33.9L424 134.1 377.9 88 407 58.9c9.4-9.4 24.6-9.4 33.9 0zM209.8 256.2L344 121.9 390.1 168 255.8 302.2c-2.9 2.9-6.5 5-10.4 6.1l-58.5 16.7 16.7-58.5c1.1-3.9 3.2-7.5 6.1-10.4zM373.1 25L175.8 222.2c-8.7 8.7-15 19.4-18.3 31.1l-28.6 100c-2.4 8.4-.1 17.4 6.1 23.6s15.2 8.5 23.6 6.1l100-28.6c11.8-3.4 22.5-9.7 31.1-18.3L487 138.9c28.1-28.1 28.1-73.7 0-101.8L474.9 25C446.8-3.1 401.2-3.1 373.1 25zM88 64C39.4 64 0 103.4 0 152V424c0 48.6 39.4 88 88 88H360c48.6 0 88-39.4 88-88V312c0-13.3-10.7-24-24-24s-24 10.7-24 24V424c0 22.1-17.9 40-40 40H88c-22.1 0-40-17.9-40-40V152c0-22.1 17.9-40 40-40H200c13.3 0 24-10.7 24-24s-10.7-24-24-24H88z'/></svg>
                                                     </button>";
@@ -484,7 +493,7 @@ if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
                                                 </button>";
                                             }
                                         } else {
-                                            if($_SESSION['role'] == 1) {
+                                            if($role == 1 || $role == 3) {
                                                 echo "<button type='button' onClick='medExamReportModal.showModal()' title='Create' class='btn btn-sm bg-green-700 hover:bg-green-800'>
                                                         <svg xmlns='http://www.w3.org/2000/svg' fill='#fff' height='14' width='12' viewBox='0 0 448 512'><path d='M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z'/></svg>
                                                     </button>";
@@ -525,7 +534,7 @@ if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
                                                         <svg xmlns='http://www.w3.org/2000/svg' fill='#fff' height='1em' viewBox='0 0 512 512'><path d='M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32V274.7l-73.4-73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l128 128c12.5 12.5 32.8 12.5 45.3 0l128-128c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L288 274.7V32zM64 352c-35.3 0-64 28.7-64 64v32c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V416c0-35.3-28.7-64-64-64H346.5l-45.3 45.3c-25 25-65.5 25-90.5 0L165.5 352H64zm368 56a24 24 0 1 1 0 48 24 24 0 1 1 0-48z'/></svg>
                                                     </a>";
 
-                                                if($_SESSION['role'] == 1) {
+                                                if($role == 1 || $role == 3) {
                                                     echo "<a href='employeeDeleteResult-APE.php?fileName=$fileName&medicalExaminationFK=$medicalExaminationFK&APEFK=$id' title='delete' class='btn btn-sm ml-1 bg-red-500 hover:bg-red-600'>
                                                         <svg xmlns='http://www.w3.org/2000/svg' fill='#fff' height='1em' viewBox='0 0 448 512'><path d='M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z'/></svg>
                                                     </a>";
@@ -545,7 +554,7 @@ if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
                 <div class="flex items-center justify-end flex-wrap flex-col sm:flex-row bg-white mt-0 px-2 sm:px-5 py-2 sm:py-5">
                     <input type="hidden" id="organizationId">
                     <input type="hidden" id="dateRegistered">
-                    <?php if($_SESSION['role'] == 1) { ?>
+                    <?php if($role == 1 || $role == 3) { ?>
                         <div class="w-full sm:w-1/2 p-1">
                             <a href="<?php echo base_url(false) . '/employees-APE.php?o=' . $o . '&y=' . $y; ?>" class="w-full <?php echo $classBtnDefault; ?>">Back</a>
                         </div>
@@ -564,11 +573,11 @@ if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
                         <div class="w-full sm:w-1/2 md:w-1/4 p-1">
                             <input type="submit" name="deleteRecord" value="Delete Record" class="w-full <?php echo $classBtnDanger; ?>">
                         </div>
-                    <?php } else if($_SESSION['role'] == 2) {  ?>
-                        <div class="w-full sm:auto p-1">
+                    <?php } else if($role == 2) {  ?>
+                        <div class="w-full sm:w-auto p-1">
                             <a href="<?php echo base_url(false) . '/client'; ?>" class="w-full <?php echo $classBtnDefault; ?>">Back</a>
                         </div>
-                        <div class="w-full sm:auto p-1">
+                        <div class="w-full sm:w-auto p-1">
                             <a href="<?php echo base_url(false) . '/employeeExport-APE.php?id=' . $id; ?>" class="w-full <?php echo $classBtnSecondary; ?>" type="button">Export Results</a>
                         </div>
                     <?php } ?>
@@ -698,11 +707,10 @@ if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
 }
 </style>
 
-
 <script>
     $(document).ready( function() {
         var post = <?php echo json_encode($_POST); ?>;
-        var role = <?php echo $_SESSION['role']; ?>;
+        var role = <?php echo $role; ?>;
         let styleInput = "block w-full rounded py-1.5 px-2 text-gray-900 border-gray-300 placeholder:text-gray-400 focus:border-green-700 focus:ring-0 focus:bg-green-50 sm:text-sm sm:leading-6";
         let styleLabel = "block text-sm font-medium leading-6 text-gray-900";
 
@@ -716,7 +724,7 @@ if( $_SESSION['role'] != 1 && $_SESSION['organizationId'] != $o ) {
                 $(this).attr('name', id);
             }
 
-            if(role != 1) {
+            if(role == 2) {
                 $(this).prop("disabled", true)
             }
         });

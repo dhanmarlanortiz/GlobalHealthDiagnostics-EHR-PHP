@@ -10,9 +10,9 @@ function setActiveNav($pageNames, $screen) {
     
     if(in_array($fileName, $pageNames)) {
         if( $screen == 'desktop' ) {
-            echo "bg-green-900 text-white rounded px-3 py-2 text-sm font-medium";
+            echo "nav-active bg-green-900 text-white rounded px-3 py-2 text-sm font-medium";
         } else if( $screen == 'mobile' ) {
-            echo "bg-green-900 text-white rounded px-3 py-2 text-base font-medium block";
+            echo "nav-active bg-green-900 text-white rounded px-3 py-2 text-base font-medium block";
         }
     } else {
         if( $screen == 'desktop' ) {
@@ -47,7 +47,7 @@ function setActiveNav($pageNames, $screen) {
                     <div class="flex space-x-4">
                         <a href="<?php base_url(); ?>/manager" class="<?php setActiveNav(array('home'), 'desktop') ?>">Home</a>                        
                         <a href="<?php base_url(); ?>/organization.php" class="<?php setActiveNav(array('organization', 'organizations', 'organizationDetails', 'createOrganization'), 'desktop') ?>">Organization</a>
-                        <a href="<?php base_url(); ?>/employees-APE.php" class="<?php setActiveNav(array('employees-APE', 'employeeCreate-APE', 'employee-APE', 'employeesImport-APE', 'employeeViewResult-APE', 'employeesExport-APE', 'employeesCSV-APE'), 'desktop') ?>">APE</a>
+                        <a href="<?php base_url(); ?>/employees-APE.php" class="<?php setActiveNav(array('employees-APE', 'employeeCreate-APE', 'employee-APE', 'employeesImport-APE', 'employeeViewResult-APE', 'employeesExport-APE', 'employeesCSV-APE', 'employeeViewRadiologyReport-APE', 'employeeViewLaboratoryResult-APE', 'employeeViewMedExamReport-APE'), 'desktop') ?>">APE</a>
                     </div>
                 </div>
             </div>
@@ -60,8 +60,8 @@ function setActiveNav($pageNames, $screen) {
     <div class="hidden sm:hidden" id="mobile-menu">
         <div class="space-y-1 px-2 pb-3 pt-2">
             <a href="<?php base_url(); ?>/manager" class="<?php setActiveNav(array('home'), 'mobile') ?>">Home</a>            
-            <a href="<?php base_url(); ?>/organization.php" class="<?php setActiveNav(array('organization', 'organizations', 'organizationDetails', 'createOrganization', 'employees-APE', 'employeeCreate-APE', 'employee-APE', 'employeesImport-APE', 'employeeViewResult-APE', 'employeesExport-APE', 'employeesCSV-APE'), 'mobile') ?>">Organization</a>
-            <a href="<?php base_url(); ?>/employees-APE.php" class="<?php setActiveNav(array('employees-APE', 'employeeCreate-APE', 'employee-APE', 'employeesImport-APE', 'employeeViewResult-APE', 'employeesExport-APE', 'employeesCSV-APE'), 'mobile') ?>">APE</a>
+            <a href="<?php base_url(); ?>/organization.php" class="<?php setActiveNav(array('organization', 'organizations', 'organizationDetails', 'createOrganization'), 'mobile') ?>">Organization</a>
+            <a href="<?php base_url(); ?>/employees-APE.php" class="<?php setActiveNav(array('employees-APE', 'employeeCreate-APE', 'employee-APE', 'employeesImport-APE', 'employeeViewResult-APE', 'employeesExport-APE', 'employeesCSV-APE', 'employeeViewRadiologyReport-APE', 'employeeViewLaboratoryResult-APE', 'employeeViewMedExamReport-APE'), 'mobile') ?>">APE</a>
         </div>
     </div>
 </nav>

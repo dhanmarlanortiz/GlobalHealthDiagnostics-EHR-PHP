@@ -19,7 +19,11 @@ if($_SESSION['role'] == 1) {
 } else if($_SESSION['role'] == 2) { 
     include('client/navbar.php');
     createMainHeader($organizationDetail['name'], array("Annual Physical Examination", "Laboratory Result"));
+} else if($_SESSION['role'] == 3) {
+    include('manager/navbar.php');
+    createMainHeader($organizationDetail['name'], array("Annual Physical Examination", "Laboratory Result"));
 }
+
 
 ?>
 

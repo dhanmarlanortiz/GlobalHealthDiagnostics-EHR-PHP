@@ -10,9 +10,9 @@ function setActiveNav($pageNames, $screen) {
     
     if(in_array($fileName, $pageNames)) {
         if( $screen == 'desktop' ) {
-            echo "bg-green-900 text-white rounded px-3 py-2 text-sm font-medium";
+            echo "nav-active bg-green-900 text-white rounded px-3 py-2 text-sm font-medium";
         } else if( $screen == 'mobile' ) {
-            echo "bg-green-900 text-white rounded px-3 py-2 text-base font-medium block";
+            echo "nav-active bg-green-900 text-white rounded px-3 py-2 text-base font-medium block";
         }
     } else {
         if( $screen == 'desktop' ) {

@@ -10,23 +10,11 @@ include('navbar.php');
 
 $sql = "SELECT U.*, O.name as organization FROM User U LEFT JOIN Organization O ON U.organizationId = O.id ";
 $result = $conn->query($sql);
+
+createMainHeader('Users', array("Home", "Users"));
+
 ?>
 
-<header class="bg-white shadow-sm">
-    <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center">
-            <div>
-                <h1 class="text-3xl font-bold tracking-tight text-gray-900 mb-2">Users</h1>
-                <div class="text-xs breadcrumbs p-0 text-gray-800">
-                    <ul>
-                        <li>Home</li> 
-                        <li>Users</li> 
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
 <main class='<?php echo $classMainContainer; ?>'>
     <div class="bg-white p-2 md:p-4">
         <?php

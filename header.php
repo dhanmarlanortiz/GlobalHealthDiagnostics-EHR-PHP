@@ -13,6 +13,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="color-scheme" content="light only">
+	<meta name="author" content="Dhan Marlan Ortiz">
 
 	<title>Global Health Diagnostics</title>
 	<link rel="shortcut icon" href="<?php base_url(); ?>/images/ghd-logo.png" type="image/x-icon">
@@ -39,6 +40,16 @@
 	?>
 
 	<link href="<?php base_url(); ?>/css/main.css" rel="stylesheet" type="text/css" />
+
+	<!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-WQMJ91RLWY"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'G-WQMJ91RLWY');
+	</script>
 </head>
 <body class="is-loading">
 	<div class="relative isolate bg-gray-50" style="min-height: calc(100vh - 52px);">

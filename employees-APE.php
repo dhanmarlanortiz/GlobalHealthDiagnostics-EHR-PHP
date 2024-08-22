@@ -51,7 +51,7 @@ if($role == 1) {
             </li>
         </ul>
     </div> -->
-
+    <?php createFormHeader('Annual Physical Exam Roster'); ?>
     <div class="bg-white p-2 md:p-4">
         <div class='p-1 overflow-auto'>
             <table id="employee-ape-table-json" class="display custom-datatable">
@@ -109,7 +109,7 @@ if($role == 1) {
     <div class="bg-white p-2 md:px-4 md:pb-4 border-t-2 border-green-700">
         <div class="flex md:justify-between flex-col md:flex-row">
             <div class="dataTables_year p-1">
-                <form id="searchYear-APE" method="GET" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" class="flex flex-col sm:flex-row sm:items-center max-w-2xl">
+                <form id="searchYear-APE" method="GET" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" class="flex flex-col sm:flex-row sm:items-center max-w-2xl">                    
                     <label>
                         Year: <input id="y" value="<?php echo $y; ?>" type="number" id="y" name="y" min="1900" max="2099" step="1"  class="border placeholder-gray-500 ml-2 px-3 py-2 rounded-lg border-gray-200 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" required />
                     </label>

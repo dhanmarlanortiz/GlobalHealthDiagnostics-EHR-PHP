@@ -17,14 +17,6 @@ if($role == 1) {
 
 $clinics = getLocation($conn);
 $professionals = getProfessional($conn);
-
-function test_input($data) {
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-    return $data;
-}
-
 $id = 0;
 
 if ($_SERVER["REQUEST_METHOD"] == "GET" && $role == 1) {
@@ -40,11 +32,11 @@ if($_SERVER["REQUEST_METHOD"] != "POST" && $role == 3) {
 $errVal = $errKey = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $id = test_input( $_POST['id'] );
-    $name = test_input( $_POST['name'] );
-    $email = test_input( $_POST['email'] );
-    $phone = test_input( $_POST['phone'] );
-    $address = test_input( $_POST['address'] );
+    $id = clean($_POST['id']);
+    $name = clean($_POST['name']);
+    $email = clean($_POST['email']);
+    $phone = clean($_POST['phone']);
+    $address = clean($_POST['address']);
     $location_fk = clean($_POST["location_fk"]);
     $xraytech_fk = clean($_POST["xraytech_fk"]);
     $radiologist_fk = clean($_POST["radiologist_fk"]);

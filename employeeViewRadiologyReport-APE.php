@@ -19,6 +19,9 @@ if($_SESSION['role'] == 1) {
 } else if($_SESSION['role'] == 2) { 
     include('client/navbar.php');
     createMainHeader($organizationDetail['name'], array("Annual Physical Examination", "Radiology  Report"));
+} else if($_SESSION['role'] == 3) { 
+    include('manager/navbar.php');
+    createMainHeader($organizationDetail['name'], array("Annual Physical Examination", "Radiology  Report"));
 }
 
 ?>

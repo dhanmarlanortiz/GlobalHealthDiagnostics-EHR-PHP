@@ -14,6 +14,7 @@ $id = $_SESSION['organizationId'];
 $org = getOrganization($id);
 
 include('navbar.php'); 
+createMainHeader();
 ?>
 	
 <div class="mx-auto max-w-3xl py-32 sm:py-48 lg:py-56">

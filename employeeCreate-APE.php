@@ -4,44 +4,45 @@ session_start();
 
 require_once('connection.php');
 include('header.php');
+
 preventAccess([['role' => 2, 'redirect' => 'client/index.php']]);
-include('navbar.php');
+
+$role = $_SESSION['role'];
+if($role == 1) {
+    include('navbar.php');
+} else if($role == 3) {
+    include('manager/navbar.php');
+}
 
 $orgQuery = "SELECT * FROM Organization";
 $orgResult = $conn->query($orgQuery);
 
-function test_input($data) {
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-    return $data;
-}
 $o = 0;
 $y = date('Y');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
  
-    // $headCount = test_input( $_POST['headCount'] );
-    // $controlNumber = test_input( $_POST['controlNumber'] );
-    $firstName = test_input( $_POST['firstName'] );
-    $middleName = test_input( $_POST['middleName'] );
-    $lastName = test_input( $_POST['lastName'] );
-    // $birthDate = test_input( $_POST['birthDate'] );
-    $age = test_input( $_POST['age'] );
-    $sex = test_input( $_POST['sex'] );
-    $civilStatus = test_input( $_POST['civilStatus'] );
-    $homeAddress = test_input( $_POST['homeAddress'] );
-    $organizationId = test_input( intval($_POST['organizationId']) );
-    $employeeNumber = test_input( $_POST['employeeNumber'] );
-    // $membership = test_input( $_POST['membership'] );
-    // $department = test_input( $_POST['department'] );
-    // $level = test_input( $_POST['level'] );
-    // $dateRegistered = test_input( $_POST['dateRegistered'] );
+    // $headCount = clean( $_POST['headCount'] );
+    // $controlNumber = clean( $_POST['controlNumber'] );
+    $firstName = clean( $_POST['firstName'] );
+    $middleName = clean( $_POST['middleName'] );
+    $lastName = clean( $_POST['lastName'] );
+    // $birthDate = clean( $_POST['birthDate'] );
+    $age = clean( $_POST['age'] );
+    $sex = clean( $_POST['sex'] );
+    $civilStatus = clean( $_POST['civilStatus'] );
+    $homeAddress = clean( $_POST['homeAddress'] );
+    $organizationId = clean( intval($_POST['organizationId']) );
+    $employeeNumber = clean( $_POST['employeeNumber'] );
+    // $membership = clean( $_POST['membership'] );
+    // $department = clean( $_POST['department'] );
+    // $level = clean( $_POST['level'] );
+    // $dateRegistered = clean( $_POST['dateRegistered'] );
     $dateRegistered = date("Y-m-d");
-    // $dateCompleted = ( ($_POST['dateCompleted']!== '') ? test_input( $_POST['dateCompleted'] ) : NULL );
-    // $examination = test_input( $_POST['examination'] );
-    $remarks = test_input( $_POST['remarks'] );
-    $userId = test_input( $_SESSION['userId'] );
+    // $dateCompleted = ( ($_POST['dateCompleted']!== '') ? clean( $_POST['dateCompleted'] ) : NULL );
+    // $examination = clean( $_POST['examination'] );
+    $remarks = clean( $_POST['remarks'] );
+    $userId = clean( $_SESSION['userId'] );
     
 
     /* GET HEAD COUNT - START */
@@ -77,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo $conn->error;
     }
 } else {
-    $o = test_input( $_GET['o']);
+    $o = clean( $_GET['o']);
 }
 
 $organizationDetail = getOrganization($o);
@@ -87,9 +88,16 @@ $conn->close();
 $styleButtonPrimary = "rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600";
 $styleButtonLink = "text-sm font-semibold leading-6 text-gray-900";
 $styleTextError = "mt-2 text-red-400 text-xs";
+
+if($role == 1) {
+    createMainHeader('', array("Home", "Organizations", $organizationDetail['name'], "Annual Physical Examination", "Registration"));    
+} else if($role == 3) {
+    createMainHeader('APE Registration', array($organizationDetail['name'], 'Annual Physical Examination', 'Registration'));    
+}
+
 ?>
 
-<header class="bg-white shadow-sm">
+<!-- <header class="bg-white shadow-sm">
     <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center overflow-hidden">
             <div>
@@ -107,12 +115,11 @@ $styleTextError = "mt-2 text-red-400 text-xs";
                     </ul>
                 </div>
             </div>
-            <!-- <div>
-                <a href="<?php base_url(); ?>/employees-APE.php" class="btn btn-default rounded normal-case">Back</a>
-            </div> -->
         </div>
     </div>
-</header>
+</header> -->
+
+
 <main class='mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8'>
     
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" class="prompt-confirm mx-auto max-w-3xl">

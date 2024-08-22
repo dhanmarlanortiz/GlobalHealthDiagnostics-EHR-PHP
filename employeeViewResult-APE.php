@@ -20,14 +20,18 @@ if($_SESSION['role'] == 1) {
 } else if($_SESSION['role'] == 2) { 
     include('client/navbar.php');
     createMainHeader($organizationDetail['name'], array("Annual Physical Examination", $examName . " Result"));
+} else if($_SESSION['role'] == 3) { 
+    include('manager/navbar.php');
+    createMainHeader($organizationDetail['name'], array("Annual Physical Examination", $examName . " Result"));
 }
+
 
 ?>
 
 <main class='mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8'>
     <?php createFormHeader(
         $firstName . " " . $middleName . " " . $lastName . " - " . $examName . " Result" ); ?>
-    <iframe class="w-full" src="<?php echo $filePath; ?>" frameborder="0" style="height: 100vh; max-height: 1500px;"></iframe>
+    <iframe class="w-full bg-white" src="<?php echo $filePath; ?>" frameborder="0" style="height: 100vh; max-height: 1500px; "></iframe>
 
     <div class="mx-auto rounded-b-box rounded-b-box">
         <div class="flex items-center justify-end flex-col sm:flex-row gap-x-1 bg-white mt-0 px-3 sm:px-6 py-4 border-t-2 border-green-700">
