@@ -94,7 +94,3 @@ if (isset($_POST['rr-generateRadiologyReport'])) {
         </div>
     </dialog>
 </form>
-
-<script>
-
-</script>

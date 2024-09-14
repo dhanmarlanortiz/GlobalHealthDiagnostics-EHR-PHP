@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 
 function initializeTableArray($tableName, $sessionUserId, $apeId) {
     $tableArray = ["{$tableName}_user_fk" => $sessionUserId, "{$tableName}_ape_fk" => $apeId];

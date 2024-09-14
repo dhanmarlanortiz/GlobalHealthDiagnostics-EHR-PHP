@@ -338,6 +338,41 @@ function getRadiologyReport($APEFK = null) {
     }
 }
 
+function getEcgDiagnosis($APEFK = null) {
+    require("connection.php");
+
+    if(null !== $APEFK) {
+        $sql = "SELECT * FROM ecgdiagnosis WHERE ecgdiag_APE_FK = $APEFK";
+        $result = $conn->query($sql);
+        
+        if ($result !== false && $result->num_rows > 0) {
+            return $result->fetch_assoc();
+        }
+    } else {
+        $sql = "SELECT * FROM ecgdiagnosis";
+        $result = $conn->query($sql);
+        
+        if ($result !== false && $result->num_rows > 0) {
+            $resArr = array();
+
+            while($arr = $result->fetch_assoc()) {
+                $arr = array(
+                    'ecgdiag_organization_FK' => $arr['ecgdiag_organization_FK'],
+                    'ecgdiag_user_FK' => $arr['ecgdiag_user_FK'],
+                    'ecgdiag_date' => $arr['ecgdiag_date'],
+                    'ecgdiag_casenumber' => $arr['ecgdiag_casenumber'],
+                    'ecgdiag_ecgdiagnosis' => $arr['ecgdiag_ecgdiagnosis'],
+                    'ecgdiag_clinicaldata' => $arr['ecgdiag_clinicaldata']
+                );
+
+                array_push($resArr, $arr);
+            }
+            
+            return $resArr;
+        }
+    }
+}
+
 function fetchLabResultByApeId($conn, $id) {
     $sql = "SELECT * FROM LaboratoryResult WHERE labRes_APE_FK = ?";
     $stmt = $conn->prepare($sql);
