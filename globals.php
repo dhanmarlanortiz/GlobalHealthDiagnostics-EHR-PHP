@@ -373,6 +373,56 @@ function getEcgDiagnosis($APEFK = null) {
     }
 }
 
+function getClinicalChemistry($APEFK = null) {
+    require("connection.php");
+
+    if(null !== $APEFK) {
+        $sql = "SELECT * FROM clinicalchemistry WHERE clinicchem_APE_FK = $APEFK";
+        $result = $conn->query($sql);
+        
+        if ($result !== false && $result->num_rows > 0) {
+            return $result->fetch_assoc();
+        }
+    } else {
+        $sql = "SELECT * FROM clinicalchemistry";
+        $result = $conn->query($sql);
+        
+        if ($result !== false && $result->num_rows > 0) {
+            $resArr = array();
+
+            while($arr = $result->fetch_assoc()) {
+                $arr = array(
+                    'clinicchem_ID' => $arr['clinicchem_ID'],
+                    'clinicchem_APE_FK' => $arr['clinicchem_APE_FK'],
+                    'clinicchem_user_FK' => $arr['clinicchem_user_FK'],
+                    'clinicchem_date' => $arr['clinicchem_date'],
+                    'clinicchem_timestamp' => $arr['clinicchem_timestamp'],
+                    'clinicchem_fbs' => $arr['clinicchem_fbs'],
+                    'clinicchem_rbs' => $arr['clinicchem_rbs'],
+                    'clinicchem_blood_urea_nitrogen' => $arr['clinicchem_blood_urea_nitrogen'],
+                    'clinicchem_creatinine' => $arr['clinicchem_creatinine'],
+                    'clinicchem_blood_uric_acid' => $arr['clinicchem_blood_uric_acid'],
+                    'clinicchem_total_cholesterol' => $arr['clinicchem_total_cholesterol'],
+                    'clinicchem_triglycerides' => $arr['clinicchem_triglycerides'],
+                    'clinicchem_hdl' => $arr['clinicchem_hdl'],
+                    'clinicchem_ldl' => $arr['clinicchem_ldl'],
+                    'clinicchem_vldl' => $arr['clinicchem_vldl'],
+                    'clinicchem_sgot_ast' => $arr['clinicchem_sgot_ast'],
+                    'clinicchem_sgpt_alt' => $arr['clinicchem_sgpt_alt'],
+                    'clinicchem_hba1c' => $arr['clinicchem_hba1c'],
+                    'clinicchem_psa' => $arr['clinicchem_psa'],
+                    'clinicchem_others' => $arr['clinicchem_others']
+                );
+
+                array_push($resArr, $arr);
+            }
+            
+            return $resArr;
+        }
+    }
+}
+
+
 function fetchLabResultByApeId($conn, $id) {
     $sql = "SELECT * FROM LaboratoryResult WHERE labRes_APE_FK = ?";
     $stmt = $conn->prepare($sql);
