@@ -28,6 +28,9 @@ require('fpdf/fpdf.php');
 include("reports/radiology-pdf.php");
 include("reports/laboratory-pdf.php");
 include("reports/medical-exam-pdf.php");
+include("reports/ecg-pdf.php");
+include("reports/clinical-chemistry-pdf.php");
+include("reports/gynecologic-report-pdf.php");
 /* PDF IMPORTS - END */
 
 $o = $y = $id = 0 ;
@@ -209,22 +212,55 @@ if(isset($_POST['generate'])) {
                 
                 $finalFilename = $apeDetails['controlNumber'] . " - " . $apeDetails['lastName'] . " " . $apeDetails['firstName'] .  $employeeNumber .  ".pdf";
         
+                ob_start();
+                
                 $pdf = new reportsFPDF();
-    
-                // // RADIOLOGY REPORT
-                $radiologyPDF = new RadiologyPDF();
-                $radiologyPDF->generateRadiologyReport($conn, $id, $pdf);
-    
-                // // LABORATORY RESULT
-                $laboratoryPDF = new LaboratoryPDF();
-                $laboratoryPDF->generateLaboratoryReport($conn, $id, $pdf);    
-    
-                // // MEDICAL EXAM REPORT
-                $medicalExamPDF = new MedicalExamPDF();
-                $medicalExamPDF->generateMedicalExamReport($conn, $id, $pdf);
-    
-                $pdf->Output('F', $folder . $combinedFilename); 
-    
+
+                try {
+                    // RADIOLOGY REPORT
+                    $radiologyPDF = new RadiologyPDF();
+                    if ($radiologyPDF) {
+                        $radiologyPDF->generateRadiologyReport($conn, $id, $pdf);
+                    }
+                
+                    // LABORATORY RESULT
+                    $laboratoryPDF = new LaboratoryPDF();
+                    if ($laboratoryPDF) {
+                        $laboratoryPDF->generateLaboratoryReport($conn, $id, $pdf);
+                    }
+                
+                    // MEDICAL EXAM REPORT
+                    $medicalExamPDF = new MedicalExamPDF();
+                    if ($medicalExamPDF) {
+                        $medicalExamPDF->generateMedicalExamReport($conn, $id, $pdf);
+                    }
+                
+                    // ECG DIAGNOSIS
+                    $ecgPDF = new EcgPDF();
+                    if ($ecgPDF) {
+                        $ecgPDF->generateEcgDiagnosis($conn, $id, $pdf);
+                    }
+                
+                    // CLINICAL CHEMISTRY REPORT
+                    $clinicalChemistryPDF = new ClinicalChemistryPDF();
+                    if ($clinicalChemistryPDF) {
+                        $clinicalChemistryPDF->generateClinicalChemistry($conn, $id, $pdf);
+                    }
+                
+                    // GYNECOLOGIC REPORT
+                    $gynecologicReportPDF = new GynecologicReportPDF();
+                    if ($gynecologicReportPDF) {
+                        $gynecologicReportPDF->generateGynecologicReport($conn, $id, $pdf);
+                    }
+                
+                    // Output the PDF file after generating all the reports
+                    ob_end_clean(); // Clean the output buffer to prevent errors with FPDF
+                    $pdf->Output('F', $folder . $combinedFilename);   // Send the PDF for download
+                } catch (Exception $e) {
+                    ob_end_clean(); // Clean the output buffer in case of error
+                    echo 'Error generating PDF: ' . $e->getMessage(); // Handle any exceptions
+                }
+
                 $zip->addFile($folder . $combinedFilename);
                 $zip->renameName($folder . $combinedFilename, $finalFilename);
         

@@ -257,8 +257,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
+    if (isset($_POST['deleteGynecologicReport'])) {
+        $stmt = $conn->prepare("DELETE FROM gynecologicreport WHERE gynerep_APE_FK = ?");
+        $stmt->bind_param("i", $id);
 
-    
+        if ($stmt->execute()) {
+            create_flash_message('delete-success', $flashMessage['delete-success'], FLASH_SUCCESS);
+
+        } else {
+            create_flash_message('delete-failed', $flashMessage['delete-failed'], FLASH_ERROR);
+
+            if($conn->errno == 1451) {
+                create_flash_message('delete-failed', $flashMessage['delete-failed-linked'] , FLASH_ERROR);
+            }
+        }
+
+        $url = base_url(false) . "/employee-APE.php?id=" . $id;
+        header("Location: " . $url ."");
+
+        $stmt->close();
+        exit();
+    }
 }
 
 $organizationDetail = getOrganization($_POST['organizationId']);
@@ -279,6 +298,9 @@ include("components/ecgDiagnosisModal.php");
 
 $clinicalChemistry = getClinicalChemistry($id);
 include("components/clinicalChemistryModal.php");
+
+$gynecologicReport = getGynecologicReport($id);
+include("components/gynecologicReportModal.php");
 
 $conn->close();
 
@@ -393,6 +415,7 @@ if( $role != 1 && $_SESSION['organizationId'] != $o ) {
                             @include 'components/medExamReportMenu.php'; // Medical Examination Report
                             @include 'components/ecgDiagnosisMenu.php'; // ECG Diagnosis
                             @include 'components/clinicalChemistryMenu.php'; // Clinical Chemistry
+                            @include 'components/gynecologicReportMenu.php'; // Gynecologic Report
                             @include 'components/uploadedResults.php'; // Uploaded
 
                             echo "</ul>";

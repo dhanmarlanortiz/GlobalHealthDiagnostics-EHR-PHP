@@ -423,6 +423,44 @@ function getClinicalChemistry($APEFK = null) {
 }
 
 
+function getGynecologicReport($APEFK = null) {
+    require("connection.php");
+
+    if(null !== $APEFK) {
+        $sql = "SELECT * FROM gynecologicreport WHERE gynerep_APE_FK = $APEFK";
+        $result = $conn->query($sql);
+        
+        if ($result !== false && $result->num_rows > 0) {
+            return $result->fetch_assoc();
+        }
+    } else {
+        $sql = "SELECT * FROM gynecologicreport";
+        $result = $conn->query($sql);
+        
+        if ($result !== false && $result->num_rows > 0) {
+            $resArr = array();
+
+            while($arr = $result->fetch_assoc()) {
+                $arr = array(
+                    'gynerep_ID' => $arr['gynerep_ID'],
+                    'gynerep_APE_' => $arr['gynerep_APE_'],
+                    'gynerep_user_FK' => $arr['gynerep_user_FK'],
+                    'gynerep_date' => $arr['gynerep_date'],
+                    'gynerep_timestamp' => $arr['gynerep_timestamp'],
+                    'gynerep_specimen_type' => $arr['gynerep_specimen_type'],
+                    'gynerep_specimen_adequacy' => $arr['gynerep_specimen_adequacy'],
+                    'gynerep_interpretation_result' => $arr['gynerep_interpretation_result'],
+                    'gynerep_recommendation' => $arr['gynerep_recommendation']
+                );
+
+                array_push($resArr, $arr);
+            }
+            
+            return $resArr;
+        }
+    }
+}
+
 function fetchLabResultByApeId($conn, $id) {
     $sql = "SELECT * FROM LaboratoryResult WHERE labRes_APE_FK = ?";
     $stmt = $conn->prepare($sql);

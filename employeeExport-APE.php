@@ -27,6 +27,9 @@ require('fpdf/fpdf.php');
 include("reports/radiology-pdf.php");
 include("reports/laboratory-pdf.php");
 include("reports/medical-exam-pdf.php");
+include("reports/ecg-pdf.php");
+include("reports/clinical-chemistry-pdf.php");
+include("reports/gynecologic-report-pdf.php");
 
 $id = $_GET['id'];
 $apeDetails = fetchApeDetailsById($conn, $id);
@@ -141,25 +144,59 @@ class reportsFPDF extends FPDF {
 
 }
 
+$finalFilename = $apeDetails['controlNumber'] . " - " . $apeDetails['lastName'] . " " . $apeDetails['firstName'] . ".pdf";
+
+// Start output buffering to prevent any output before the PDF is generated
+ob_start();
+
 $pdf = new reportsFPDF();
 
+try {
+    // RADIOLOGY REPORT
+    $radiologyPDF = new RadiologyPDF();
+    if ($radiologyPDF) {
+        $radiologyPDF->generateRadiologyReport($conn, $id, $pdf);
+    }
 
-// RADIOLOGY REPORT
-$radiologyPDF = new RadiologyPDF();
-$radiologyPDF->generateRadiologyReport($conn, $id, $pdf);
+    // LABORATORY RESULT
+    $laboratoryPDF = new LaboratoryPDF();
+    if ($laboratoryPDF) {
+        $laboratoryPDF->generateLaboratoryReport($conn, $id, $pdf);
+    }
 
-// LABORATORY RESULT
-$laboratoryPDF = new LaboratoryPDF();
-$laboratoryPDF->generateLaboratoryReport($conn, $id, $pdf);    
+    // MEDICAL EXAM REPORT
+    $medicalExamPDF = new MedicalExamPDF();
+    if ($medicalExamPDF) {
+        $medicalExamPDF->generateMedicalExamReport($conn, $id, $pdf);
+    }
 
-// MEDICAL EXAM REPORT
-$medicalExamPDF = new MedicalExamPDF();
-$medicalExamPDF->generateMedicalExamReport($conn, $id, $pdf);
+    // ECG DIAGNOSIS
+    $ecgPDF = new EcgPDF();
+    if ($ecgPDF) {
+        $ecgPDF->generateEcgDiagnosis($conn, $id, $pdf);
+    }
 
-$finalFilename = $apeDetails['controlNumber'] . " - " . $apeDetails['lastName'] . " " . $apeDetails['firstName'] . ".pdf";
-$pdf->Output('D', $finalFilename); 
+    // CLINICAL CHEMISTRY REPORT
+    $clinicalChemistryPDF = new ClinicalChemistryPDF();
+    if ($clinicalChemistryPDF) {
+        $clinicalChemistryPDF->generateClinicalChemistry($conn, $id, $pdf);
+    }
+
+    // GYNECOLOGIC REPORT
+    $gynecologicReportPDF = new GynecologicReportPDF();
+    if ($gynecologicReportPDF) {
+        $gynecologicReportPDF->generateGynecologicReport($conn, $id, $pdf);
+    }
+
+    // Output the PDF file after generating all the reports
+    ob_end_clean(); // Clean the output buffer to prevent errors with FPDF
+    $pdf->Output('D', $finalFilename);  // Send the PDF for download
+} catch (Exception $e) {
+    ob_end_clean(); // Clean the output buffer in case of error
+    echo 'Error generating PDF: ' . $e->getMessage(); // Handle any exceptions
+}
+
 $pdf->Close(); 
-
 $conn->close();
 
 // $url = base_url(false) . "/employee-APE.php?id=" . $id;
