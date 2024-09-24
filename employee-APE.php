@@ -410,13 +410,13 @@ if( $role != 1 && $_SESSION['organizationId'] != $o ) {
                         <?php
                             echo '<ul role="list" class="divide-y divide-gray-100">';
 
-                            @include 'components/radiologyReportMenu.php'; // Radiology Report
-                            @include 'components/laboratoryResultMenu.php'; // Laboratory Result
-                            @include 'components/medExamReportMenu.php'; // Medical Examination Report
-                            @include 'components/ecgDiagnosisMenu.php'; // ECG Diagnosis
-                            @include 'components/clinicalChemistryMenu.php'; // Clinical Chemistry
-                            @include 'components/gynecologicReportMenu.php'; // Gynecologic Report
-                            @include 'components/uploadedResults.php'; // Uploaded
+                            include 'components/radiologyReportMenu.php'; // Radiology Report
+                            include 'components/laboratoryResultMenu.php'; // Laboratory Result
+                            include 'components/medExamReportMenu.php'; // Medical Examination Report
+                            include 'components/ecgDiagnosisMenu.php'; // ECG Diagnosis
+                            include 'components/clinicalChemistryMenu.php'; // Clinical Chemistry
+                            include 'components/gynecologicReportMenu.php'; // Gynecologic Report
+                            include 'components/uploadedResults.php'; // Uploaded
 
                             echo "</ul>";
                         ?>
