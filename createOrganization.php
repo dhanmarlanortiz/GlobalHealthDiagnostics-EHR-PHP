@@ -31,9 +31,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $medtech2_fk = clean($_POST["medtech2_fk"]);
     $pathologist_fk = clean($_POST["pathologist_fk"]);
     $physician_fk = clean($_POST["physician_fk"]);
-  print_r($_POST);
-    $sql = "INSERT INTO Organization (name, email, phone, address, location_fk, xraytech_fk, radiologist_fk, medtech1_fk, medtech2_fk, pathologist_fk, physician_fk)
-    VALUES ('$name', '$email', '$phone', '$address', '$location_fk', '$xraytech_fk', '$radiologist_fk', '$medtech1_fk', '$medtech2_fk', '$pathologist_fk', '$physician_fk')";
+    $cardiologist_fk = clean($_POST["cardiologist_fk"]);
+  
+    $sql = "INSERT INTO Organization (name, email, phone, address, location_fk, xraytech_fk, radiologist_fk, medtech1_fk, medtech2_fk, pathologist_fk, physician_fk, cardiologist_fk)
+    VALUES ('$name', '$email', '$phone', '$address', '$location_fk', '$xraytech_fk', '$radiologist_fk', '$medtech1_fk', '$medtech2_fk', '$pathologist_fk', '$physician_fk', '$cardiologist_fk')";
   
     if ($conn->query($sql) === TRUE) {
         create_flash_message('create-success', '<strong>Success!</strong> New Organization has been created.', FLASH_SUCCESS);
@@ -156,6 +157,12 @@ $conn->close();
                         <select id="physician_fk" data-filter="Physician" data-label="Physician" required></select>
                         <p class="mt-2 text-gray-500 text-xs">Medical Examination Report (Examiner)</p>
                     </div>
+
+                    <div class="sm:col-span-1">
+                        <select id="cardiologist_fk" data-filter="Cardiologist" data-label="Cardiologist" required></select>
+                        <p class="mt-2 text-gray-500 text-xs">ECG Diagnosis</p>
+                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -224,6 +231,10 @@ $conn->close();
 
     document.addEventListener("DOMContentLoaded", 
         setRoleSelect( listProfessionals, document.getElementById("physician_fk"), "<?php echo isset($_POST['physician_fk']) ? $_POST['physician_fk'] : ''; ?>", "Physician" )
+    );
+
+    document.addEventListener("DOMContentLoaded", 
+        setRoleSelect( listProfessionals, document.getElementById("cardiologist_fk"), "<?php echo isset($_POST['cardiologist_fk']) ? $_POST['cardiologist_fk'] : ''; ?>", "Cardiologist" )
     );
 
 </script>

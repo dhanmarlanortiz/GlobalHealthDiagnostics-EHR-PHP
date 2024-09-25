@@ -1,5 +1,5 @@
 // Array of healthcare professional roles
-const healthcareProfessionalRoles = ["Medical Technologist", "Pathologist", "Physician", "Radiologist", "X-Ray Technologist"];
+const healthcareProfessionalRoles = ["Cardiologist", "Medical Technologist", "Pathologist", "Physician", "Radiologist", "X-Ray Technologist"];
 
 // Function to populate the select element with healthcare professional roles
 function setProfessionalsSelect(selectRoles, selectedRole) {
@@ -39,12 +39,12 @@ function setRoleSelect(listProfessionals, selectProfessionals, selectedProfessio
     defaultOption.value = "";
     defaultOption.textContent = "Select";
     defaultOption.disabled = true;
-
-    if (selectedProfessional === '') {
+    
+    if (selectedProfessional === '' || selectedProfessional === '0') {
         defaultOption.selected = true;
     }
     selectProfessionals.appendChild(defaultOption);
-
+    console.log(listProfessionals);
     const filteredProfessionals = listProfessionals.filter(prof => prof.prof_role === filterRole);
 
     filteredProfessionals.forEach(professional => {

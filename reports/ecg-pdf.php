@@ -6,12 +6,12 @@ class EcgPDF {
 
         $orgDetails = fetchOrgDetailsById($conn, $apeDetails['organizationId']);
 
-        $physician = getProfessional($conn, $orgDetails['physician_fk']);
-        $physician_id = $physician['prof_id'] ?? 0;
-        $physician_name = $physician['prof_name'] ?? '';
-        $physician_role = $physician['prof_role'] ?? '';
-        $physician_license = $physician['prof_license'] ?? '';
-        $physician_signature = base_url(false) . '/images/healthcare-professional-' . $physician_id  . '-signature.png';
+        $cardiologist = getProfessional($conn, $orgDetails['cardiologist_fk']);
+        $cardiologist_id = $cardiologist['prof_id'] ?? 0;
+        $cardiologist_name = $cardiologist['prof_name'] ?? '';
+        $cardiologist_role = $cardiologist['prof_role'] ?? '';
+        $cardiologist_license = $cardiologist['prof_license'] ?? '';
+        $cardiologist_signature = base_url(false) . '/images/healthcare-professional-' . $cardiologist_id  . '-signature.png';
 
         // Instanciation of inherited class
         if(null == $pdf) {
@@ -105,8 +105,8 @@ class EcgPDF {
         $pdf->ln(10);
         
         
-        if (isValidImageUrl($physician_signature)) {
-            $pdf->Image($physician_signature, 20);
+        if (isValidImageUrl($cardiologist_signature)) {
+            $pdf->Image($cardiologist_signature, 20);
         }
         
         $pdf->SetFont('Arial','B', 8);
@@ -114,16 +114,16 @@ class EcgPDF {
         $pdf->SetDrawColor(83,99,113);
 
         $pdf->Cell(10, 8, '' , '', 0, 'L');
-        $pdf->Cell(50, 8, $physician_name , 'B', 0, 'C');
+        $pdf->Cell(50, 8, $cardiologist_name , 'B', 0, 'C');
         $pdf->ln();
         $pdf->SetFont('Arial','', 8);
         $pdf->Cell(10, 8, '' , '', 0, 'L');
-        $pdf->Cell(50, 8, $physician_role , '', 0, 'C');
+        $pdf->Cell(50, 8, $cardiologist_role , '', 0, 'C');
         $pdf->ln(5);
         $pdf->Cell(10, 8, '' , '', 0, 'C');
 
-        if($physician_license != '') {
-            $pdf->Cell(50, 8, 'License No.: ' . $physician_license , '', 0, 'C');
+        if($cardiologist_license != '') {
+            $pdf->Cell(50, 8, 'License No.: ' . $cardiologist_license , '', 0, 'C');
             $pdf->ln(5);
             $pdf->Cell(10, 8, '' , '', 0, 'C');
         }

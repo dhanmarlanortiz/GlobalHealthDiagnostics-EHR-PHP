@@ -44,6 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $medtech2_fk = clean($_POST["medtech2_fk"]);
     $pathologist_fk = clean($_POST["pathologist_fk"]);
     $physician_fk = clean($_POST["physician_fk"]);
+    $cardiologist_fk = clean($_POST["cardiologist_fk"]);
 
     if(isset( $_POST['saveChanges'] )) {
         
@@ -58,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             medtech1_fk = '$medtech1_fk',
                             medtech2_fk = '$medtech2_fk',
                             pathologist_fk = '$pathologist_fk',
-                            physician_fk = '$physician_fk'
+                            cardiologist_fk = '$cardiologist_fk'
                             WHERE id = $id";
 
         if ($conn->query($orgUpdateQuery) === TRUE) {
@@ -209,6 +210,11 @@ $conn->close();
                             <select id="physician_fk" data-filter="Physician" data-label="Physician" required></select>
                             <p class="mt-2 text-gray-500 text-xs">Medical Examination Report (Examiner)</p>
                         </div>
+
+                        <div class="sm:col-span-1">
+                            <select id="cardiologist_fk" data-filter="Cardiologist" data-label="Cardiologist" required></select>
+                            <p class="mt-2 text-gray-500 text-xs">ECG Diagnosis</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -288,6 +294,10 @@ $conn->close();
 
     document.addEventListener("DOMContentLoaded", 
         setRoleSelect( listProfessionals, document.getElementById("physician_fk"), "<?php echo isset($_POST['physician_fk']) ? $_POST['physician_fk'] : ''; ?>", "Physician" )
+    );
+
+    document.addEventListener("DOMContentLoaded", 
+        setRoleSelect( listProfessionals, document.getElementById("cardiologist_fk"), "<?php echo isset($_POST['cardiologist_fk']) ? $_POST['cardiologist_fk'] : ''; ?>", "Cardiologist" )
     );
 </script>
 
