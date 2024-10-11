@@ -39,21 +39,22 @@ $fileDeleter = new FileDeleter($uploadDir, $conn);
 /* HANDLES UPLOAD AND DELETE FILE - END  */
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $id = $_GET['id'];
-    $headCount = test_input( $_POST['headCount'] );
-    $controlNumber = test_input( $_POST['controlNumber'] );
+    $id = test_input( $_GET['id'] ?? 0 );
+    $headCount = test_input( $_POST['headCount'] ?? 0 );
+    $controlNumber = test_input( $_POST['controlNumber'] ?? 0 );
+    $firstName = test_input( $_POST['firstName'] ?? '' );
+    $middleName = test_input( $_POST['middleName'] ?? '' );
+    $lastName = test_input( $_POST['lastName'] ?? '' );
+    $age = test_input( $_POST['age'] ?? 0 );
+    $sex = test_input( $_POST['sex'] ?? '' );
+    $civilStatus = test_input( $_POST['civilStatus'] ?? '' );
+    $homeAddress = test_input( $_POST['homeAddress'] ?? '' );
+    $organizationId = test_input( $_POST['organizationId'] ?? 0 );
+    $employeeNumber = test_input( $_POST['employeeNumber'] ?? '' );
+    $remarks = test_input( $_POST['remarks'] ?? '' );
+    $dateRegistered = test_input( $_POST['dateRegistered'] ?? '' );
+
     // $controlDate = test_input( $_POST['controlDate'] );
-    $firstName = test_input( $_POST['firstName'] );
-    $middleName = test_input( $_POST['middleName'] );
-    $lastName = test_input( $_POST['lastName'] );
-    $age = test_input( $_POST['age'] );
-    $sex = test_input( $_POST['sex'] );
-    $civilStatus = test_input( $_POST['civilStatus'] );
-    $homeAddress = test_input( $_POST['homeAddress'] );
-    $organizationId = test_input( $_POST['organizationId'] );
-    $employeeNumber = test_input( $_POST['employeeNumber'] );
-    $remarks = test_input( $_POST['remarks'] );
-    $dateRegistered = test_input( $_POST['dateRegistered'] );
 
     if (isset($_POST['updateDetailsForm'])) {
         $apeUpdateQuery =  "UPDATE APE SET

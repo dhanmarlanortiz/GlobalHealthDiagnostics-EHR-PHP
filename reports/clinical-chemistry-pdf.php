@@ -112,7 +112,7 @@ class ClinicalChemistryPDF {
             $pdf->row('Hba1c:', $clinicalChemistry['clinicchem_hba1c'], '4.50-6.50 %');
             $pdf->ln();
 
-            $pdf->row('PSA:', $clinicalChemistry['clinicchem_psa'], '');
+            $pdf->row('PSA:', $clinicalChemistry['clinicchem_psa'], '0-4.00 ng/mL');
             $pdf->ln();
             $pdf->row('Other:', $clinicalChemistry['clinicchem_others'], '');
 

@@ -1,6 +1,6 @@
 <?php
 // error_reporting(E_ALL);
-// ini_set('display_errors', 1);
+// ini_set('display_errors', 0);
 
 if (isset($_POST['generateClinicalChemistry'])) {
 
@@ -35,7 +35,7 @@ if (isset($_POST['generateClinicalChemistry'])) {
     exit();
 } else if (isset($_POST['updateClinicalChemistry'])) {
 
-    $clinicChemQuery =  "UPDATE clinicalChemistry
+    $clinicChemQuery =  "UPDATE clinicalchemistry
                     SET clinicchem_user_FK = '" . clean( $_POST['clinicchem_user_FK'] ) . "',
                         clinicchem_date = '" . clean( $_POST['clinicchem_date'] ) . "',
                         clinicchem_fbs = '" . clean( $_POST['clinicchem_fbs'] ) . "',
@@ -60,8 +60,9 @@ if (isset($_POST['generateClinicalChemistry'])) {
     } else {
         create_flash_message('update-failed', $flashMessage['update-failed'], FLASH_ERROR);
     }
-
     $url = base_url(false) . "/employee-APE.php?id=" . $id;
+    echo $url;
+    // die;
     header("Location: " . $url ."");
     exit();
 }
@@ -180,7 +181,7 @@ if (isset($_POST['generateClinicalChemistry'])) {
                     </div>
                     <div class="col-span-1">
                         <input type="text" maxLength="100" id="clinicchem_psa" data-label="PSA" placeholder="PSA" title="PSA" />
-                        <p class="text-gray-500 text-xs mt-2 font-semibold"></p>
+                        <p class="text-gray-500 text-xs mt-2 font-semibold">0-4.00 ng/mL</p>
                     </div>
 
                     <div class="col-span-1 sm:col-span-2 lg:col-span-3">
