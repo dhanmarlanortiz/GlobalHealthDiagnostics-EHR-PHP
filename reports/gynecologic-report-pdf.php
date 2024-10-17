@@ -70,16 +70,46 @@ class GynecologicReportPDF {
             
             $pdf->row('Based on the Bethesda System for Reporting Cervical Cytology.', '', '');
 
-            $pdf->ln(10);
-                        
+            $pdf->ln(12);
+            
+            // Specimen Type
+            $pdf->SetFont('Arial','', 8);
+            $pdf->SetTextColor(83,99,113);
+            $pdf->Cell(35, 4, ' Specimen Type: ' , 0, 0, 'L');
 
-            $pdf->row('Specimen Type:', $gynecologicReport['gynerep_specimen_type'], '');
-            $pdf->ln();
-            $pdf->row('Specimen Adequacy:', $gynecologicReport['gynerep_specimen_adequacy'], '');
-            $pdf->ln();
-            $pdf->row('Interpretation/Result:', $gynecologicReport['gynerep_interpretation_result'], '');
-            $pdf->ln();
-            $pdf->row('Recommendation:', $gynecologicReport['gynerep_recommendation'], '');
+            $pdf->SetFont('Arial','B', 8);
+            $pdf->SetTextColor(17, 24, 39);
+            $pdf->MultiCell(0, 4, ($gynecologicReport['gynerep_specimen_type'] ?? null), 0, 'L');
+            $pdf->ln(3);
+            
+            // Specimen Adequacy
+            $pdf->SetFont('Arial','', 8);
+            $pdf->SetTextColor(83,99,113);
+            $pdf->Cell(35, 4, ' Specimen Adequacy: ' , 0, 0, 'L');
+
+            $pdf->SetFont('Arial','B', 8);
+            $pdf->SetTextColor(17, 24, 39);
+            $pdf->MultiCell(0, 4, ($gynecologicReport['gynerep_specimen_adequacy'] ?? null), 0, 'L');
+            $pdf->ln(3);
+            
+            // Interpretation/Result
+            $pdf->SetFont('Arial','', 8);
+            $pdf->SetTextColor(83,99,113);
+            $pdf->Cell(35, 4, ' Interpretation/Result: ' , 0, 0, 'L');
+
+            $pdf->SetFont('Arial','B', 8);
+            $pdf->SetTextColor(17, 24, 39);
+            $pdf->MultiCell(0, 4, ($gynecologicReport['gynerep_interpretation_result'] ?? null), 0, 'L');
+            $pdf->ln(3);
+            
+            // Recommendation
+            $pdf->SetFont('Arial','', 8);
+            $pdf->SetTextColor(83,99,113);
+            $pdf->Cell(35, 4, ' Recommendation: ' , 0, 0, 'L');
+
+            $pdf->SetFont('Arial','B', 8);
+            $pdf->SetTextColor(17, 24, 39);
+            $pdf->MultiCell(0, 4, ($gynecologicReport['gynerep_recommendation'] ?? null), 0, 'L');
             $pdf->ln();
  
             $pdf->Cell(0, 1,'', '', $toBegin);

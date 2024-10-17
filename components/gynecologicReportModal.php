@@ -85,10 +85,10 @@ if (isset($_POST['generateGynecologicReport'])) {
 
                 <div class="grid grid-cols-1 gap-x-6 gap-y-8 p-4 lg:p-5">
                     <div class="col-span-1">
-                        <input type="text" maxLength="100" id="gynerep_specimen_type" data-label="Specimen Type" placeholder="Specimen Type" title="Specimen Type" />
+                        <input type="text" maxLength="255" id="gynerep_specimen_type" data-label="Specimen Type" placeholder="Specimen Type" title="Specimen Type" />
                     </div>
                     <div class="col-span-1">
-                        <input type="text" maxLength="100" id="gynerep_specimen_adequacy" data-label="Specimen Adequacy" placeholder="Specimen Adequacy" title="Specimen Adequacy" />
+                        <input type="text" maxLength="255" id="gynerep_specimen_adequacy" data-label="Specimen Adequacy" placeholder="Specimen Adequacy" title="Specimen Adequacy" />
                     </div>
                     <div class="col-span-1">
                         <input type="text" maxLength="255" id="gynerep_interpretation_result" data-label="Interpretation/Result" placeholder="Interpretation/Result" title="Interpretation/Result" />
