@@ -274,7 +274,8 @@ class MedicalExamPDF {
         $pdf->thFontStyle();
         $pdf->MultiCell(190, $lineHeight, 'RECOMMENDATIONS: ', 0);        
         $pdf->ln(0);
-        $pdf->rowCol4('Ratings: ', ($medExamReports['medExamReport_recommendation_ratings_note'] ?? null) . '     ' . ($medExamReports['medExamReport_recommendation_ratings'] ?? null));
+
+        $pdf->rowCol4('Ratings: ', ($medExamReports['medExamReport_recommendation_ratings_note'] ?? null) . '     ' . (strtoupper($medExamReports['medExamReport_recommendation_ratings']) ?? null));
         $pdf->ln();
 
         /** Remarks- START */   
