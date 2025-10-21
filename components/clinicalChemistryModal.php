@@ -105,15 +105,15 @@ if (isset($_POST['generateClinicalChemistry'])) {
                     </div>
                     <div class="col-span-1">
                         <input type="text" maxLength="100" id="clinicchem_fbs" data-label="Fasting Blood Sugar (FBS)" placeholder="Fasting Blood Sugar (FBS)" title="Fasting Blood Sugar (FBS)" />
-                        <p class="text-gray-500 text-xs mt-2 font-semibold">60.7-111.3 mg/dl</p>
+                        <p class="text-gray-500 text-xs mt-2 font-semibold">70.3 - 115.3 mg/dL</p>
                     </div>
                     <div class="col-span-1">
                         <input type="text" maxLength="100" id="clinicchem_rbs" data-label="Random Blood Sugar (RBS)" placeholder="Random Blood Sugar (RBS)" title="Random Blood Sugar (RBS)" />
-                        <p class="text-gray-500 text-xs mt-2 font-semibold">80.0-140.0 mg/dl</p>
+                        <p class="text-gray-500 text-xs mt-2 font-semibold">80.0 - 140.0 mg/dl</p>
                     </div>
                     <div class="col-span-1">
                         <input type="text" maxLength="100" id="clinicchem_hba1c" data-label="HbA1c" placeholder="HbA1c" title="HbA1c" />
-                        <p class="text-gray-500 text-xs mt-2 font-semibold">4.50-6.50 %</p>
+                        <p class="text-gray-500 text-xs mt-2 font-semibold">4.50 - 6.50 %</p>
                     </div>
 
                     <div class="col-span-1 sm:col-span-2 lg:col-span-3">
@@ -123,15 +123,15 @@ if (isset($_POST['generateClinicalChemistry'])) {
                     </div>
                     <div class="col-span-1">
                         <input type="text" maxLength="100" id="clinicchem_blood_urea_nitrogen" data-label="Blood Urea Nitrogen (BUN)" placeholder="Blood Urea Nitrogen (BUN)" title="Blood Urea Nitrogen (BUN)" />
-                        <p class="text-gray-500 text-xs mt-2 font-semibold">7.84-20.17 mg/dl</p>
+                        <p class="text-gray-500 text-xs mt-2 font-semibold">15.0 - 45.0 mg/dL</p>
                     </div>
                     <div class="col-span-1">
                         <input type="text" maxLength="100" id="clinicchem_creatinine" data-label="Creatinine" placeholder="Creatinine" title="Creatinine" />
-                        <p class="text-gray-500 text-xs mt-2 font-semibold">Male: 0.90-1.50 mg/dl<br>Female: 0.70-1.37 mg/dl</p>
+                        <p class="text-gray-500 text-xs mt-2 font-semibold">0.60 - 1.30 mg/dL</p>
                     </div>
                     <div class="col-span-1">
                         <input type="text" maxLength="100" id="clinicchem_blood_uric_acid" data-label="Blood Uric Acid" placeholder="Blood Uric Acid" title="Blood Uric Acid" />
-                        <p class="text-gray-500 text-xs mt-2 font-semibold">Male: 3.41-7.00 mg/dl<br>Female: 2.41-5.69 mg/dl</p>
+                        <p class="text-gray-500 text-xs mt-2 font-semibold">3.40 - 7.00 mg/dL</p>
                     </div>
 
                     <div class="col-span-1 sm:col-span-2 lg:col-span-3">
@@ -141,23 +141,23 @@ if (isset($_POST['generateClinicalChemistry'])) {
                     </div>
                     <div class="col-span-1">
                         <input type="text" maxLength="100" id="clinicchem_total_cholesterol" data-label="Total Cholesterol" placeholder="Total Cholesterol" title="Total Cholesterol" />
-                        <p class="text-gray-500 text-xs mt-2 font-semibold">139.6-238.8 mg/dl</p>
+                        <p class="text-gray-500 text-xs mt-2 font-semibold">124.9 - 201.1 mg/dL</p>
                     </div>
                     <div class="col-span-1">
                         <input type="text" maxLength="100" id="clinicchem_triglycerides" data-label="Triglycerides" placeholder="Triglycerides" title="Triglycerides" />
-                        <p class="text-gray-500 text-xs mt-2 font-semibold">36.3-164.6 mg/dl</p>
+                        <p class="text-gray-500 text-xs mt-2 font-semibold">39.9 - 160.3 mg/dL</p>
                     </div>
                     <div class="col-span-1">
                         <input type="text" maxLength="100" id="clinicchem_hdl" data-label="High-Density Lipoprotein (HDL)" placeholder="High-Density Lipoprotein (HDL)" title="High-Density Lipoprotein (HDL)" />
-                        <p class="text-gray-500 text-xs mt-2 font-semibold">40.0-60.0 mg/dl</p>
+                        <p class="text-gray-500 text-xs mt-2 font-semibold">34.8 - 54.9 mg/dL</p>
                     </div>
                     <div class="col-span-1">
                         <input type="text" maxLength="100" id="clinicchem_ldl" data-label="Low-Density Lipoprotein (LDL)" placeholder="Low-Density Lipoprotein (LDL)" title="Low-Density Lipoprotein (LDL)" />
-                        <p class="text-gray-500 text-xs mt-2 font-semibold">92.3-146.2 mg/dl</p>
+                        <p class="text-gray-500 text-xs mt-2 font-semibold">7.7 - 130.3 mg/dL</p>
                     </div>
                     <div class="col-span-1">
                         <input type="text" maxLength="100" id="clinicchem_vldl" data-label="Very Low-Density Lipoprotein (VLDL)" placeholder="Very Low-Density Lipoprotein (VLDL)" title="Very Low-Density Lipoprotein (VLDL)" />
-                        <p class="text-gray-500 text-xs mt-2 font-semibold">7.2-32.5 mg/dl</p>
+                        <p class="text-gray-500 text-xs mt-2 font-semibold">7.7 - 31.7 mg/dL</p>
                     </div>
 
                     <div class="col-span-1 sm:col-span-2 lg:col-span-3">
@@ -167,11 +167,11 @@ if (isset($_POST['generateClinicalChemistry'])) {
                     </div>
                     <div class="col-span-1">
                         <input type="text" maxLength="100" id="clinicchem_sgot_ast" data-label="SGOT/AST (Aspartate Aminotransferase)" placeholder="SGOT/AST (Aspartate Aminotransferase)" title="SGOT/AST (Aspartate Aminotransferase)" />
-                        <p class="text-gray-500 text-xs mt-2 font-semibold">0-40 U/L</p>
+                        <p class="text-gray-500 text-xs mt-2 font-semibold">0.00 - 0.38 U/L</p>
                     </div>
                     <div class="col-span-1">
                         <input type="text" maxLength="100" id="clinicchem_sgpt_alt" data-label="SGPT/ALT (Alanine Aminotransferase)" placeholder="SGPT/ALT (Alanine Aminotransferase)" title="SGPT/ALT (Alanine Aminotransferase)" />
-                        <p class="text-gray-500 text-xs mt-2 font-semibold">0-38 U/L</p>
+                        <p class="text-gray-500 text-xs mt-2 font-semibold">0.00 - 40.0 U/L</p>
                     </div>
 
                     <div class="col-span-1 sm:col-span-2 lg:col-span-3">
@@ -181,7 +181,7 @@ if (isset($_POST['generateClinicalChemistry'])) {
                     </div>
                     <div class="col-span-1">
                         <input type="text" maxLength="100" id="clinicchem_psa" data-label="PSA" placeholder="PSA" title="PSA" />
-                        <p class="text-gray-500 text-xs mt-2 font-semibold">0-4.00 ng/mL</p>
+                        <p class="text-gray-500 text-xs mt-2 font-semibold">0 - 4.0 ng/mL</p>
                     </div>
 
                     <div class="col-span-1 sm:col-span-2 lg:col-span-3">

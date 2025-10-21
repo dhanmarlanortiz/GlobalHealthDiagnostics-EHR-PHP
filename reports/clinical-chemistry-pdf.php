@@ -80,39 +80,39 @@ class ClinicalChemistryPDF {
             $pdf->row('', '', 'Normal Values:');
             $pdf->ln();
 
-            $pdf->row('FBS	:', $clinicalChemistry['clinicchem_fbs'], '60.7-111.3 mg/dl');
+            $pdf->row('FBS	:', $clinicalChemistry['clinicchem_fbs'], '70.3 - 115.3 mg/dL');
             $pdf->ln();
-            $pdf->row('RBS:', $clinicalChemistry['clinicchem_rbs'], '80.0-140.0 mg/dl');
+            $pdf->row('RBS:', $clinicalChemistry['clinicchem_rbs'], '80 - 140 mg/dL');
             $pdf->ln();
-            $pdf->row('Blood Urea Nitrogen:', $clinicalChemistry['clinicchem_blood_urea_nitrogen'], '7.84-20.17 mg/dl');
+            $pdf->row('Blood Urea Nitrogen:', $clinicalChemistry['clinicchem_blood_urea_nitrogen'], '15.0 - 45.0 mg/dL');
             $pdf->ln();
-            $pdf->row('Creatinine:', $clinicalChemistry['clinicchem_creatinine'], 'Male: 0.90-1.50 mg/dl');
+            $pdf->row('Creatinine:', $clinicalChemistry['clinicchem_creatinine'], '0.60 - 1.30 mg/dL');
+            // $pdf->ln();
+            // $pdf->row('', '', 'Female: 0.70-1.37 mg/dl');
             $pdf->ln();
-            $pdf->row('', '', 'Female: 0.70-1.37 mg/dl');
+            $pdf->row('Blood Uric Acid:', $clinicalChemistry['clinicchem_blood_uric_acid'], '3.40 - 7.00 mg/dL');
+            // $pdf->ln();
+            // $pdf->row('', '', 'Female: 2.41-5.69 mg/dl');
             $pdf->ln();
-            $pdf->row('Blood Uric Acid:', $clinicalChemistry['clinicchem_blood_uric_acid'], 'Male: 3.41-7.00 mg/dl');
+            $pdf->row('Total Cholesterol:', $clinicalChemistry['clinicchem_total_cholesterol'], '124.9 - 201.1 mg/dL');
             $pdf->ln();
-            $pdf->row('', '', 'Female: 2.41-5.69 mg/dl');
+            $pdf->row('Triglycerides:', $clinicalChemistry['clinicchem_triglycerides'], '39.9 - 160.3 mg/dL');
             $pdf->ln();
-            $pdf->row('Total Cholesterol:', $clinicalChemistry['clinicchem_total_cholesterol'], '139.6-238.8 mg/dl');
+            $pdf->row('HDL:', $clinicalChemistry['clinicchem_hdl'], '34.8 - 54.9 mg/dL');
             $pdf->ln();
-            $pdf->row('Triglycerides:', $clinicalChemistry['clinicchem_triglycerides'], '36.3-164.6 mg/dl');
+            $pdf->row('LDL:', $clinicalChemistry['clinicchem_ldl'], '7.7 - 130.3 mg/dL');
             $pdf->ln();
-            $pdf->row('HDL:', $clinicalChemistry['clinicchem_hdl'], '40.0-60.0 mg/dl');
+            $pdf->row('VLDL:', $clinicalChemistry['clinicchem_vldl'], '7.7 - 31.7 mg/dL');
             $pdf->ln();
-            $pdf->row('LDL:', $clinicalChemistry['clinicchem_ldl'], '92.3-146.2 mg/dl');
+            $pdf->row('SGOT/AST:', $clinicalChemistry['clinicchem_sgot_ast'], '0.00 - 0.38 U/L');
             $pdf->ln();
-            $pdf->row('VLDL:', $clinicalChemistry['clinicchem_vldl'], '7.2-32.5 mg/dl');
-            $pdf->ln();
-            $pdf->row('SGOT/AST:', $clinicalChemistry['clinicchem_sgot_ast'], '0-40 U/L');
-            $pdf->ln();
-            $pdf->row('SGPT/ALT:', $clinicalChemistry['clinicchem_sgpt_alt'], '0-38 U/L');
+            $pdf->row('SGPT/ALT:', $clinicalChemistry['clinicchem_sgpt_alt'], '0.00 - 40.0 U/L');
             $pdf->ln();
             
-            $pdf->row('Hba1c:', $clinicalChemistry['clinicchem_hba1c'], '4.50-6.50 %');
+            $pdf->row('Hba1c:', $clinicalChemistry['clinicchem_hba1c'], '4.50 - 6.50 %');
             $pdf->ln();
 
-            $pdf->row('PSA:', $clinicalChemistry['clinicchem_psa'], '0-4.00 ng/mL');
+            $pdf->row('PSA:', $clinicalChemistry['clinicchem_psa'], '0 - 4.0 ng/mL');
             $pdf->ln();
             $pdf->row('Other:', $clinicalChemistry['clinicchem_others'], '');
 
