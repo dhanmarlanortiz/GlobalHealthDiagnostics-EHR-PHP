@@ -84,13 +84,13 @@ class ClinicalChemistryPDF {
             $pdf->ln();
             $pdf->row('RBS:', $clinicalChemistry['clinicchem_rbs'], '80 - 140 mg/dL');
             $pdf->ln();
-            $pdf->row('Blood Urea Nitrogen:', $clinicalChemistry['clinicchem_blood_urea_nitrogen'], '15.0 - 45.0 mg/dL');
+            $pdf->row('Blood Urea Nitrogen:', $clinicalChemistry['clinicchem_blood_urea_nitrogen'], '15 - 45 mg/dL');
             $pdf->ln();
             $pdf->row('Creatinine:', $clinicalChemistry['clinicchem_creatinine'], '0.60 - 1.30 mg/dL');
             // $pdf->ln();
             // $pdf->row('', '', 'Female: 0.70-1.37 mg/dl');
             $pdf->ln();
-            $pdf->row('Blood Uric Acid:', $clinicalChemistry['clinicchem_blood_uric_acid'], '3.40 - 7.00 mg/dL');
+            $pdf->row('Blood Uric Acid:', $clinicalChemistry['clinicchem_blood_uric_acid'], '3.4 - 7 mg/dL');
             // $pdf->ln();
             // $pdf->row('', '', 'Female: 2.41-5.69 mg/dl');
             $pdf->ln();
@@ -104,15 +104,15 @@ class ClinicalChemistryPDF {
             $pdf->ln();
             $pdf->row('VLDL:', $clinicalChemistry['clinicchem_vldl'], '7.7 - 31.7 mg/dL');
             $pdf->ln();
-            $pdf->row('SGOT/AST:', $clinicalChemistry['clinicchem_sgot_ast'], '0.00 - 0.38 U/L');
+            $pdf->row('SGOT/AST:', $clinicalChemistry['clinicchem_sgot_ast'], '0 - 38 U/L');
             $pdf->ln();
-            $pdf->row('SGPT/ALT:', $clinicalChemistry['clinicchem_sgpt_alt'], '0.00 - 40.0 U/L');
+            $pdf->row('SGPT/ALT:', $clinicalChemistry['clinicchem_sgpt_alt'], '0 - 40 U/L');
             $pdf->ln();
             
-            $pdf->row('Hba1c:', $clinicalChemistry['clinicchem_hba1c'], '4.50 - 6.50 %');
+            $pdf->row('Hba1c:', $clinicalChemistry['clinicchem_hba1c'], '4.5 - 6.5 %');
             $pdf->ln();
 
-            $pdf->row('PSA:', $clinicalChemistry['clinicchem_psa'], '0 - 4.0 ng/mL');
+            $pdf->row('PSA:', $clinicalChemistry['clinicchem_psa'], '0 - 4 ng/mL');
             $pdf->ln();
             $pdf->row('Other:', $clinicalChemistry['clinicchem_others'], '');
 

@@ -109,11 +109,11 @@ if (isset($_POST['generateClinicalChemistry'])) {
                     </div>
                     <div class="col-span-1">
                         <input type="text" maxLength="100" id="clinicchem_rbs" data-label="Random Blood Sugar (RBS)" placeholder="Random Blood Sugar (RBS)" title="Random Blood Sugar (RBS)" />
-                        <p class="text-gray-500 text-xs mt-2 font-semibold">80.0 - 140.0 mg/dl</p>
+                        <p class="text-gray-500 text-xs mt-2 font-semibold">80 - 140 mg/dl</p>
                     </div>
                     <div class="col-span-1">
                         <input type="text" maxLength="100" id="clinicchem_hba1c" data-label="HbA1c" placeholder="HbA1c" title="HbA1c" />
-                        <p class="text-gray-500 text-xs mt-2 font-semibold">4.50 - 6.50 %</p>
+                        <p class="text-gray-500 text-xs mt-2 font-semibold">4.5 - 6.5 %</p>
                     </div>
 
                     <div class="col-span-1 sm:col-span-2 lg:col-span-3">
@@ -123,15 +123,15 @@ if (isset($_POST['generateClinicalChemistry'])) {
                     </div>
                     <div class="col-span-1">
                         <input type="text" maxLength="100" id="clinicchem_blood_urea_nitrogen" data-label="Blood Urea Nitrogen (BUN)" placeholder="Blood Urea Nitrogen (BUN)" title="Blood Urea Nitrogen (BUN)" />
-                        <p class="text-gray-500 text-xs mt-2 font-semibold">15.0 - 45.0 mg/dL</p>
+                        <p class="text-gray-500 text-xs mt-2 font-semibold">15 - 45 mg/dL</p>
                     </div>
                     <div class="col-span-1">
                         <input type="text" maxLength="100" id="clinicchem_creatinine" data-label="Creatinine" placeholder="Creatinine" title="Creatinine" />
-                        <p class="text-gray-500 text-xs mt-2 font-semibold">0.60 - 1.30 mg/dL</p>
+                        <p class="text-gray-500 text-xs mt-2 font-semibold">0.6 - 1.3 mg/dL</p>
                     </div>
                     <div class="col-span-1">
                         <input type="text" maxLength="100" id="clinicchem_blood_uric_acid" data-label="Blood Uric Acid" placeholder="Blood Uric Acid" title="Blood Uric Acid" />
-                        <p class="text-gray-500 text-xs mt-2 font-semibold">3.40 - 7.00 mg/dL</p>
+                        <p class="text-gray-500 text-xs mt-2 font-semibold">3.4 - 7 mg/dL</p>
                     </div>
 
                     <div class="col-span-1 sm:col-span-2 lg:col-span-3">
@@ -167,11 +167,11 @@ if (isset($_POST['generateClinicalChemistry'])) {
                     </div>
                     <div class="col-span-1">
                         <input type="text" maxLength="100" id="clinicchem_sgot_ast" data-label="SGOT/AST (Aspartate Aminotransferase)" placeholder="SGOT/AST (Aspartate Aminotransferase)" title="SGOT/AST (Aspartate Aminotransferase)" />
-                        <p class="text-gray-500 text-xs mt-2 font-semibold">0.00 - 0.38 U/L</p>
+                        <p class="text-gray-500 text-xs mt-2 font-semibold">0 - 38 U/L</p>
                     </div>
                     <div class="col-span-1">
                         <input type="text" maxLength="100" id="clinicchem_sgpt_alt" data-label="SGPT/ALT (Alanine Aminotransferase)" placeholder="SGPT/ALT (Alanine Aminotransferase)" title="SGPT/ALT (Alanine Aminotransferase)" />
-                        <p class="text-gray-500 text-xs mt-2 font-semibold">0.00 - 40.0 U/L</p>
+                        <p class="text-gray-500 text-xs mt-2 font-semibold">0 - 40 U/L</p>
                     </div>
 
                     <div class="col-span-1 sm:col-span-2 lg:col-span-3">
@@ -181,7 +181,7 @@ if (isset($_POST['generateClinicalChemistry'])) {
                     </div>
                     <div class="col-span-1">
                         <input type="text" maxLength="100" id="clinicchem_psa" data-label="PSA" placeholder="PSA" title="PSA" />
-                        <p class="text-gray-500 text-xs mt-2 font-semibold">0 - 4.0 ng/mL</p>
+                        <p class="text-gray-500 text-xs mt-2 font-semibold">0 - 4 ng/mL</p>
                     </div>
 
                     <div class="col-span-1 sm:col-span-2 lg:col-span-3">
